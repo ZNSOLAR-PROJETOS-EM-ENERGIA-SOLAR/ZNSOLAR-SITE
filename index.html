@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ZNSOLAR | Energia Solar Fotovoltaica em São Paulo</title>
+
+  <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltaica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
+  <meta name="keywords" content="energia solar, energia fotovoltaica, instalação solar, placas solares, energia solar São Paulo">
+  <meta name="author" content="ZNSOLAR">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f7f7f7; color: #333; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+
+    header {
+      background: #ff9800;
+      color: white;
+      padding: 20px 10%;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 { font-size: 2rem; }
+    header p { font-size: 1rem; }
+
+    main { padding: 40px 10%; }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #ff9800;
+    }
+
+    /* Cards */
+    .instalacoes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .item {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    .item:hover { transform: translateY(-5px); }
+
+    .item img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .info h3 {
+      color: #ff9800;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .info ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .btn-whatsapp {
+      margin-top: auto;
+      background: #25d366;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* Vídeos */
+    .videos {
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .video-box iframe {
+      width: 100%;
+      height: 220px;
+      border-radius: 10px;
+    }
+
+    /* Contato */
+    .contato {
+      background: #e9ecef;
+      padding: 30px;
+      border-radius: 10px;
+      margin-top: 50px;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    /* WhatsApp flutuante */
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: white;
+      font-size: 2rem;
+      padding: 15px;
+      border-radius: 50%;
+      z-index: 1000;
+    }
+
+    @media (max-width: 992px) {
+      .instalacoes, .videos { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .instalacoes, .videos { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>ZNSOLAR</h1>
+  <p>Energia Solar Fotovoltaica • Economia • Sustentabilidade</p>
+</header>
+
+<main>
+
+  <h2>Nossas Instalações</h2>
+
+  <section class="instalacoes">
+
+    <div class="item">
+      <img src="img/residencial.jpg" alt="Energia Solar Residencial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Residencial</h3>
+        <ul>
+          <li>Redução de até 95% na conta de luz</li>
+          <li>Projeto personalizado</li>
+          <li>Instalação rápida e segura</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="img/comercial.jpg" alt="Energia Solar Comercial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Comercial</h3>
+        <ul>
+          <li>Redução de custos operacionais</li>
+          <li>Sistema escalável</li>
+          <li>Retorno rápido do investimento</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="img/industrial.jpg" alt="Energia Solar Industrial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Industrial</h3>
+        <ul>
+          <li>Alta capacidade de geração</li>
+          <li>Engenharia especializada</li>
+          <li>Conformidade com normas técnicas</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <h2>Vídeos dos Projetos</h2>
+
+  <section class="videos">
+    <div class="video-box">
+      <iframe src="https://www.youtube.com/embed/VIDEO1" allowfullscreen></iframe>
+    </div>
+    <div class="video-box">
+      <iframe src="https://www.youtube.com/embed/VIDEO2" allowfullscreen></iframe>
+    </div>
+    <div class="video-box">
+      <iframe src="https://www.youtube.com/embed/VIDEO3" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section class="contato">
+    <h2>Atendimento ZNSOLAR</h2>
+    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5511983185337" target="_blank">(11) 98318-5337</a></p>
+    <p><strong>Região de atendimento:</strong> São Paulo e região metropolitana</p>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; <span id="ano"></span> ZNSOLAR — Energia Solar Fotovoltaica</p>
+</footer>
+
+<a href="https://wa.me/5511983185337"
+   class="whatsapp"
+   aria-label="Falar com a ZNSOLAR no WhatsApp"
+   target="_blank">☀️</a>
+
+<script>
+  document.getElementById('ano').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
