@@ -16,7 +16,7 @@
     body { background: #fdfdfd; color: #333; line-height: 1.6; }
     a { text-decoration: none; color: inherit; }
 
-    /* Cabeçalho com fundo branco e borda sutil */
+    /* Cabeçalho limpo com fundo branco */
     header {
       background: #ffffff;
       color: #333;
@@ -54,7 +54,7 @@
       color: #ff9800;
     }
 
-    /* Cards */
+    /* Cards de Instalações */
     .instalacoes {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -105,18 +105,25 @@
       font-weight: bold;
     }
 
-    /* Vídeos */
-    .videos {
+    /* Secção de Vídeos - Ajustada para 2 vídeos centralizados */
+    .videos-container {
       margin-top: 50px;
+    }
+
+    .videos-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .video-box iframe {
       width: 100%;
-      height: 220px;
+      height: 280px;
       border-radius: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     /* Contato */
@@ -151,11 +158,12 @@
     }
 
     @media (max-width: 992px) {
-      .instalacoes, .videos { grid-template-columns: repeat(2, 1fr); }
+      .instalacoes { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 600px) {
-      .instalacoes, .videos { grid-template-columns: 1fr; }
+    @media (max-width: 768px) {
+      .instalacoes, .videos-grid { grid-template-columns: 1fr; }
+      .video-box iframe { height: 240px; }
     }
   </style>
 </head>
@@ -173,55 +181,55 @@
 
   <section class="instalacoes">
 
-  <div class="item">
-    <img src="img/instalação residencial.jpeg" alt="Energia Solar Residencial" loading="lazy">
-    <div class="info">
-      <h3>Energia Solar Residencial</h3>
-      <ul>
-        <li>Redução de até 95% na conta de luz</li>
-        <li>Projeto personalizado</li>
-        <li>Instalação rápida e segura</li>
-      </ul>
-      <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial"
-         class="btn-whatsapp" target="_blank">
-         💬 Solicitar Orçamento
-      </a>
+    <div class="item">
+      <img src="img/instalação residencial.jpeg" alt="Energia Solar Residencial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Residencial</h3>
+        <ul>
+          <li>Redução de até 95% na conta de luz</li>
+          <li>Projeto personalizado</li>
+          <li>Instalação rápida e segura</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="item">
-    <img src="img/Comercial.jpeg" alt="Energia Solar Comercial" loading="lazy">
-    <div class="info">
-      <h3>Energia Solar Comercial</h3>
-      <ul>
-        <li>Redução de custos operacionais</li>
-        <li>Sistema escalável</li>
-        <li>Retorno rápido do investimento</li>
-      </ul>
-      <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial"
-         class="btn-whatsapp" target="_blank">
-         💬 Solicitar Orçamento
-      </a>
+    <div class="item">
+      <img src="img/Comercial.jpeg" alt="Energia Solar Comercial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Comercial</h3>
+        <ul>
+          <li>Redução de custos operacionais</li>
+          <li>Sistema escalável</li>
+          <li>Retorno rápido do investimento</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="item">
-    <img src="img/images.jpeg" alt="Energia Solar Industrial" loading="lazy">
-    <div class="info">
-      <h3>Energia Solar Industrial</h3>
-      <ul>
-        <li>Alta capacidade de geração</li>
-        <li>Engenharia especializada</li>
-        <li>Conformidade com normas técnicas</li>
-      </ul>
-      <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial"
-         class="btn-whatsapp" target="_blank">
-         💬 Solicitar Orçamento
-      </a>
+    <div class="item">
+      <img src="img/images.jpeg" alt="Energia Solar Industrial" loading="lazy">
+      <div class="info">
+        <h3>Energia Solar Industrial</h3>
+        <ul>
+          <li>Alta capacidade de geração</li>
+          <li>Engenharia especializada</li>
+          <li>Conformidade com normas técnicas</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial"
+           class="btn-whatsapp" target="_blank">
+           💬 Solicitar Orçamento
+        </a>
+      </div>
     </div>
-  </div>
 
-</section>
+  </section>
 
   <section id="simulador-solar" style="background: white; padding: 30px; border-radius: 10px; margin-top: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; border-top: 4px solid #ff9800;">
     <h2 style="color: #ff9800; margin-bottom: 15px; text-align: center; font-size: 1.8rem;">Simule seu Sistema e Economia</h2>
@@ -262,15 +270,15 @@
     <div id="resultado-simulacao" style="margin-top: 25px; padding: 22px; border-radius: 8px; display: none; line-height: 1.6; font-size: 1.05rem;"></div>
   </section>
 
-  <section class="videos">
-    <div class="video-box">
-      <iframe src="https://www.youtube.com/embed/VIDEO1" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://www.youtube.com/embed/VIDEO2" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://www.youtube.com/embed/VIDEO3" allowfullscreen></iframe>
+  <section class="videos-container">
+    <h2 style="text-align: center; margin-bottom: 30px;">Conheça o Nosso Trabalho</h2>
+    <div class="videos-grid">
+      <div class="video-box">
+        <iframe src="https://www.youtube.com/embed/Gjo_kqxJ1nM" title="ZNSOLAR" allowfullscreen></iframe>
+      </div>
+      <div class="video-box">
+        <iframe src="https://www.youtube.com/embed/92p-NI8F13E" title="Sistema Energia Solar Zona Norte SP 8 kWpico" allowfullscreen></iframe>
+      </div>
     </div>
   </section>
 
@@ -295,6 +303,7 @@
   document.getElementById('ano').textContent = new Date().getFullYear();
 
   const tabelaPrecosZN = {
+    // ... mantida a sua tabela de preços completa ...
     2.0: 8224.00, 2.5: 9745.00, 3.0: 11010.00, 3.5: 12047.00, 4.0: 12912.00, 4.5: 14220.00,
     5.0: 15510.00, 5.5: 16687.00, 6.0: 17856.00, 6.5: 18902.00, 7.0: 19880.00, 7.5: 20865.00,
     8.0: 21712.00, 8.5: 22865.00, 9.0: 24030.00, 9.5: 25042.00, 10.0: 26120.00, 10.5: 27321.00,
@@ -353,10 +362,9 @@
 
     const areaNecessaria = (numModulos * 2.58) * 1.15;
 
-    // Novos cálculos financeiros com base na planilha real
     const tarifaKwh = 0.92954; 
     const contaAtual = consumoMedio * tarifaKwh;
-    const novaConta = 55.87; // Custo de disponibilidade 50kWh + Imposto COSIP
+    const novaConta = 55.87; 
     const economiaMensal = contaAtual - novaConta;
 
     divResultado.style.display = "block";
@@ -375,16 +383,16 @@
       
       <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 5px;">Sua Nova Conta de Luz:</div>
       <strong>Gasto Atual Estimado:</strong> R$ ${contaAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
+      <strong>Nova Conta com Energia Solar:</strong> R$ ${novaConta.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
       <strong>Economia Mensal Estimada:</strong> <span style="color: #1b5e20; font-weight: bold;">R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês</span>
-      <div style="font-size: 0.9rem; color: #388e3c; font-weight: bold; margin-top: 5px;">Com este sistema sua conta de luz será aproximadamente    o valor mínimo de R$ 55,87.</div>
       
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
       <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
       <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
       
       <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente do mês 05 de 2026 B1 residencial. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc.
+        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00.
       </div>
       <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
          target="_blank" 
