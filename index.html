@@ -52,7 +52,7 @@
 
     main { max-width:1200px; margin:0 auto; padding:40px 10%; }
 
-    h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; }
+    h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; text-align:center; }
 
     /* Cards de Serviços */
     .instalacoes {
@@ -111,8 +111,7 @@
       border-radius:10px;
       box-shadow:0 4px 10px rgba(0,0,0,0.05);
       border:1px solid #eee;
-      margin-top:50px;
-      margin-bottom:50px;
+      margin: 50px 0;
       display:flex;
       flex-direction:row;
       align-items:center;
@@ -123,19 +122,51 @@
     .autoridade-texto { flex:1; }
     .autoridade-texto h2 { text-align:left; margin-bottom:15px; }
     .autoridade-texto p { color:#555; margin-bottom:15px; }
+    .autoridade-texto ul { list-style:none; margin-bottom:15px; }
+    .autoridade-texto ul li { margin-bottom:10px; color:#444; }
+    .autoridade-texto ul li strong { color:#ff9800; }
     
     .autoridade-imagem {
       flex:1;
-      max-width:500px;
+      max-width:450px;
       border-radius:10px;
       border:1px solid #ddd;
       box-shadow:0 4px 10px rgba(0,0,0,0.05);
     }
 
+    /* Passo a Passo da Instalação */
+    .passos-container {
+      margin:50px 0;
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+    }
+
+    .passos-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+      margin-top:30px;
+    }
+
+    .passo-card {
+      background:#fdfdfd;
+      padding:25px;
+      border-radius:8px;
+      border:1px solid #eef2f5;
+      border-top:4px solid #ff9800;
+      text-align:left;
+      box-shadow:0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .passo-card h3 { color:#333; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+    .passo-numero { background:#ff9800; color:white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:bold; }
+
     /* Seção do Diagrama */
     .diagrama-container {
-      margin-top:50px;
-      margin-bottom:50px;
+      margin:50px 0;
       text-align:center;
       background:white;
       padding:40px 30px;
@@ -159,8 +190,24 @@
       margin-top:20px;
     }
 
+    /* Seção FAQ */
+    .faq-container {
+      margin:50px 0;
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+      text-align:left;
+    }
+
+    .faq-item { margin-bottom:20px; border-bottom:1px solid #edf2f7; padding-bottom:15px; }
+    .faq-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .faq-item h3 { color:#333; font-size:1.1rem; margin-bottom:8px; }
+    .faq-item p { color:#555; font-size:1rem; }
+
     /* Seção de Vídeos */
-    .videos-container { margin-top:50px; margin-bottom:50px; }
+    .videos-container { margin:50px 0; }
 
     .videos-grid {
       display:grid;
@@ -269,11 +316,35 @@
 
   <section class="autoridade-container">
     <div class="autoridade-texto">
-      <h2>Conformidade Técnica e Qualidade</h2>
-      <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido sob rigorosos padrões técnicos e normas vigentes. Nossa equipe é prepara para realizar simulações precisas e garantir a máxima eficiência energética e segurança da sua futura instalação.</p>
-      <p>Trabalhamos exclusivamente com equipamentos de ponta homologados e projetos validados junto à concessionária de energia, assegurando que seu investimento tenha durabilidade superior a 25 anos.</p>
+      <h2>Por que Escolher a ZNSOLAR?</h2>
+      <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido com total segurança, transparência e rigor técnico.</p>
+      <ul>
+        <li><strong>✓ Equipe Qualificada:</strong> Projetos e instalações desenvolvidos por Técnico em Sistemas de Energia Renovável e Eletricista Industrial credenciado.</li>
+        <li><strong>✓ Conformidade Legal:</strong> Projetos rigorosamente alinhados com a Lei 14.300 e as normas vigentes da Enel SP.</li>
+        <li><strong>✓ Simulação Precisa:</strong> Nada de estimativas vagas; usamos cálculos exatos baseados no seu histórico real de consumo e nos dados de radiação locais.</li>
+      </ul>
+      <p>Garantimos a máxima eficiência para que seu investimento tenha durabilidade superior a 25 anos.</p>
     </div>
     <img src="img/Simulação Profissional .jpeg" alt="Profissional realizando testes e simulações solares" class="autoridade-imagem">
+  </section>
+
+  <section class="passos-container">
+    <h2>Como Funciona a Instalação</h2>
+    <p style="color:#666; margin-bottom:20px;">Entenda o processo passo a passo do seu projeto até o início da economia real:</p>
+    <div class="passos-grid">
+      <div class="passo-card">
+        <h3><span class="passo-numero">1</span> Simulação e Visita</h3>
+        <p>Avaliação detalhada das contas de consumo do cliente e análise técnica do telhado diretamente no local.</p>
+      </div>
+      <div class="passo-card">
+        <h3><span class="passo-numero">2</span> Projeto e Homologação</h3>
+        <p>Desenvolvimento da engenharia completa do sistema e aprovação do projeto junto à concessionária (Enel SP).</p>
+      </div>
+      <div class="passo-card">
+        <h3><span class="passo-numero">3</span> Instalação e Ativação</h3>
+        <p>Montagem dos painéis, testes do inversor e troca do medidor padrão pelo modelo bidirecional.</p>
+      </div>
+    </div>
   </section>
 
   <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
@@ -300,7 +371,29 @@
     <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
   </section>
 
-   <section class="videos-container">
+  <section class="diagrama-container">
+    <h2>Como Funciona o Sistema Conectado à Rede (On-Grid)</h2>
+    <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia para uso nos seus equipamentos. O excedente produzido é injetado na rede elétrica pública, gerando créditos compensatórios para você usar.</p>
+    <img src="img/Sistemas-on-grid-x-off-grid.jpg" alt="Diagrama Técnico de Sistema Solar On-Grid" class="diagrama-imagem">
+  </section>
+
+  <section class="faq-container">
+    <h2>Dúvidas Frequentes (FAQ)</h2>
+    <div class="faq-item" style="margin-top:20px;">
+      <h3>O que acontece em dias nublados ou chuvosos?</h3>
+      <p>O sistema continua gerando energia através da radiação solar difusa, porém em menor quantidade quando comparado a um dia ensolarado.</p>
+    </div>
+    <div class="faq-item">
+      <h3>O que é o "custo de disponibilidade" (taxa mínima)?</h3>
+      <p>É o valor obrigatório pago à concessionária para estar conectado à rede de energia. Para ligações bifásicas padrão, corresponde ao valor de 50 kWh.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Os meus créditos de energia expiram?</h3>
+      <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futuras em até 60 meses.</p>
+    </div>
+  </section>
+
+  <section class="videos-container">
     <h2>Conheça o Nosso Trabalho</h2>
     <div class="videos-grid">
       <div class="video-box">
@@ -350,6 +443,9 @@
     const e = tc - nc;
     r.style.display = "block";
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
+
+    // Cálculo exato de Payback em anos
+    const payback = (p / (e * 12)).toFixed(1);
     
     r.style.backgroundColor = "#e8f5e9";
     r.style.border = "1px solid #a5d6a7";
@@ -368,11 +464,14 @@
       <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
       <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
+      <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
+      <div style="font-size:0.9rem; color:#555;">Depois desse período, toda a economia vai direto para o seu bolso por mais de 20 anos!</div>
+      <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">
         * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Simples assim, disponibilizamos informações claras e direto ao ponto , oque nos leva a uma eficiência maior e menos tempo de esfoço.  
+        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc.
       </div>
-      <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20e%20de%20${c.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." target="_blank" style="display:inline-block;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">💬 Falar com Especialista no WhatsApp</a>
+      <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${c.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." target="_blank" style="display:inline-block;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">💬 Falar com Especialista no WhatsApp</a>
     `;
   }
 </script>
