@@ -19,15 +19,26 @@
     header {
       background: #ff9800;
       color: white;
-      padding: 20px 10%;
+      padding: 15px 10%;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    header h1 { font-size: 2rem; }
-    header p { font-size: 1rem; }
+    /* Estilização do Logotipo ZNSOLAR */
+    .logo-site {
+      max-width: 280px;
+      height: auto;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    header p { font-size: 1rem; margin-top: 5px; font-weight: 500; }
 
     main { padding: 40px 10%; }
 
@@ -139,7 +150,7 @@
 <body>
 
 <header>
-  <h1>ZNSOLAR</h1>
+  <img src="img/marca dagua.png" alt="Logotipo ZNSOLAR" class="logo-site">
   <p>Energia Solar Fotovoltaica • Economia • Sustentabilidade</p>
 </header>
 
@@ -253,7 +264,7 @@
   <section class="contato">
     <h2>Atendimento ZNSOLAR</h2>
     <p><strong>WhatsApp:</strong> <a href="https://wa.me/5511983185337" target="_blank">(11) 98318-5337</a></p>
-    <p><strong>Região de atendimento:</strong> São Paulo e região metropolitana</p>
+    <p><strong>Região de atendimento:</strong> São Paulo Capital e região metropolitana</p>
   </section>
 
 </main>
@@ -329,7 +340,7 @@
 
     const areaNecessaria = (numModulos * 2.58) * 1.15;
 
-    // Novos cálculos financeiros baseados na conta real enviada
+    // Novos cálculos financeiros com base na planilha real
     const tarifaKwh = 0.92954; 
     const contaAtual = consumoMedio * tarifaKwh;
     const novaConta = 55.87; // Custo de disponibilidade 50kWh + Imposto COSIP
@@ -351,15 +362,17 @@
       
       <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 5px;">Sua Nova Conta de Luz:</div>
       <strong>Gasto Atual Estimado:</strong> R$ ${contaAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
-      <strong>Nova Conta com Sistema de Energia Solar:</strong> R$ ${novaConta.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês aproximadamente , sujeto a alteração sem préveo aviso <br>
+      <strong>Nova Conta com Energia Solar:</strong> R$ ${novaConta.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
       <strong>Economia Mensal Estimada:</strong> <span style="color: #1b5e20; font-weight: bold;">R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês</span>
-      <div style="font-size: 0.9rem; color: #388e3c; font-weight: bold; margin-top: 5px;">
+      <div style="font-size: 0.9rem; color: #388e3c; font-weight: bold; margin-top: 5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
       
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
       <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
       <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
+      
       <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente do mês 05 de 2026 bandeira Verde B1 residencial. Valores sujeitos a alteração sem prévio aviso.
+        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente do mês 05 de 2026 B1 residencial. Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc.
       </div>
       <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
          target="_blank" 
