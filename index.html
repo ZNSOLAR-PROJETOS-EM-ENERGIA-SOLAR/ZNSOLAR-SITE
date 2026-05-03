@@ -462,12 +462,26 @@
     i.forEach(x => { const v = parseFloat(x.value); if (!isNaN(v) && v >= 0) { t += v; m++; } });
     const r = document.getElementById('resultado-simulacao');
     if (m === 0) { alert("Por favor, preencha o consumo de pelo menos um mês."); return; }
+    
     const c = t / m;
     const n = Math.ceil(c / 55.42);
     const pr = n * 0.575;
-    let pf = Math.round(pr * 2) / 2;
+    
+    // REGRA DE ARREDONDAMENTO ESPECÍFICA DO NEGÓCIO
+    let pf;
+    if (pr < 2.5) {
+      pf = 2.0;
+    } else if (pr === 2.5) {
+      pf = 2.5;
+    } else if (pr > 2.5 && pr <= 3.0) {
+      pf = 3.0;
+    } else {
+      pf = Math.round(pr * 2) / 2; // Mantém o padrão de 0.5 em 0.5 para potências maiores
+    }
+
     if (pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
+
     const a = (n * 2.58) * 1.15;
     const tc = c * 0.92954;
     const nc = 55.87;
