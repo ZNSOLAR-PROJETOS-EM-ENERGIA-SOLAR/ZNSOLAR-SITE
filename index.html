@@ -6,6 +6,8 @@
 
   <title>ZNSOLAR | Energia Solar Fotovoltaica em São Paulo</title>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
   <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
   <meta name="keywords" content="energia solar, energia fotovoltaica, instalação solar, placas solares, energia solar São Paulo">
   <meta name="author" content="ZNSOLAR">
@@ -102,6 +104,10 @@
       text-align:center;
       font-weight:bold;
       width:100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     /* Seção de Credibilidade e Engenharia */
@@ -245,11 +251,19 @@
       right:20px;
       background:#25d366;
       color:white;
-      font-size:2.2rem;
-      padding:15px;
+      font-size:2rem;
+      width: 60px;
+      height: 60px;
       border-radius:50%;
       z-index:1000;
       box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+    .whatsapp:hover {
+      transform: scale(1.1);
     }
 
     /* Regra para manter as imagens lado a lado e responsivas */
@@ -283,7 +297,9 @@
           <li>Projeto sob medida</li>
           <li>Instalação rápida e homologada</li>
         </ul>
-        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial" class="btn-whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i> Orçamento Grátis
+        </a>
       </div>
     </div>
 
@@ -296,7 +312,9 @@
           <li>Sistema escalável</li>
           <li>Retorno rápido do investimento</li>
         </ul>
-        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial" class="btn-whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i> Orçamento Grátis
+        </a>
       </div>
     </div>
 
@@ -309,7 +327,9 @@
           <li>Engenharia especializada</li>
           <li>Atende normas técnicas RIGOROSAS</li>
         </ul>
-        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial" class="btn-whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i> Orçamento Grátis
+        </a>
       </div>
     </div>
   </section>
@@ -325,7 +345,7 @@
       <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:10px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
@@ -449,7 +469,9 @@
   <p>&copy; <span id="ano"></span> ZNSOLAR — Energia Solar Fotovoltaica</p>
 </footer>
 
-<a href="https://wa.me/5511983185337" class="whatsapp" aria-label="Falar com a ZNSOLAR no WhatsApp" target="_blank">☀️</a>
+<a href="https://wa.me/5511983185337" class="whatsapp" aria-label="Falar com a ZNSOLAR no WhatsApp" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
 
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
@@ -533,9 +555,11 @@ Gostaria de prosseguir com o meu projeto!`
       <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">
         * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do cliente, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, se você não tem tempo a perder, nós também não, a clareza e rápidez nas informações torna  mais eficaz sua decisão, se voce compartilha deste mesmo pensamento, não espere mais entre em contato agora mesmo.
+        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do cliente, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, se você não tem tempo a perder, nós também não, a clareza e rapidez nas informações tornam  mais eficazes suas decisões, se voce compartilha deste mesmo pensamento, não espere mais entre em contato agora mesmo.
       </div>
-      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:inline-block;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">💬 Falar com Especialista no WhatsApp</a>
+      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
+        <i class="fab fa-whatsapp"></i> Falar com Especialista no WhatsApp
+      </a>
     `;
   }
 </script>
