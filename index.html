@@ -270,7 +270,6 @@
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
 
-  // Tabela de Preços corrigida (2.0 a 75.0 kWp)
   const tabelaPrecosZN = {
     2.0: 8224.00, 2.5: 9745.00, 3.0: 11010.00, 3.5: 12047.00, 4.0: 12912.00, 4.5: 14220.00,
     5.0: 15510.00, 5.5: 16687.00, 6.0: 17856.00, 6.5: 18902.00, 7.0: 19880.00, 7.5: 20865.00,
@@ -319,29 +318,19 @@
       return;
     }
 
-    // 1. Média de consumo mensal
     const consumoMedio = totalConsumo / mesesPreenchidos;
-
-    // 2. Número de módulos necessários (Consumo Médio / 55.42 kWh por módulo)
     const numModulos = Math.ceil(consumoMedio / 55.42);
-
-    // 3. Potência de Pico Real calculada
     const potenciaReal = numModulos * 0.575;
 
-    // 4. Arredondamento para o degrau de 0.5 kWp mais próximo
     let potenciaParaPreco = Math.round(potenciaReal * 2) / 2;
 
-    // Limites de segurança de acordo com a sua tabela
     if (potenciaParaPreco < 2.0) potenciaParaPreco = 2.0;
     if (potenciaParaPreco > 75.0) potenciaParaPreco = 75.0;
 
-    // 5. Área necessária recalculada: (módulos * 2.58 m²) + 15% de margem
     const areaNecessaria = (numModulos * 2.58) * 1.15;
 
-    // Exibe a div de resultado
     divResultado.style.display = "block";
 
-    // Busca o preço na tabela
     const precoFinal = tabelaPrecosZN[potenciaParaPreco.toFixed(1)] || tabelaPrecosZN[potenciaParaPreco];
 
     divResultado.style.backgroundColor = "#e8f5e9";
@@ -351,13 +340,12 @@
     divResultado.innerHTML = `
       <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Resultado da Simulação ZN Solar:</div>
       <strong>Consumo Médio Apurado:</strong> ${consumoMedio.toFixed(1)} kWh/mês<br>
-      <strong>Potência do Sistema:</strong> ${potenciaParaPreco.toFixed(1)} kWp<br>
-      <strong>Área de Telhado Necessária (+15% de margem):</strong> ${areaNecessaria.toFixed(1)} m²<br>
+      <strong>Área Necessária:</strong> ${areaNecessaria.toFixed(1)} m²<br>
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
       <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
       <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
       <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica.
+        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa vigente do mês 05 de 2026 B1 residencial. Valores sujeitos a alteração sem prévio aviso.
       </div>
       <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
          target="_blank" 
