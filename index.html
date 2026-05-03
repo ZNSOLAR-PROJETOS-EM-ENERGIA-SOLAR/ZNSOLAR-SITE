@@ -3,109 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZN Solar - Especialistas em Projetos Fotovoltaicos</title>
+  <title>ZNSOLAR | Energia Solar Fotovoltaica em São Paulo</title>
+  <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltaica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
+  <meta name="keywords" content="energia solar, energia fotovoltaica, instalação solar, placas solares, energia solar São Paulo">
+  <meta name="author" content="ZNSOLAR">
+  <meta name="robots" content="index, follow">
   <style>
-    /* Estilos Gerais */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      background-color: #f9f9f9;
-    }
-    header {
-      background-color: #ff9800;
-      padding: 20px;
-      text-align: center;
-    }
-    header img {
-      max-width: 250px;
-      height: auto;
-    }
-    .hero-subtitle {
-      color: white;
-      font-size: 1.1em;
-      margin-top: 10px;
-      font-weight: 500;
-    }
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* Seção do Diagrama Técnico */
-    .diagrama-container {
-      margin-top: 50px;
-      margin-bottom: 50px;
-      text-align: center;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    .diagrama-container h2 {
-      color: #333;
-      margin-bottom: 10px;
-    }
-    .diagrama-container p {
-      color: #666;
-      margin-bottom: 25px;
-    }
-    .diagrama-imagem {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      margin-top: 20px;
-    }
-
-    /* Seção de Contato */
-    .contato {
-      background-color: #f4f6f8;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      margin-top: 40px;
-    }
-    .btn-whatsapp {
-      background-color: #25d366;
-      color: white;
-      padding: 15px 30px;
-      text-decoration: none;
-      font-size: 1.1em;
-      font-weight: bold;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 15px;
-      transition: background-color 0.3s;
-    }
-    .btn-whatsapp:hover {
-      background-color: #128c7e;
-    }
+    /* Impedir seleção de texto em todo o site para evitar cópias */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
+    body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; }
+    a { text-decoration:none; color:inherit; }
+    header { background:#ffffff; color:#333; padding:30px 10%; text-align:center; position:sticky; top:0; z-index:1000; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 6px rgba(0,0,0,0.05); }
+    .logo-site { max-width:320px; height:auto; display:block; margin-bottom:10px; }
+    header p { font-size:1.1rem; margin-top:5px; font-weight:500; color:#ff9800; }
+    main { max-width:1200px; margin:0 auto; padding:40px 10%; }
+    h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; }
+    .instalacoes { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:50px; }
+    .item { background:white; padding:25px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; display:flex; flex-direction:column; transition:transform 0.3s, box-shadow 0.3s; }
+    .item:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.1); }
+    .item img { width:100%; border-radius:10px; margin-bottom:15px; }
+    .info h3 { color:#333; margin-bottom:15px; text-align:center; }
+    .info ul { list-style:disc; padding-left:20px; margin-bottom:15px; text-align:left; }
+    .btn-whatsapp { margin-top:auto; background:#25d366; color:white; padding:12px; border-radius:5px; text-align:center; font-weight:bold; width:100%; }
+    .diagrama-container { margin-top:50px; margin-bottom:50px; text-align:center; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; }
+    .diagrama-imagem { max-width:100%; height:auto; border-radius:10px; border:1px solid #ddd; box-shadow:0 4px 10px rgba(0,0,0,0.05); margin-top:20px; }
+    .videos-container { margin-top:50px; margin-bottom:50px; }
+    .videos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(400px,1fr)); gap:25px; max-width:900px; margin:0 auto; }
+    .video-box iframe { width:100%; height:280px; border-radius:10px; border:1px solid #ddd; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+    .contato { background:#f4f6f8; padding:30px; border-radius:10px; margin-top:50px; border:1px solid #e2e8f0; max-width:600px; margin:0 auto; }
+    footer { background:#333; color:white; text-align:center; padding:20px; margin-top:40px; }
+    .whatsapp { position:fixed; bottom:20px; right:20px; background:#25d366; color:white; font-size:2.2rem; padding:15px; border-radius:50%; z-index:1000; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+    /* Permitir digitação nos campos do simulador */
+    input { -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto; user-select:auto; }
+    @media (max-width:768px) { .video-box iframe { height:200px; } }
   </style>
+  <script>
+    // Bloqueia clique direito e atalhos de desenvolvedor (F12, Ctrl+Shift+I, Ctrl+U)
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+        e.preventDefault();
+        return false;
+      }
+    });
+  </script>
 </head>
 <body>
-
-  <header>
-    <img src="img/marca dagua.png" alt="ZN Solar">
-    <div class="hero-subtitle">Energia Solar Fotovoltaica • Economia • Sustentabilidade</div>
-  </header>
-
-  <main>
-    <section class="diagrama-container">
-      <h2>Esquema do Sistema Fotovoltaico</h2>
-      <p>Entenda o funcionamento do sistema e a ligação com a rede elétrica.</p>
-      <img src="img/Sistemas-on-grid-x-off-grid.jpg" alt="Diagrama Técnico On-Grid vs Off-Grid" class="diagrama-imagem">
-    </section>
-
-    <section class="contato">
-      <h2>Fale com um Especialista</h2>
-      <p>Tem dúvidas sobre o seu projeto? Entre em contacto connosco diretamente pelo WhatsApp.</p>
-      <a href="https://wa.me/SeuNumeroAqui" class="btn-whatsapp" target="_blank">Falar no WhatsApp</a>
-    </section>
-  </main>
-
+<header>
+  <img src="img/marca dagua.png" alt="Logotipo ZNSOLAR" class="logo-site">
+  <p>Energia Solar Fotovoltaica • Economia • Sustentabilidade</p>
+</header>
+<main>
+  <h2>Tipos de Instalações</h2>
+  <section class="instalacoes">
+    <div class="item">
+      <img src="img/instalação residencial.jpeg" alt="Energia Solar Residencial" loading="lazy">
+      <div class="info">
+        <h3>Residencial</h3>
+        <ul>
+          <li>Redução de até 95% na conta</li>
+          <li>Projeto sob medida</li>
+          <li>Instalação rápida e homologada</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20residencial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+      </div>
+    </div>
+    <div class="item">
+      <img src="img/Comercial.jpeg" alt="Energia Solar Comercial" loading="lazy">
+      <div class="info">
+        <h3>Comercial</h3>
+        <ul>
+          <li>Redução de custos operacionais</li>
+          <li>Sistema escalável</li>
+          <li>Retorno rápido do investimento</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20comercial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+      </div>
+    </div>
+    <div class="item">
+      <img src="img/images.jpeg" alt="Energia Solar Industrial" loading="lazy">
+      <div class="info">
+        <h3>Industrial</h3>
+        <ul>
+          <li>Alta capacidade de geração</li>
+          <li>Engenharia especializada</li>
+          <li>Atende normas técnicas RIGOROSAS</li>
+        </ul>
+        <a href="https://wa.me/5511983185337?text=Olá,%20quero%20energia%20solar%20industrial" class="btn-whatsapp" target="_blank">💬 Orçamento Grátis</a>
+      </div>
+    </div>
+  </section>
+  <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
+    <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
+    <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:15px; margin-bottom:25px;">
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+    </div>
+    <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
+    <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
+  </section>
+  <section class="diagrama-container">
+    <h2>Entenda Como Funciona o Sistema</h2>
+    <p>Veja abaixo como os painéis solares captam a luz do sol e o inversor transforma em energia para sua casa.</p>
+    <img src="img/Sistemas-on-grid-x-off-grid.jpg" alt="Diagrama Técnico On-Grid e Off-Grid" class="diagrama-imagem">
+  </section>
+  <section class="videos-container">
+    <h2>Conheça o Nosso Trabalho</h2>
+    <div class="videos-grid">
+      <div class="video-box"><iframe src="https://www.youtube.com/embed/92p-NI8F13E" title="Vídeo ZNSOLAR 1" allowfullscreen></iframe></div>
+      <div class="video-box"><iframe src="https://www.youtube.com/embed/Gjo_kqxJ1nM" title="Vídeo ZNSOLAR 2" allowfullscreen></iframe></div>
+    </div>
+  </section>
+  <section class="contato">
+    <h2>Atendimento ZNSOLAR</h2>
+    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5511983185337" target="_blank">(11) 98318-5337</a></p>
+    <p><strong>Região de atendimento:</strong> São Paulo Capital e região metropolitana</p>
+  </section>
+</main>
+<footer><p>&copy; <span id="ano"></span> ZNSOLAR — Energia Solar Fotovoltaica</p></footer>
+<a href="https://wa.me/5511983185337" class="whatsapp" aria-label="Falar com a ZNSOLAR no WhatsApp" target="_blank">☀️</a>
+<script>
+  document.getElementById('ano').textContent = new Date().getFullYear();
+  // Tabela de preços compactada para dificultar a leitura
+  const _tpZN = {2.0:8224,2.5:9745,3.0:11010,3.5:12047,4.0:12912,4.5:14220,5.0:15510,5.5:16687,6.0:17856,6.5:18902,7.0:19880,7.5:20865,8.0:21712,8.5:22865,9.0:24030,9.5:25042,10.0:26120,10.5:27321,11.0:28248,11.5:29302,12.0:30288,12.5:30037.5,13.0:31070,13.5:32265,14.0:33320,14.5:34510,15.0:35700,15.5:36688.5,16.0:37872,16.5:39055.5,17.0:40018,17.5:41020,18.0:42192,18.5:43364,19.0:44536,19.5:45454.5,20.0:46620,20.5:47785.5,21.0:48468,21.5:49622,22.0:50776,22.5:51930,23.0:53084,23.5:53932.5,24.0:55080,24.5:56227.5,25.0:56800,25.5:57936,26.0:59072,26.5:60208,27.0:61344,27.5:62122.5,28.0:63252,28.5:64096.5,29.0:64844,29.5:65962,30.0:67080,30.5:68198,31.0:69316,31.5:70434,32.0:71552,32.5:72670,33.0:73788,33.5:75241,34.0:76364,34.5:77487,35.0:78610,35.5:80194.5,36.0:81324,36.5:82453.5,37.0:83583,37.5:84712.5,38.0:85842,38.5:86971.5,39.0:88101,39.5:89230.5,40.0:90760,40.5:91894.5,41.0:93029,41.5:94163.5,42.0:95298,42.5:96432.5,43.0:97567,43.5:98701.5,44.0:99836,44.5:100970.5,45.0:102690,45.5:103831,46.0:104972,46.5:106113,47.0:107724,47.5:108870,48.0:110016,48.5:111162,49.0:112308,49.5:113454,50.0:114600,50.5:116251,51.0:117912,51.5:119068,52.0:120068,52.5:121747.5,53.0:123437,53.5:124601.5,54.0:126306,54.5:128020.5,55.0:129030,55.5:130758,56.0:131936,56.5:133679,57.0:135432,57.5:137195,58.0:137634,58.5:139405.5,59.0:141187,59.5:142978.5,60.0:144780,60.5:145986.5,61.0:147010,61.5:148830,62.0:150660,62.5:151875,63.0:153720,63.5:155575,64.0:157440,64.5:158476.5,65.0:159705,65.5:161588.5,66.0:163482,66.5:165385.5,67.0:167299,67.5:167670,68.0:169592,68.5:171524,69.0:173466,69.5:174723,70.0:176680,70.5:177730.5,71.0:179701,71.5:181681.5,72.0:182952,72.5:184947.5,73.0:186953,73.5:188013,74.0:189292,74.5:191316,75.0:193350};
+  
+  function _calcZN() {
+    const i = document.querySelectorAll('.mes-consumo');
+    let t = 0, m = 0;
+    i.forEach(x => { const v = parseFloat(x.value); if (!isNaN(v) && v >= 0) { t += v; m++; } });
+    const r = document.getElementById('resultado-simulacao');
+    if (m === 0) { alert("Por favor, preencha o consumo de pelo menos um mês."); return; }
+    const c = t / m;
+    const n = Math.ceil(c / 55.42);
+    const pr = n * 0.575;
+    let pf = Math.round(pr * 2) / 2;
+    if (pf < 2.0) pf = 2.0;
+    if (pf > 75.0) pf = 75.0;
+    const a = (n * 2.58) * 1.15;
+    const tc = c * 0.92954;
+    const nc = 55.87;
+    const e = tc - nc;
+    r.style.display = "block";
+    const p = _tpZN[pf.toFixed(1)] || _tpZN[pf];
+    r.style.backgroundColor = "#e8f5e9";
+    r.style.border = "1px solid #a5d6a7";
+    r.style.color = "#2e7d32";
+    r.innerHTML = `<div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div><strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br><strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br><hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;"><div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div><strong>Gasto Atual Estimado:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês<br><strong>Nova Conta com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês<br><strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês</span><div style="font-size:0.9rem;color:#388e3c;font-weight:bold;margin-top:5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div><hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;"><div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div><span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br><div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br><strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00.</div><a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${c.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." target="_blank" style="display:inline-block;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">💬 Falar com Especialista no WhatsApp</a>`;
+  }
+</script>
 </body>
 </html>
