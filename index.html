@@ -252,12 +252,13 @@
       box-shadow:0 4px 15px rgba(0,0,0,0.2);
     }
 
-    /* Mobile */
+    /* Regra para manter as imagens lado a lado e responsivas */
     @media (max-width:768px) {
       .autoridade-container { flex-direction:column; text-align:center; }
       .autoridade-texto h2 { text-align:center; }
       .video-box iframe { height:200px; }
       .videos-grid { grid-template-columns: 1fr; }
+      .diagramas-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
@@ -272,7 +273,6 @@
 <main>
 
   <h2>Nossos Serviços</h2>
-
   <section class="instalacoes">
     <div class="item">
       <img src="img/instalação residencial.jpeg" alt="Energia Solar Residencial">
@@ -314,38 +314,6 @@
     </div>
   </section>
 
-  <section class="autoridade-container">
-    <div class="autoridade-texto">
-           <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido com total segurança, transparência e rigor técnico.</p>
-      <ul>
-        <li><strong>✓ Equipe Qualificada:</strong> Projetos e instalações desenvolvidos por Técnicos em Sistemas de Energia Renovável e Eletricista.</li>
-        <li><strong>✓ Conformidade Legal:</strong> Projetos rigorosamente alinhados com a Lei 14.300 e as normas vigentes da Enel SP.</li>
-        <li><strong>✓ Simulação Precisa:</strong> Nada de estimativas vagas; usamos cálculos exatos baseados no seu histórico real de consumo e nos dados de radiação locais.</li>
-      </ul>
-      <p>Garantimos a máxima eficiência para que seu investimento tenha durabilidade superior a 25 anos.</p>
-    </div>
-    <img src="img/Simulação Profissional .jpeg" alt="Profissional realizando testes e simulações solares" class="autoridade-imagem">
-  </section>
-
-  <section class="passos-container">
-    <h2>Como Funciona a Instalação</h2>
-    <p style="color:#666; margin-bottom:20px;">Entenda o processo passo a passo do seu projeto até o início da economia real:</p>
-    <div class="passos-grid">
-      <div class="passo-card">
-        <h3><span class="passo-numero">1</span> Simulação e Visita</h3>
-        <p>Avaliação detalhada das contas de consumo do cliente e análise técnica do telhado diretamente no local.</p>
-      </div>
-      <div class="passo-card">
-        <h3><span class="passo-numero">2</span> Projeto e Homologação</h3>
-        <p>Desenvolvimento da engenharia completa do sistema e aprovação do projeto junto à concessionária (Enel SP).</p>
-      </div>
-      <div class="passo-card">
-        <h3><span class="passo-numero">3</span> Instalação e Ativação</h3>
-        <p>Montagem dos painéis, testes do inversor e troca do medidor padrão pelo modelo bidirecional.</p>
-      </div>
-    </div>
-  </section>
-
   <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
@@ -370,12 +338,11 @@
     <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
   </section>
 
- <section class="diagrama-container">
+  <section class="diagrama-container">
     <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
     <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia. Dependendo do sistema, ela pode ser usada localmente, injetada na rede ou armazenada em baterias.</p>
-    
+     
     <div class="diagramas-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
-        
         <div class="diagrama-item" style="text-align: center;">
             <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema On-Grid</h3>
             <img src="img/DIAGRAMA SITE.jpeg" alt="Diagrama Técnico de Sistema Solar On-Grid" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -390,7 +357,6 @@
             <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema Híbrido</h3>
             <img src="img/hibrdo fotovoltaco.jpeg" alt="Diagrama Técnico de Sistema Solar Híbrido" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
         </div>
-
     </div>
 
     <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; padding: 0 10px;">
@@ -398,7 +364,7 @@
             <strong style="color: #333; display: block; margin-bottom: 5px;">On-Grid (Conectado à Rede)</strong>
             <p style="color: #666; font-size: 0.95rem; margin: 0;">É o modelo mais comum e econômico. Funciona em paralelo com a rede da concessionária. Toda a energia excedente vira créditos para abater na sua conta de luz.</p>
         </div>
-        
+         
         <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
             <strong style="color: #333; display: block; margin-bottom: 5px;">Off-Grid (Isolado por Baterias)</strong>
             <p style="color: #666; font-size: 0.95rem; margin: 0;">Totalmente independente da rede elétrica. A energia gerada é armazenada em baterias para ser usada à noite ou em locais isolados onde não há energia da concessionária.</p>
@@ -409,6 +375,38 @@
             <p style="color: #666; font-size: 0.95rem; margin: 0;">Trabalha conectado à rede da concessionária para gerar créditos, mas também possui baterias de emergência (backup) caso falte energia na rede da rua.</p>
         </div>
     </div>
+  </section>
+
+  <section class="passos-container">
+    <h2>Como Funciona a Instalação</h2>
+    <p style="color:#666; margin-bottom:20px;">Entenda o processo passo a passo do seu projeto até o início da economia real:</p>
+    <div class="passos-grid">
+      <div class="passo-card">
+        <h3><span class="passo-numero">1</span> Simulação e Visita</h3>
+        <p>Avaliação detalhada das contas de consumo do cliente e análise técnica do telhado diretamente no local.</p>
+      </div>
+      <div class="passo-card">
+        <h3><span class="passo-numero">2</span> Projeto e Homologação</h3>
+        <p>Desenvolvimento da engenharia completa do sistema e aprovação do projeto junto à concessionária (Enel SP).</p>
+      </div>
+      <div class="passo-card">
+        <h3><span class="passo-numero">3</span> Instalação e Ativação</h3>
+        <p>Montagem dos painéis, testes do inversor e troca do medidor padrão pelo modelo bidirecional.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="autoridade-container">
+    <div class="autoridade-texto">
+      <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido com total segurança, transparência e rigor técnico.</p>
+      <ul>
+        <li><strong>✓ Equipe Qualificada:</strong> Projetos e instalações desenvolvidos por Técnicos em Sistemas de Energia Renovável e Eletricista.</li>
+        <li><strong>✓ Conformidade Legal:</strong> Projetos rigorosamente alinhados com a Lei 14.300 e as normas vigentes da Enel SP.</li>
+        <li><strong>✓ Simulação Precisa:</strong> Nada de estimativas vagas; usamos cálculos exatos baseados no seu histórico real de consumo e nos dados de radiação locais.</li>
+      </ul>
+      <p>Garantimos a máxima eficiência para que seu investimento tenha durabilidade superior a 25 anos.</p>
+    </div>
+    <img src="img/Simulação Profissional .jpeg" alt="Profissional realizando testes e simulações solares" class="autoridade-imagem">
   </section>
 
   <section class="faq-container">
@@ -456,7 +454,6 @@
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
 
-  // Tabela de preços ofuscada para proteção
   const _0xtp = {2.0:8224,2.5:9745,3.0:11010,3.5:12047,4.0:12912,4.5:14220,5.0:15510,5.5:16687,6.0:17856,6.5:18902,7.0:19880,7.5:20865,8.0:21712,8.5:22865,9.0:24030,9.5:25042,10.0:26120,10.5:27321,11.0:28248,11.5:29302,12.0:30288,12.5:30037.5,13.0:31070,13.5:32265,14.0:33320,14.5:34510,15.0:35700,15.5:36688.5,16.0:37872,16.5:39055.5,17.0:40018,17.5:41020,18.0:42192,18.5:43364,19.0:44536,19.5:45454.5,20.0:46620,20.5:47785.5,21.0:48468,21.5:49622,22.0:50776,22.5:51930,23.0:53084,23.5:53932.5,24.0:55080,24.5:56227.5,25.0:56800,25.5:57936,26.0:59072,26.5:60208,27.0:61344,27.5:62122.5,28.0:63252,28.5:64096.5,29.0:64844,29.5:65962,30.0:67080,30.5:68198,31.0:69316,31.5:70434,32.0:71552,32.5:72670,33.0:73788,33.5:75241,34.0:76364,34.5:77487,35.0:78610,35.5:80194.5,36.0:81324,36.5:82453.5,37.0:83583,37.5:84712.5,38.0:85842,38.5:86971.5,39.0:88101,39.5:89230.5,40.0:90760,40.5:91894.5,41.0:93029,41.5:94163.5,42.0:95298,42.5:96432.5,43.0:97567,43.5:98701.5,44.0:99836,44.5:100970.5,45.0:102690,45.5:103831,46.0:104972,46.5:106113,47.0:107724,47.5:108870,48.0:110016,48.5:111162,49.0:112308,49.5:113454,50.0:114600,50.5:116251,51.0:117912,51.5:119068,52.0:120068,52.5:121747.5,53.0:123437,53.5:124601.5,54.0:126306,54.5:128020.5,55.0:129030,55.5:130758,56.0:131936,56.5:133679,57.0:135432,57.5:137195,58.0:137634,58.5:139405.5,59.0:141187,59.5:142978.5,60.0:144780,60.5:145986.5,61.0:147010,61.5:148830,62.0:150660,62.5:151875,63.0:153720,63.5:155575,64.0:157440,64.5:158476.5,65.0:159705,65.5:161588.5,66.0:163482,66.5:165385.5,67.0:167299,67.5:167670,68.0:169592,68.5:171524,69.0:173466,69.5:174723,70.0:176680,70.5:177730.5,71.0:179701,71.5:181681.5,72.0:182952,72.5:184947.5,73.0:186953,73.5:188013,74.0:189292,74.5:191316,75.0:193350};
 
   function _calcZN() {
@@ -478,7 +475,6 @@
     r.style.display = "block";
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
 
-    // Cálculo exato de Payback em anos
     const payback = (p / (e * 12)).toFixed(1);
     
     r.style.backgroundColor = "#e8f5e9";
