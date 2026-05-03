@@ -145,7 +145,7 @@
 
 <main>
 
-  <h2>Tipos de  Instalações</h2>
+  <h2>Tipos de Instalações</h2>
 
   <section class="instalacoes">
 
@@ -198,29 +198,37 @@
   </div>
 
 </section>
-  <section id="simulador-solar" style="background: white; padding: 30px; border-radius: 10px; margin-top: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid #ff9800;">
-    <h2 style="color: #ff9800; margin-bottom: 20px; text-align: center; font-size: 1.8rem;">Simule seu Sistema e Economia</h2>
-    <p style="text-align: center; color: #666; margin-bottom: 30px;">Descubra o tamanho ideal do sistema, a área de telhado necessária e uma estimativa de preço.</p>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px;">
-      
-      <div>
-        <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #333;">Consumo Médio (kWh/mês):</label>
-        <input type="number" id="consumo" placeholder="Ex: 350" step="0.01" style="width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
-      </div>
 
+  <section id="simulador-solar" style="background: white; padding: 30px; border-radius: 10px; margin-top: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid #ff9800;">
+    <h2 style="color: #ff9800; margin-bottom: 15px; text-align: center; font-size: 1.8rem;">Simule seu Sistema e Economia</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 25px;">
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight: bold; font-size: 0.9rem;">Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px;">
       <div>
-        <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #333;">Estado:</label>
-        <select id="estado" style="width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background: white;">
+        <label style="display: block; font-weight: bold; margin-bottom: 8px;">Estado:</label>
+        <select id="estado" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background: white;">
           <option value="SP">São Paulo (SP)</option>
         </select>
       </div>
-
       <div>
-        <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #333;">Cidade:</label>
-        <input type="text" id="cidade" placeholder="Ex: São Paulo" style="width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+        <label style="display: block; font-weight: bold; margin-bottom: 8px;">Cidade:</label>
+        <input type="text" id="cidade" placeholder="Ex: São Paulo" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
       </div>
-
     </div>
 
     <button onclick="calcularSimulacaoZN()" style="background: #ff9800; color: white; border: none; padding: 16px; width: 100%; border-radius: 6px; font-size: 1.15rem; font-weight: bold; cursor: pointer; transition: background 0.3s; box-shadow: 0 4px 6px rgba(255,152,0,0.2);">
@@ -229,7 +237,7 @@
 
     <div id="resultado-simulacao" style="margin-top: 25px; padding: 22px; border-radius: 8px; display: none; line-height: 1.6; font-size: 1.05rem;"></div>
   </section>
-    
+
   <section class="videos">
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/VIDEO1" allowfullscreen></iframe>
@@ -260,94 +268,105 @@
    target="_blank">☀️</a>
 
 <script>
-  // Atualiza o ano no rodapé automaticamente
   document.getElementById('ano').textContent = new Date().getFullYear();
 
-  // Tabela oficial ZN Solar até o limite de 7.0 kWp
+  // Tabela de Preços corrigida da imagem (2.0 a 75.0 kWp)
   const tabelaPrecosZN = {
-    2.0: 8254.00,
-    2.5: 9745.00,
-    3.0: 11118.00,
-    3.5: 12947.00,
-    4.0: 15012.00,
-    4.5: 16228.00,
-    5.0: 16818.00,
-    5.5: 18887.00,
-    6.0: 17850.00,
-    6.5: 18932.00,
-    7.0: 18808.00
+    2.0: 8254.00,  2.5: 9745.00,  3.0: 11118.00, 3.5: 12047.00, 4.0: 12912.00, 4.5: 14233.00,
+    5.0: 14513.00, 5.5: 16687.00, 6.0: 17350.00, 6.5: 18053.00, 7.0: 18350.00, 7.5: 19355.00,
+    8.0: 21712.00, 8.5: 22365.00, 9.0: 24030.00, 9.5: 25042.00, 10.0: 26130.00, 10.5: 27331.00,
+    11.0: 28243.00, 11.5: 29363.00, 12.0: 30269.00, 12.5: 31037.50, 13.0: 31879.00, 13.5: 32265.00,
+    14.0: 33323.00, 14.5: 34519.00, 15.0: 35719.00, 15.5: 36585.50, 16.0: 37572.00, 16.5: 38356.50,
+    17.0: 40016.00, 17.5: 41033.00, 18.0: 42182.00, 18.5: 43354.00, 19.0: 44520.00, 19.5: 45654.50,
+    20.0: 46833.00, 20.5: 47765.50, 21.0: 48660.00, 21.5: 49832.00, 22.0: 50779.00, 22.5: 51920.00,
+    23.0: 53084.00, 23.5: 53932.50, 24.0: 55063.00, 24.5: 56217.50, 25.0: 56340.00, 25.5: 57935.00,
+    26.0: 59072.00, 26.5: 60259.00, 27.0: 61344.00, 27.5: 62122.50, 28.0: 63282.00, 28.5: 64065.50,
+    29.0: 64944.00, 29.5: 65912.00, 30.0: 67083.00, 30.5: 68156.00, 31.0: 69316.00, 31.5: 70434.00,
+    32.0: 71542.00, 32.5: 72673.00, 33.0: 73789.00, 33.5: 75241.00, 34.0: 76356.00, 34.5: 77417.00,
+    35.0: 78013.00, 35.5: 80154.50, 36.0: 81334.00, 36.5: 82513.50, 37.0: 83563.00, 37.5: 84712.50,
+    38.0: 85842.00, 38.5: 86971.50, 39.0: 88104.00, 39.5: 89233.50, 40.0: 90763.00, 40.5: 91864.50,
+    41.0: 93029.00, 41.5: 94163.50, 42.0: 95294.00, 42.5: 96423.50, 43.0: 97567.00, 43.5: 98701.50,
+    44.0: 99836.00, 44.5: 100970.50, 45.0: 102104.00, 45.5: 103931.50, 46.0: 104871.00, 46.5: 106113.00,
+    47.0: 107724.00, 47.5: 108876.00, 48.0: 110018.00, 48.5: 111102.50, 49.0: 113330.00, 49.5: 113454.50,
+    50.0: 114828.00, 50.5: 116211.00, 51.0: 117912.00, 51.5: 119808.00, 52.0: 120959.00, 52.5: 121747.50,
+    53.0: 123437.00, 53.5: 124901.50, 54.0: 126306.00, 54.5: 126829.50, 55.0: 128938.00, 55.5: 130758.50,
+    56.0: 131935.00, 56.5: 133979.50, 57.0: 135432.00, 57.5: 137315.00, 58.0: 137834.00, 58.5: 139405.50,
+    59.0: 141507.00, 59.5: 142978.50, 60.0: 154719.00, 60.5: 155819.50, 61.0: 157018.00, 61.5: 158030.50,
+    62.0: 156800.00, 62.5: 151975.00, 63.0: 153724.00, 63.5: 155575.50, 64.0: 157410.00, 64.5: 156475.50,
+    65.0: 158705.00, 65.5: 151508.50, 66.0: 153402.00, 66.5: 155305.50, 67.0: 157209.00, 67.5: 157578.00,
+    68.0: 159502.00, 68.5: 171524.00, 69.0: 173450.00, 69.5: 174723.50, 70.0: 176654.00, 70.5: 177738.50,
+    71.0: 179701.00, 71.5: 181813.50, 72.0: 183813.00, 72.5: 184947.50, 73.0: 186913.00, 73.5: 188313.00,
+    74.0: 189313.00, 74.5: 191313.00, 75.0: 193350.00
   };
 
   function calcularSimulacaoZN() {
-    const consumo = parseFloat(document.getElementById('consumo').value);
+    const inputs = document.querySelectorAll('.mes-consumo');
+    let totalConsumo = 0;
+    let mesesPreenchidos = 0;
+
+    inputs.forEach(input => {
+      const val = parseFloat(input.value);
+      if (!isNaN(val) && val >= 0) {
+        totalConsumo += val;
+        mesesPreenchidos++;
+      }
+    });
+
     const divResultado = document.getElementById('resultado-simulacao');
 
-    if (isNaN(consumo) || consumo <= 0) {
-      alert("Por favor, insira um valor de consumo mensal válido.");
+    if (mesesPreenchidos === 0) {
+      alert("Por favor, preencha o consumo de pelo menos um mês.");
       return;
     }
 
-    // 1. Cálculo do número de módulos (Consumo / 55.42 kWh por módulo)
-    const numModulos = Math.ceil(consumo / 55.42);
+    // Média de consumo mensal
+    const consumoMedio = totalConsumo / mesesPreenchidos;
 
-    // 2. Potência de Pico Real (Módulos * 0.575 kWp)
+    // Número de módulos necessários (Consumo Médio / 55.42 kWh por módulo)
+    const numModulos = Math.ceil(consumoMedio / 55.42);
+
+    // Potência de Pico Real calculada
     const potenciaReal = numModulos * 0.575;
 
-    // 3. Área total necessária (Módulos * 2.58 m²)
+    // Regra de arredondamento personalizada:
+    // Se a parte decimal for menor que 0.5 -> arredonda para baixo
+    // Se for igual ou maior que 0.5 -> arredonda para cima
+    let parteInteira = Math.floor(potenciaReal);
+    let parteDecimal = potenciaReal - parteInteira;
+    let potenciaParaPreco = parteDecimal >= 0.5 ? parteInteira + 1.0 : parteInteira;
+
+    // Limites de segurança da tabela
+    if (potenciaParaPreco < 2.0) potenciaParaPreco = 2.0;
+    if (potenciaParaPreco > 75.0) potenciaParaPreco = 75.0;
+
+    // Área necessária (módulos * 2.58 m²)
     const areaNecessaria = numModulos * 2.58;
 
     divResultado.style.display = "block";
 
-    // Regra A: Até 7.0 kWp (Cálculo automático do preço)
-    if (potenciaReal <= 7.0) {
-      // Arredondamento para o degrau mais próximo da tabela (0.5 em 0.5 kWp)
-      let potenciaParaPreco = Math.round(potenciaReal * 2) / 2;
-      
-      // Garante que o mínimo da tabela seja 2.0 kWp
-      if (potenciaParaPreco < 2.0) {
-        potenciaParaPreco = 2.0;
-      }
+    // O preço é buscado diretamente da tabela de forma exata e segura
+    const precoFinal = tabelaPrecosZN[potenciaParaPreco];
 
-      const precoFinal = tabelaPrecosZN[potenciaParaPreco];
-
-      divResultado.style.backgroundColor = "#e8f5e9";
-      divResultado.style.border = "1px solid #a5d6a7";
-      divResultado.style.color = "#2e7d32";
-      
-      divResultado.innerHTML = `
-        <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Resultado da Proposta ZN Solar:</div>
-        <strong>Potência de Pico do Sistema:</strong> ${potenciaReal.toFixed(2)} kWp<br>
-        <strong>Número de Módulos:</strong> ${numModulos} painéis de 575Wp (Jinko)<br>
-        <strong>Área de Telhado Necessária:</strong> ${areaNecessaria.toFixed(2)} m²<br>
-        <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
-        <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
-        <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
-        <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-          * O valor inclui todos os equipamentos, a instalação profissional e a homologação técnica.
-        </div>
-      `;
-    } 
-    // Regra B: Entre 7.1 kWp e 75.0 kWp (Grandes Sistemas - Orçamento via WhatsApp)
-    else if (potenciaReal > 7.0 && potenciaReal <= 75.0) {
-      divResultado.style.backgroundColor = "#fff8e1";
-      divResultado.style.border = "1px solid #ffe082";
-      divResultado.style.color = "#b78103";
-      
-      divResultado.innerHTML = `
-        <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Proposta Personalizada (Sistema de Grande Porte):</div>
-        <strong>Potência de Pico Estimada:</strong> ${potenciaReal.toFixed(2)} kWp<br>
-        <strong>Número de Módulos necessários:</strong> ${numModulos} painéis de 575Wp (Jinko)<br>
-        <strong>Área de Telhado Necessária:</strong> ${areaNecessaria.toFixed(2)} m²<br>
-        <hr style="border: 0; border-top: 1px solid #ffe082; margin: 12px 0;">
-        <div style="font-size: 1rem; font-weight: bold;">Como este sistema é maior que 7 kWp:</div>
-        <p style="margin-top: 5px;">Como sou credenciado até 75 kWp, farei um estudo personalizado para você!</p>
-        <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site%20e%20deu%20um%20sistema%20de%20${potenciaReal.toFixed(2)}%20kWp.%20Quero%20um%20orçamento%20personalizado." 
-           target="_blank" 
-           style="display: inline-block; background: #25d366; color: white; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; font-size: 0.95rem;">
-           💬 Enviar dados para o WhatsApp
-        </a>
-      `;
-    }
+    divResultado.style.backgroundColor = "#e8f5e9";
+    divResultado.style.border = "1px solid #a5d6a7";
+    divResultado.style.color = "#2e7d32";
+    
+    divResultado.innerHTML = `
+      <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Resultado da Simulação ZN Solar:</div>
+      <strong>Consumo Médio Apurado:</strong> ${consumoMedio.toFixed(1)} kWh/mês<br>
+      <strong>Área de Telhado Necessária:</strong> ${areaNecessaria.toFixed(1)} m²<br>
+      <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
+      <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
+      <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
+      <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
+        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica.
+      </div>
+      <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
+         target="_blank" 
+         style="display: inline-block; background: #25d366; color: white; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 12px; font-size: 1rem; width:100%; text-align:center;">
+         💬 Falar com Especialista no WhatsApp
+      </a>
+    `;
   }
 </script>
 
