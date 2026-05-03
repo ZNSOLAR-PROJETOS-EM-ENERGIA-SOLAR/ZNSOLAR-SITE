@@ -329,6 +329,12 @@
 
     const areaNecessaria = (numModulos * 2.58) * 1.15;
 
+    // Novos cálculos financeiros baseados na conta real enviada
+    const tarifaKwh = 0.92954; 
+    const contaAtual = consumoMedio * tarifaKwh;
+    const novaConta = 55.87; // Custo de disponibilidade 50kWh + Imposto COSIP
+    const economiaMensal = contaAtual - novaConta;
+
     divResultado.style.display = "block";
 
     const precoFinal = tabelaPrecosZN[potenciaParaPreco.toFixed(1)] || tabelaPrecosZN[potenciaParaPreco];
@@ -342,10 +348,18 @@
       <strong>Consumo Médio Apurado:</strong> ${consumoMedio.toFixed(1)} kWh/mês<br>
       <strong>Área Necessária:</strong> ${areaNecessaria.toFixed(1)} m²<br>
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
+      
+      <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 5px;">Sua Nova Conta de Luz:</div>
+      <strong>Gasto Atual Estimado:</strong> R$ ${contaAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
+      <strong>Nova Conta com Energia Solar:</strong> R$ ${novaConta.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
+      <strong>Economia Mensal Estimada:</strong> <span style="color: #1b5e20; font-weight: bold;">R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês</span>
+      <div style="font-size: 0.9rem; color: #388e3c; font-weight: bold; margin-top: 5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
+      
+      <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
       <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
       <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
       <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SAO PAULO -SP vigente do mês 05 de 2026 B1 residencial. Valores sujeitos a alteração sem prévio aviso.
+        * O valor inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente do mês 05 de 2026 bandeira Verde B1 residencial. Valores sujeitos a alteração sem prévio aviso.
       </div>
       <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
          target="_blank" 
