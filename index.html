@@ -52,6 +52,7 @@
     h2 {
       margin-bottom: 25px;
       color: #ff9800;
+      text-align: center;
     }
 
     /* Cards de Instalações */
@@ -59,6 +60,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
+      margin-bottom: 50px;
     }
 
     .item {
@@ -105,7 +107,50 @@
       font-weight: bold;
     }
 
-    /* Secção de Vídeos - Ajustada para 2 vídeos centralizados */
+    /* Nova Seção: Diferenciais e Passo a Passo */
+    .secao-conteudo {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    .bloco-info {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+    }
+
+    .bloco-info h3 {
+      color: #ff9800;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      border-bottom: 2px solid #fff3e0;
+      padding-bottom: 8px;
+    }
+
+    .bloco-info ul {
+      list-style: none;
+    }
+
+    .bloco-info ul li {
+      margin-bottom: 15px;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .bloco-info ul li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #ff9800;
+      font-weight: bold;
+    }
+
+    /* Vídeos - Ajustada para 2 vídeos centralizados */
     .videos-container {
       margin-top: 50px;
     }
@@ -158,11 +203,11 @@
     }
 
     @media (max-width: 992px) {
-      .instalacoes { grid-template-columns: repeat(2, 1fr); }
+      .instalacoes, .secao-conteudo { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
-      .instalacoes, .videos-grid { grid-template-columns: 1fr; }
+      .videos-grid { grid-template-columns: 1fr; }
       .video-box iframe { height: 240px; }
     }
   </style>
@@ -231,6 +276,26 @@
 
   </section>
 
+  <section class="secao-conteudo">
+    <div class="bloco-info">
+      <h3>Por que escolher a ZNSOLAR?</h3>
+      <ul>
+        <li><strong>Qualificação Técnica Especializada:</strong> Projetos e instalações executados por profissional credenciado em Sistemas de Energia Renovável e Eletricista Industrial.</li>
+        <li><strong>Conformidade Legal:</strong> Todos os projetos respeitam rigorosamente a legislação vigente e as normas da Enel SP.</li>
+        <li><strong>Simulação de Alta Precisão:</strong> Cálculos baseados no seu consumo real para entregar o melhor custo-benefício.</li>
+      </ul>
+    </div>
+
+    <div class="bloco-info">
+      <h3>Como Funciona a Instalação?</h3>
+      <ul>
+        <li><strong>1. Avaliação e Visita Técnica:</strong> Analisamos suas contas de consumo e realizamos a vistoria técnica no local.</li>
+        <li><strong>2. Projeto e Homologação:</strong> Desenvolvemos a engenharia completa do sistema e aprovamos junto à concessionária.</li>
+        <li><strong>3. Instalação e Ativação:</strong> Fixação dos painéis, ligação dos equipamentos e troca do medidor de energia para o início da geração.</li>
+      </ul>
+    </div>
+  </section>
+
   <section id="simulador-solar" style="background: white; padding: 30px; border-radius: 10px; margin-top: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; border-top: 4px solid #ff9800;">
     <h2 style="color: #ff9800; margin-bottom: 15px; text-align: center; font-size: 1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align: center; color: #666; margin-bottom: 25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
@@ -271,7 +336,7 @@
   </section>
 
   <section class="videos-container">
-    <h2 style="text-align: center; margin-bottom: 30px;">Conheça o Nosso Trabalho</h2>
+    <h2 style="margin-bottom: 30px;">Conheça o Nosso Trabalho</h2>
     <div class="videos-grid">
       <div class="video-box">
         <iframe src="https://www.youtube.com/embed/Gjo_kqxJ1nM" title="ZNSOLAR" allowfullscreen></iframe>
@@ -303,7 +368,6 @@
   document.getElementById('ano').textContent = new Date().getFullYear();
 
   const tabelaPrecosZN = {
-    // ... mantida a sua tabela de preços completa ...
     2.0: 8224.00, 2.5: 9745.00, 3.0: 11010.00, 3.5: 12047.00, 4.0: 12912.00, 4.5: 14220.00,
     5.0: 15510.00, 5.5: 16687.00, 6.0: 17856.00, 6.5: 18902.00, 7.0: 19880.00, 7.5: 20865.00,
     8.0: 21712.00, 8.5: 22865.00, 9.0: 24030.00, 9.5: 25042.00, 10.0: 26120.00, 10.5: 27321.00,
@@ -371,6 +435,9 @@
 
     const precoFinal = tabelaPrecosZN[potenciaParaPreco.toFixed(1)] || tabelaPrecosZN[potenciaParaPreco];
 
+    // Cálculo exato de payback (Retorno do Investimento) em anos
+    const paybackAnos = precoFinal / (economiaMensal * 12);
+
     divResultado.style.backgroundColor = "#e8f5e9";
     divResultado.style.border = "1px solid #a5d6a7";
     divResultado.style.color = "#2e7d32";
@@ -378,20 +445,22 @@
     divResultado.innerHTML = `
       <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Resultado da Simulação ZN Solar:</div>
       <strong>Consumo Médio Apurado:</strong> ${consumoMedio.toFixed(1)} kWh/mês<br>
-      <strong>Área Necessária:</strong> ${areaNecessaria.toFixed(1)} m²<br>
+      <strong>Área Necessária Estimada:</strong> ${areaNecessaria.toFixed(1)} m²<br>
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
       
-      <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 5px;">Sua Nova Conta de Luz:</div>
+      <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 5px;">Economia na Conta de Luz:</div>
       <strong>Gasto Atual Estimado:</strong> R$ ${contaAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
       <strong>Nova Conta com Energia Solar:</strong> R$ ${novaConta.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês<br>
-      <strong>Economia Mensal Estimada:</strong> <span style="color: #1b5e20; font-weight: bold;">R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês</span>
+      <strong>Economia Mensal:</strong> <span style="color: #1b5e20; font-weight: bold;">R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} /mês</span>
       
       <hr style="border: 0; border-top: 1px solid #a5d6a7; margin: 12px 0;">
-      <div style="font-size: 1.1rem; font-weight: bold;">Investimento Total Estimado:</div>
-      <span style="font-size: 1.6rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
+      <div style="font-size: 1.1rem; font-weight: bold;">Investimento e Retorno:</div>
+      <strong>Investimento Estimado:</strong> <span style="font-size: 1.4rem; font-weight: bold;">R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span><br>
+      <strong>Tempo de Retorno (Payback):</strong> <span style="color: #1b5e20; font-weight: bold;">Cerca de ${paybackAnos.toFixed(1).replace('.', ',')} anos</span><br>
+      <div style="font-size: 0.9rem; color: #388e3c; margin-top: 4px;">Após esse período, toda a economia será lucro direto para você por mais de 25 anos!</div>
       
-      <div style="font-size: 0.85rem; color: #555; margin-top: 10px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
-        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
+      <div style="font-size: 0.85rem; color: #555; margin-top: 15px; border-top: 1px solid #c8e6c9; padding-top: 8px;">
+        * O valor acima inclui todos os equipamentos, a instalação completa e a homologação junto à concessionária. Foi utilizado o HSP de São Paulo e tarifa ENEL vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
         <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00.
       </div>
       <a href="https://wa.me/5511983185337?text=Olá,%20fiz%20a%20simulação%20no%20site.%20Meu%20consumo%20médio%20é%20de%20${consumoMedio.toFixed(1)}%20kWh.%20Quero%20prosseguir%20com%20o%20meu%20projeto." 
