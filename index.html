@@ -3,18 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
+    
     <title>ZNSOLAR | Energia Solar Fotovoltáica em São Paulo</title>
-   
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- ADICIONADO: Biblioteca para o gráfico não dar erro -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
+    
     <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
     <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo">
     <meta name="author" content="ZNSOLAR">
     <meta name="robots" content="index, follow">
-   
+    
     <style>
       /* Estilos base e proteção máxima contra cópia */
       * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
@@ -582,6 +581,10 @@
             <canvas id="graficoConsumoMensal"></canvas>
         </div>
 
+        <div style="position: relative; height:250px; width:100%; margin: 30px 0;">
+            <canvas id="graficoCustoFinanceiro"></canvas>
+        </div>
+
         <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
@@ -600,35 +603,44 @@
     r.style.border = "1px solid #a5d6a7";
     r.style.color = "#2e7d32";
 
-    // --- LÓGICA DO GRÁFICO (CONSUMO VS GERAÇÃO) ---
+    // --- LÓGICA DO GRÁFICO 1 (CONSUMO VS GERAÇÃO COM MÉDIA) ---
     const ctx = document.getElementById('graficoConsumoMensal').getContext('2d');
-    const dadosConsumo = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
+    const inputsConsumo = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
     
-    // Dados de HSP mensais (Jan-Dez) de São Paulo conforme as fotos
+    // HSP mensais SP
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const PR_SISTEMA = 0.76;
     const POTENCIA_MOD_KW = 0.575;
     
-    // Geração Mensal Real: (Qtd Placas * Potência Placa * HSP * 30 dias * PR)
+    // Geração Mensal
     const dadosGeracao = hspSP.map(hsp => n * POTENCIA_MOD_KW * hsp * 30 * PR_SISTEMA);
+
+    // Cálculo das Médias (13ª Coluna)
+    const mediaConsumo = inputsConsumo.reduce((a, b) => a + b, 0) / (inputsConsumo.filter(v => v > 0).length || 1);
+    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
+
+    // Adiciona "MÉDIA" aos arrays
+    const labelsComMedia = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'];
+    const consumoFinal = [...inputsConsumo, mediaConsumo];
+    const geracaoFinal = [...dadosGeracao, mediaGeracao];
 
     if (window.meuGraficoConsumo) { window.meuGraficoConsumo.destroy(); }
 
     window.meuGraficoConsumo = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            labels: labelsComMedia,
             datasets: [
                 {
                     label: 'Consumo (kWh)',
-                    data: dadosConsumo,
-                    backgroundColor: '#e53935', // Vermelho
+                    data: consumoFinal,
+                    backgroundColor: '#e53935',
                     borderRadius: 4
                 },
                 {
                     label: 'Geração ZNSOLAR (kWh)',
-                    data: dadosGeracao,
-                    backgroundColor: '#2e7d32', // Verde
+                    data: geracaoFinal,
+                    backgroundColor: '#2e7d32',
                     borderRadius: 4
                 }
             ]
@@ -637,10 +649,42 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { 
-                legend: { display: true, position: 'top' } 
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: 'Consumo Mensal vs Geração Solar' }
             },
             scales: {
                 y: { beginAtZero: true, title: { display: true, text: 'kWh' } }
+            }
+        }
+    });
+
+    // --- LÓGICA DO GRÁFICO 2 (COMPARATIVO FINANCEIRO ANTES VS DEPOIS) ---
+    const ctxFinanceiro = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+    
+    if (window.meuGraficoFinanceiro) { window.meuGraficoFinanceiro.destroy(); }
+
+    window.meuGraficoFinanceiro = new Chart(ctxFinanceiro, {
+        type: 'bar',
+        data: {
+            labels: ['Gasto Mensal Atual', 'Nova Conta com Solar'],
+            datasets: [{
+                label: 'Valor em R$',
+                data: [tc, nc],
+                backgroundColor: ['#e53935', '#2e7d32'],
+                borderRadius: 4,
+                barThickness: 60
+            }]
+        },
+        options: {
+            indexAxis: 'y', // Gráfico na Horizontal para diferenciar
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Comparativo de Custo Mensal (R$)' }
+            },
+            scales: {
+                x: { beginAtZero: true }
             }
         }
     });
