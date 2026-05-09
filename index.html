@@ -334,29 +334,45 @@
     </div>
   </section>
 
-  <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
+ <!-- SUBSTITUA O TRECHO DO SIMULADOR POR ESTE ABAIXO -->
+<section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
     
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:15px; margin-bottom:25px;">
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:10px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+    <style>
+      .grid-consumo {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* Força 4 colunas */
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+      .campo-mes label { font-weight:bold; font-size:0.9rem; display:block; margin-bottom:5px; }
+      .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
+
+      @media (max-width: 600px) {
+        .grid-consumo { grid-template-columns: repeat(2, 1fr); } /* 2 colunas no celular */
+      }
+    </style>
+
+    <div class="grid-consumo">
+      <div class="campo-mes"><label>Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+      <div class="campo-mes"><label>Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
     </div>
 
     <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
 
     <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
-  </section>
+</section>
 
   <section class="diagrama-container">
     <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
