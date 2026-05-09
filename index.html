@@ -565,8 +565,7 @@
 • Gasto Atual Estimado: R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês`
-    ); // <-- ESSES FECHAMENTOS AQUI SÃO O QUE ESTAVAM FALTANDO NA SUA FOTO
-
+  
     r.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -587,6 +586,10 @@
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
         <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
+
+        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do cliente, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, se você não tem tempo a perder, nós também não, a clarezae rapidez nas informações torna  ais eficaz sua decisão, se voce compartilha deste mesmo pensamento, não espera mais entre em contato agora mesmo.
+      </div>
         
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
           <i class="fab fa-whatsapp"></i> Falar com Especialista no WhatsApp
