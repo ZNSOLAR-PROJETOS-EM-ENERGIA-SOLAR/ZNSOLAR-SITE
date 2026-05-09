@@ -294,7 +294,7 @@
     74.5: 230801.00, 75.0: 233100.00
   };
 
- function _calcZN() {
+function _calcZN() {
     const inputs = document.querySelectorAll('.mes-consumo');
     let consumosMensais = [];
     let totalConsumo = 0;
@@ -317,7 +317,7 @@
       return;
     }
     
-    // Cálculo com a margem de 18% que você estabeleceu
+    // Cálculo com 18% de margem (Protocolo Rafael Silva)
     const mediaConsumo = totalConsumo / mesesPreenchidos;
     const numPlacas = Math.ceil((mediaConsumo / 55.42) * 1.18); 
     const potenciaReal = numPlacas * 0.575;
@@ -331,7 +331,6 @@
     if (potenciaFinal < 2.0) potenciaFinal = 2.0;
     if (potenciaFinal > 75.0) potenciaFinal = 75.0;
 
-    // Cálculo considerando Tarifa Enel SP e COSIP
     const custoAtual = mediaConsumo * 0.92954; 
     const novaConta = 55.87; 
     const economiaMensal = custoAtual - novaConta;
@@ -341,53 +340,57 @@
     const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo Médio ${mediaConsumo.toFixed(1)} kWh/mês. Investimento: R$ ${precoKit.toLocaleString('pt-BR')}. Payback: ${payback} anos.`);
     
     resultadoDiv.style.display = "block";
+    resultadoDiv.style.backgroundColor = "#fdfdfd";
+    
     resultadoDiv.innerHTML = `
-      <h3 style="margin-bottom:15px; color:#ff9800;">Resultado da sua Simulação</h3>
-      <p><strong>Consumo Médio:</strong> ${mediaConsumo.toFixed(1)} kWh/mês</p>
-      <p><strong>Sistema Recomendado:</strong> ${potenciaFinal.toFixed(1)} kWp (${numPlacas} placas)</p>
+      <h3 style="color:#ff9800; text-align:center; margin-top:0;">Resultado ZNSolar</h3>
+      <p style="text-align:center;"><strong>Consumo Médio:</strong> ${mediaConsumo.toFixed(1)} kWh/mês | <strong>Sistema:</strong> ${potenciaFinal.toFixed(1)} kWp</p>
       
-      <div style="margin: 25px 0; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-        <p style="font-weight:bold; text-align:center; margin-bottom:10px;">Sazonalidade: Seu Consumo vs Geração Estimada</p>
-        <canvas id="graficoMensal" height="180"></canvas>
+      <!-- 1º GRÁFICO: CONSUMO MENSAL VS GERAÇÃO -->
+      <div style="margin: 20px 0; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+        <p style="font-weight:bold; text-align:center; margin-bottom:10px;">Consumo Mensal vs Geração Estimada (kWh)</p>
+        <canvas id="graficoSazonalidade" height="150"></canvas>
       </div>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; align-items: center;">
-        <div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; flex: 1; min-width: 250px;">
-            <p><strong>Gasto Atual:</strong> <span style="color:#e53935;">R$ ${custoAtual.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
-            <p><strong>Com Solar:</strong> <span style="color:#2e7d32;">R$ ${novaConta.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
-            <p><strong>Economia Anual:</strong> R$ ${(economiaMensal * 12).toLocaleString('pt-BR',{minimumFractionDigits:2})}</p>
-            <p style="font-size: 1.1rem; margin-top:10px;"><strong>Investimento:</strong> R$ ${precoKit.toLocaleString('pt-BR')}</p>
+      <!-- 2º GRÁFICO E DADOS FINANCEIROS -->
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-top:20px;">
+        <div style="flex: 1; min-width: 250px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+            <p><strong>Gasto Sem Solar:</strong> <span style="color:#e53935;">R$ ${custoAtual.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
+            <p><strong>Gasto Com Solar:</strong> <span style="color:#2e7d32;">R$ ${novaConta.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
+            <p><strong>Investimento:</strong> R$ ${precoKit.toLocaleString('pt-BR')}</p>
             <p><strong>Payback:</strong> ${payback} anos</p>
         </div>
-        <div style="flex: 1; min-width: 200px; max-width: 280px;">
+        <div style="flex: 1; max-width: 200px;">
             <canvas id="graficoFinanceiro"></canvas>
         </div>
       </div>
 
-      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block;background:#25d366;color:white;padding:15px;border-radius:5px;text-align:center;font-weight:bold;margin-top:20px; text-decoration:none;">
-        <i class="fab fa-whatsapp"></i> Solicitar Orçamento Detalhado
+      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block;background:#25d366;color:white;padding:15px;border-radius:5px;text-align:center;font-weight:bold;margin-top:25px; text-decoration:none;">
+        <i class="fab fa-whatsapp"></i> Receber Projeto Detalhado
       </a>
     `;
 
-    // Gráfico de Barras + Linha (Sazonalidade)
-    new Chart(document.getElementById('graficoMensal').getContext('2d'), {
+    // Renderização do Gráfico de Sazonalidade
+    new Chart(document.getElementById('graficoSazonalidade'), {
       type: 'bar',
       data: {
         labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         datasets: [
-          { label: 'Seu Consumo (kWh)', data: consumosMensais, backgroundColor: 'rgba(54, 162, 235, 0.4)', borderColor: 'rgb(54, 162, 235)', borderWidth: 1 },
-          { label: 'Geração Estimada (kWh)', data: Array(12).fill(mediaConsumo.toFixed(1)), type: 'line', borderColor: '#ff9800', borderWidth: 3, fill: false }
+          { label: 'Consumo (kWh)', data: consumosMensais, backgroundColor: 'rgba(54, 162, 235, 0.5)', order: 2 },
+          { label: 'Geração (kWh)', data: Array(12).fill(mediaConsumo.toFixed(1)), type: 'line', borderColor: '#ff9800', borderWidth: 3, fill: false, order: 1 }
         ]
-      }
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
 
-    // Gráfico de Pizza (Financeiro)
-    new Chart(document.getElementById('graficoFinanceiro').getContext('2d'), {
+    // Renderização do Gráfico Financeiro
+    new Chart(document.getElementById('graficoFinanceiro'), {
       type: 'doughnut',
       data: {
-        labels: ['Custo Atual', 'Com Solar'],
+        labels: ['Conta Atual', 'Com Solar'],
         datasets: [{ data: [custoAtual.toFixed(2), novaConta.toFixed(2)], backgroundColor: ['#e53935', '#2e7d32'] }]
-      }
+      },
+      options: { plugins: { legend: { display: false } } }
     });
   }
 </script>
