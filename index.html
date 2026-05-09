@@ -16,24 +16,20 @@
         .logo-site { max-width:300px; height:auto; }
         main { max-width:1200px; margin:0 auto; padding:40px 10%; }
         h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; }
-  
-        /* Grid de Serviços */
+        
         .instalacoes { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:50px; }
-        .item { background:white; padding:25px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; transition:0.3s; }
+        .item { background:white; padding:25px; border-radius:10px; border:1px solid #eee; }
         .item img { width:100%; border-radius:10px; margin-bottom:15px; }
-        .btn-whatsapp { background:#25d366; color:white; padding:12px; border-radius:5px; font-weight:bold; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; }
-  
-        /* Simulador */
-        #simulador-solar { background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border-top:4px solid #ff9800; text-align:left; }
+        .btn-whatsapp { background:#25d366; color:white; padding:12px; border-radius:5px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; }
+
+        #simulador-solar { background:white; padding:30px; border-radius:10px; margin:50px 0; border-top:4px solid #ff9800; text-align:left; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
         .grid-consumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .campo-mes input { width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; -webkit-user-select:auto; user-select:auto; }
         @media (max-width: 600px) { .grid-consumo { grid-template-columns: repeat(2, 1fr); } }
 
-        /* Gráficos */
-        .chart-container { position: relative; height:300px; width:100%; margin: 20px 0; }
-        
-        /* Footer e Flutuante */
-        footer { background:#333; color:white; padding:20px; margin-top:40px; }
+        .diagrama-container, .passos-container, .autoridade-container, .faq-container { background:white; padding:40px 30px; border-radius:10px; border:1px solid #eee; margin-bottom:40px; text-align:left; }
+        .diagrama-imagem { max-width:100%; border-radius:10px; border:1px solid #ddd; margin-top:20px; }
+        footer { background:#333; color:white; padding:20px; }
         .whatsapp-float { position:fixed; bottom:20px; right:20px; background:#25d366; color:white; font-size:2rem; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:1000; }
     </style>
 </head>
@@ -45,6 +41,34 @@
 </header>
 
 <main>
+    <h2>Nossos Serviços</h2>
+    <section class="instalacoes">
+        <div class="item">
+            <img src="img/instalação residencial.jpeg" alt="Residencial">
+            <div class="info">
+                <h3>Residencial</h3>
+                <ul><li>Redução de até 95% na conta</li><li>Projeto sob medida</li><li>Instalação rápida e homologada</li></ul>
+                <a href="https://wa.me/5511983185337?text=Olá, quero energia solar residencial" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Estamos On-line</a>
+            </div>
+        </div>
+        <div class="item">
+            <img src="img/Comercial.jpeg" alt="Comercial">
+            <div class="info">
+                <h3>Comercial</h3>
+                <ul><li>Redução de custos operacionais</li><li>Sistema escalável</li><li>Retorno rápido do investimento</li></ul>
+                <a href="https://wa.me/5511983185337?text=Olá, quero energia solar comercial" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Estamos On-line</a>
+            </div>
+        </div>
+        <div class="item">
+            <img src="img/images.jpeg" alt="Industrial">
+            <div class="info">
+                <h3>Industrial</h3>
+                <ul><li>Alta capacidade de geração</li><li>Engenharia especializada</li><li>Atende normas técnicas RIGOROSAS</li></ul>
+                <a href="https://wa.me/5511983185337?text=Olá, quero energia solar industrial" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Estamos On-line</a>
+            </div>
+        </div>
+    </section>
+
     <section id="simulador-solar">
         <h2 style="text-align:center;">Simule seu Sistema e Economia</h2>
         <div class="grid-consumo">
@@ -61,107 +85,108 @@
             <div class="campo-mes"><label>Nov</label><input type="number" class="mes-consumo" value="0"></div>
             <div class="campo-mes"><label>Dez</label><input type="number" class="mes-consumo" value="0"></div>
         </div>
-        <button onclick="calcularTudo()" style="background:#ff9800; color:white; border:none; padding:15px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Calcular Orçamento Completo</button>
+        <button onclick="calcularZN()" style="background:#ff9800; color:white; border:none; padding:15px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Calcular Orçamento Completo</button>
 
-        <div id="resultado" style="display:none; margin-top:30px; padding:20px; background:#f0f9f0; border:1px solid #c3e6cb; border-radius:8px;">
-            <div id="pdf-content" style="background:white; padding:20px; border-radius:5px;">
-                <h3 style="color:#2e7d32;">Estudo de Viabilidade ZN Solar</h3>
-                <div id="dados-texto"></div>
+        <div id="resultado" style="display:none; margin-top:30px;">
+            <div id="pdf-area" style="background:white; padding:20px; border-radius:8px; border:1px solid #ccc;">
+                <h3 style="color:#2e7d32; border-bottom:2px solid #2e7d32; padding-bottom:10px;">Estudo de Viabilidade - ZN Solar</h3>
+                <div id="resumo-valores" style="padding:20px 0; font-size:1.1rem;"></div>
                 
-                <div class="chart-container">
-                    <canvas id="chartConsumo"></canvas>
-                </div>
+                <p><strong>Gráfico 1: Consumo Mensal e Média (13 Colunas)</strong></p>
+                <div style="height:300px; margin-bottom:40px;"><canvas id="chart13"></canvas></div>
 
-                <div class="chart-container">
-                    <canvas id="chartComparativo"></canvas>
-                </div>
+                <p><strong>Gráfico 2: Geração Mensal Estimada e Média (13 Colunas)</strong></p>
+                <div style="height:300px; margin-bottom:20px;"><canvas id="chartGer"></canvas></div>
             </div>
 
-            <p style="font-size:0.9rem; color:#555; margin-top:20px; text-align:left;">
+            <p style="font-size:0.9rem; margin-top:20px; text-align:left; color:#444;">
                 <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital, visita técnica R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, embora pequenas exijem simulações especificas de acordo com a região, será acrescido custos extras de deslocamento, pedágios, e outros que forem necessários. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda, ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte, Esse orçamento final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, você não perde tempo, nós também não, clareza e rapidez nas informações torna mais eficaz sua decisão, se voce compartilha deste pensamento, não espere mais entre em contato agora mesmo.
             </p>
 
             <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="gerarPDF()" style="background:#444; color:white; border:none; padding:15px; border-radius:5px; cursor:pointer; font-weight:bold;">📄 Baixar seu estudo</button>
-                <a id="link-zap" href="#" target="_blank" style="background:#25d366; color:white; padding:15px; border-radius:5px; font-weight:bold; text-decoration:none; text-align:center;">
-                   <i class="fab fa-whatsapp"></i> Envie para o especialista on-line
+                <button onclick="baixarPDF()" style="background:#555; color:white; border:none; padding:15px; border-radius:5px; cursor:pointer; font-weight:bold;">📄 Baixe seu estudo (PDF)</button>
+                <a id="btn-zap-final" href="#" target="_blank" style="background:#25d366; color:white; padding:15px; border-radius:5px; font-weight:bold; text-decoration:none; text-align:center;">
+                   Envie para o especialista on-line agora
                 </a>
             </div>
         </div>
     </section>
+
+    <section class="diagrama-container">
+        <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
+        <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia para alimentar sua casa. O excedente é enviado para a rede da concessionária gerando créditos.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <img src="img/DIAGRAMA SITE.jpeg" class="diagrama-imagem" alt="On Grid">
+            <img src="img/fotovoltaico off grid.jpeg" class="diagrama-imagem" alt="Off Grid">
+            <img src="img/hibrdo fotovoltaco.jpeg" class="diagrama-imagem" alt="Hibrido">
+        </div>
+    </section>
+
+    <section class="passos-container">
+        <h2>Como Funciona a Instalação</h2>
+        <p>Passo 1: Simulação e Visita Técnica. Passo 2: Projeto e Homologação. Passo 3: Instalação e Ativação do Sistema.</p>
+    </section>
+
+    <section class="faq-container">
+        <h2>Dúvidas Frequentes (FAQ)</h2>
+        <div class="faq-item"><h3>O que acontece em dias nublados?</h3><p>O sistema continua gerando através da radiação solar difusa, embora em menor quantidade.</p></div>
+        <div class="faq-item"><h3>O que é o custo de disponibilidade?</h3><p>É o valor mínimo que você paga à concessionária (ENEL) pela conexão à rede elétrica.</p></div>
+    </section>
 </main>
 
-<footer><p>&copy; 2026 ZNSOLAR — Todos os direitos reservados</p></footer>
+<footer><p>&copy; 2026 ZNSOLAR — Energia Solar Fotovoltaica</p></footer>
 <a href="https://wa.me/5511983185337" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    let chart1, chart2;
-    const tabelaPrecos = { 2.0: 9568, 3.0: 12870, 4.0: 15184, 5.0: 18270, 10.0: 31040, 20.0: 58320 /* Adicione os demais aqui conforme sua lista */ };
+    let c1, c2;
 
-    function calcularTudo() {
-        const inputs = document.querySelectorAll('.mes-consumo');
-        let valores = Array.from(inputs).map(i => parseFloat(i.value) || 0);
-        let media = valores.reduce((a,b) => a+b, 0) / 12;
-        
-        if(media <= 0) { alert("Insira os valores de consumo"); return; }
+    function calcularZN() {
+        const val = Array.from(document.querySelectorAll('.mes-consumo')).map(i => parseFloat(i.value) || 0);
+        const media = val.reduce((a,b) => a+b,0) / 12;
+        if(media <= 0) return alert("Preencha o consumo!");
 
-        const custoAtual = media * 0.93;
-        const novaConta = 55.87;
-        const economia = custoAtual - novaConta;
-        const pf = Math.max(2, Math.round((media * 1.18 / 55.42) * 2) / 2);
-        const preco = (tabelaPrecos[pf.toFixed(1)] || pf * 3000); // Fallback caso não ache na tabela
+        const economia = (media * 0.93) - 55.87;
+        const preco = (media * 5.8) + 8000; // Simulação de preço base
 
-        document.getElementById('dados-texto').innerHTML = `
-            <b>Consumo Médio:</b> ${media.toFixed(1)} kWh/mês <br>
-            <b>Economia Mensal:</b> R$ ${economia.toLocaleString('pt-BR')} <br>
-            <b>Investimento:</b> R$ ${preco.toLocaleString('pt-BR')}
+        document.getElementById('resumo-valores').innerHTML = `
+            <b>Média de Consumo:</b> ${media.toFixed(1)} kWh/mês<br>
+            <b>Economia Mensal Estimada:</b> R$ ${economia.toLocaleString('pt-BR')}<br>
+            <b>Investimento Estimado:</b> R$ ${preco.toLocaleString('pt-BR')}
         `;
 
         document.getElementById('resultado').style.display = 'block';
         
-        const msg = encodeURIComponent(`Olá ZNSolar! Fiz a simulação:\nConsumo: ${media.toFixed(1)}kWh\nEconomia: R$ ${economia.toFixed(2)}`);
-        document.getElementById('link-zap').href = `https://wa.me/5511983185337?text=${msg}`;
+        // WhatsApp Automático
+        const textoZap = `Olá ZNSolar! Fiz meu estudo no site:\nConsumo Médio: ${media.toFixed(1)}kWh\nEconomia: R$ ${economia.toFixed(2)}`;
+        document.getElementById('btn-zap-final').href = `https://wa.me/5511983185337?text=${encodeURIComponent(textoZap)}`;
 
-        renderizarGraficos(valores, media);
+        renderGraficos(val, media);
+        
+        // Rolar para o resultado
+        document.getElementById('resultado').scrollIntoView({behavior: 'smooth'});
     }
 
-    function renderizarGraficos(valores, media) {
-        if(chart1) chart1.destroy();
-        if(chart2) chart2.destroy();
+    function renderGraficos(val, media) {
+        if(c1) c1.destroy(); if(c2) c2.destroy();
+        const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','MÉDIA'];
 
-        // Grafico 1: 12 meses + Média (Coluna 13)
-        const ctx1 = document.getElementById('chartConsumo').getContext('2d');
-        chart1 = new Chart(ctx1, {
+        c1 = new Chart(document.getElementById('chart13'), {
             type: 'bar',
-            data: {
-                labels: ['J','F','M','A','M','J','J','A','S','O','N','D', 'MÉDIA'],
-                datasets: [{
-                    label: 'Consumo Mensal (kWh)',
-                    data: [...valores, media],
-                    backgroundColor: [...Array(12).fill('#ff9800'), '#333']
-                }]
-            },
+            data: { labels: labels, datasets: [{ label: 'Consumo (kWh)', data: [...val, media], backgroundColor: [...Array(12).fill('#ff9800'), '#333'] }] },
             options: { devicePixelRatio: 2, maintainAspectRatio: false }
         });
 
-        // Grafico 2: Consumo vs Geração (Lado a Lado)
-        const ctx2 = document.getElementById('chartComparativo').getContext('2d');
-        chart2 = new Chart(ctx2, {
+        const geracao = val.map(v => v * 1.05); // Simula geração baseada no consumo + 5%
+        c2 = new Chart(document.getElementById('chartGer'), {
             type: 'bar',
-            data: {
-                labels: ['Comparativo'],
-                datasets: [
-                    { label: 'Seu Consumo', data: [media], backgroundColor: '#e53935' },
-                    { label: 'Geração ZNSolar', data: [media * 1.05], backgroundColor: '#2e7d32' }
-                ]
-            },
+            data: { labels: labels, datasets: [{ label: 'Geração (kWh)', data: [...geracao, media * 1.05], backgroundColor: [...Array(12).fill('#2e7d32'), '#1b5e20'] }] },
             options: { devicePixelRatio: 2, maintainAspectRatio: false }
         });
     }
 
-    function gerarPDF() {
-        const element = document.getElementById('pdf-content');
-        html2pdf().from(element).set({ margin: 10, filename: 'Estudo-ZNSolar.pdf', html2canvas: { scale: 2 } }).save();
+    function baixarPDF() {
+        const element = document.getElementById('pdf-area');
+        html2pdf().from(element).set({ margin: 10, filename: 'ZNSolar-Estudo.pdf', html2canvas: { scale: 2 } }).save();
     }
 </script>
 </body>
