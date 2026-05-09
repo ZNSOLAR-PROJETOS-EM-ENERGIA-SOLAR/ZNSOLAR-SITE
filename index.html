@@ -7,6 +7,8 @@
   <title>ZNSOLAR | Energia Solar Fotovoltaica em São Paulo</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- ADICIONADO: Biblioteca para o gráfico não dar erro -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
   <meta name="keywords" content="energia solar, energia fotovoltaica, instalação solar, placas solares, energia solar São Paulo">
@@ -525,28 +527,24 @@
     74.5: 230801.00, 75.0: 233100.00
   };
 
+  // FUNÇÃO ÚNICA E CORRIGIDA
   function _calcZN() {
     const i = document.querySelectorAll('.mes-consumo');
     let t = 0, m = 0;
     i.forEach(x => { const v = parseFloat(x.value); if (!isNaN(v) && v >= 0) { t += v; m++; } });
     const r = document.getElementById('resultado-simulacao');
+    
     if (m === 0) { alert("Por favor, preencha o consumo de pelo menos um mês."); return; }
     
     const c = t / m;
-    const n = Math.ceil(c / 55.42);
+    const n = Math.ceil((c * 1.18) / 55.42); // Margem de 18% conforme sua regra
     const pr = n * 0.575;
     
-    // REGRA DE ARREDONDAMENTO ESPECÍFICA DO NEGÓCIO
     let pf;
-    if (pr < 2.5) {
-      pf = 2.0;
-    } else if (pr === 2.5) {
-      pf = 2.5;
-    } else if (pr > 2.5 && pr <= 3.0) {
-      pf = 3.0;
-    } else {
-      pf = Math.round(pr * 2) / 2; // Mantém o padrão de 0.5 em 0.5 para potências maiores
-    }
+    if (pr < 2.5) { pf = 2.0; } 
+    else if (pr === 2.5) { pf = 2.5; } 
+    else if (pr > 2.5 && pr <= 3.0) { pf = 3.0; } 
+    else { pf = Math.round(pr * 2) / 2; }
 
     if (pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
@@ -555,31 +553,24 @@
     const tc = c * 0.92954;
     const nc = 55.87;
     const e = tc - nc;
-    r.style.display = "block";
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
-
     const payback = (p / (e * 12)).toFixed(1);
 
-    // Formatação da mensagem detalhada para o WhatsApp
     const msgWhatsapp = encodeURIComponent(
 `Olá ZNSolar! Acabei de fazer uma simulação completa no site.
-
 *Dados do meu consumo e sistema:*
 • Consumo Médio Apurado: ${c.toFixed(1)} kWh/mês
 • Área Necessária Estimada: ${a.toFixed(1)} m²
-
 *Resultado da Economia:*
 • Gasto Atual Estimado: R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês
 • Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} /mês
-
 *Investimento e Retorno:*
 • Investimento Total Estimado: R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}
-• Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.
-
-Gostaria de prosseguir com o meu projeto!`
+• Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.`
     );
     
+    r.style.display = "block";
     r.style.backgroundColor = "#e8f5e9";
     r.style.border = "1px solid #a5d6a7";
     r.style.color = "#2e7d32";
@@ -598,69 +589,15 @@ Gostaria de prosseguir com o meu projeto!`
       <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
       <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
       <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
-      <div style="font-size:0.9rem; color:#555;">Depois desse período, toda a economia vai direto para o seu bolso por mais de 20 anos!</div>
-      <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
-      <div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">
-        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes 05 de 2025 bandeira verde Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Esta simulação e orçamento são válidos para São Paulo Capital e possui uma cobrança de validação de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios,e variações nas simulações e orçamentos. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do imóvel, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem necessidade de contato , fazendo tudo pelo site, você não perde tempo, nós também não ! A clareza e rapidez nas informações tornam  mais eficaz sua decisão, se voce compartilha deste mesmo pensamento, não espere mais entre em contato agora mesmo.
-      </div>
       <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
         <i class="fab fa-whatsapp"></i> Falar com Especialista no WhatsApp
       </a>
     `;
   }
 </script>
+
 <script>
-    // PREMISSAS TÉCNICAS DA ZNSOLAR
-    const hspMensal = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69]; 
-    const diasMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    const PR = 0.76; 
-    const potenciaModulo = 0.575; 
-
-    function _calcZN() {
-        const inputs = document.querySelectorAll('.mes-consumo');
-        const consumos = Array.from(inputs).map(i => parseFloat(i.value) || 0);
-        const mediaConsumo = consumos.reduce((a, b) => a + b, 0) / 12;
-
-        // Dimensionamento com 18% de margem (Fio B)
-        const modulosNecessarios = Math.ceil((mediaConsumo * 1.18) / 55.42); 
-        const potenciaSistema = modulosNecessarios * potenciaModulo;
-
-        // Geração mensal calculada
-        const geracaoMensal = hspMensal.map((hsp, i) => potenciaSistema * hsp * diasMes[i] * PR);
-
-        // Gráfico Comparativo
-        document.getElementById('container-grafico').style.display = 'block';
-        const ctx1 = document.getElementById('graficoSolar').getContext('2d');
-        if (window.chart1) window.chart1.destroy();
-        window.chart1 = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                datasets: [
-                    { label: 'Consumo Cliente (kWh)', data: consumos, backgroundColor: '#3498db' },
-                    { label: 'Geração ZNSOLAR (kWh)', data: geracaoMensal, backgroundColor: '#ff9800' }
-                ]
-            },
-            options: { responsive: true }
-        });
-
-        // Resultado no HTML
-        const custoSem = mediaConsumo * 0.93; 
-        const custoCom = 55.87;
-        const preco = _0xtp[potenciaSistema.toFixed(1)] || "Sob Consulta";
-        
-        document.getElementById('resultado-simulacao').style.display = 'block';
-        document.getElementById('resultado-simulacao').innerHTML = `
-            <h3>Análise ZNSOLAR Finalizada</h3>
-            <p>Para sua média de <b>${mediaConsumo.toFixed(0)} kWh</b>, instalaremos <b>${modulosNecessarios} módulos</b> Jinko 575Wp.</p>
-            <p>Sua conta cai para aprox. <b>R$ ${custoCom.toFixed(2)}</b>.</p>
-            <p>Investimento: <b>R$ ${preco.toLocaleString('pt-BR')}</b></p>
-        `;
-    }
-</script>
-  
-<script>
+  // Script de Proteção
   document.addEventListener('contextmenu', e => e.preventDefault());
   document.addEventListener('selectstart', e => e.preventDefault());
   document.onkeydown = function(e) {
