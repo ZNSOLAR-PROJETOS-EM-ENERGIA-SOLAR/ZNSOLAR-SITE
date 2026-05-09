@@ -334,7 +334,6 @@
     </div>
   </section>
 
- <!-- SUBSTITUA O TRECHO DO SIMULADOR POR ESTE ABAIXO -->
 <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
@@ -611,7 +610,56 @@ Gostaria de prosseguir com o meu projeto!`
     `;
   }
 </script>
+<script>
+    // PREMISSAS TÉCNICAS DA ZNSOLAR
+    const hspMensal = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69]; 
+    const diasMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const PR = 0.76; 
+    const potenciaModulo = 0.575; 
 
+    function _calcZN() {
+        const inputs = document.querySelectorAll('.mes-consumo');
+        const consumos = Array.from(inputs).map(i => parseFloat(i.value) || 0);
+        const mediaConsumo = consumos.reduce((a, b) => a + b, 0) / 12;
+
+        // Dimensionamento com 18% de margem (Fio B)
+        const modulosNecessarios = Math.ceil((mediaConsumo * 1.18) / 55.42); 
+        const potenciaSistema = modulosNecessarios * potenciaModulo;
+
+        // Geração mensal calculada
+        const geracaoMensal = hspMensal.map((hsp, i) => potenciaSistema * hsp * diasMes[i] * PR);
+
+        // Gráfico Comparativo
+        document.getElementById('container-grafico').style.display = 'block';
+        const ctx1 = document.getElementById('graficoSolar').getContext('2d');
+        if (window.chart1) window.chart1.destroy();
+        window.chart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                datasets: [
+                    { label: 'Consumo Cliente (kWh)', data: consumos, backgroundColor: '#3498db' },
+                    { label: 'Geração ZNSOLAR (kWh)', data: geracaoMensal, backgroundColor: '#ff9800' }
+                ]
+            },
+            options: { responsive: true }
+        });
+
+        // Resultado no HTML
+        const custoSem = mediaConsumo * 0.93; 
+        const custoCom = 55.87;
+        const preco = _0xtp[potenciaSistema.toFixed(1)] || "Sob Consulta";
+        
+        document.getElementById('resultado-simulacao').style.display = 'block';
+        document.getElementById('resultado-simulacao').innerHTML = `
+            <h3>Análise ZNSOLAR Finalizada</h3>
+            <p>Para sua média de <b>${mediaConsumo.toFixed(0)} kWh</b>, instalaremos <b>${modulosNecessarios} módulos</b> Jinko 575Wp.</p>
+            <p>Sua conta cai para aprox. <b>R$ ${custoCom.toFixed(2)}</b>.</p>
+            <p>Investimento: <b>R$ ${preco.toLocaleString('pt-BR')}</b></p>
+        `;
+    }
+</script>
+  
 <script>
   document.addEventListener('contextmenu', e => e.preventDefault());
   document.addEventListener('selectstart', e => e.preventDefault());
