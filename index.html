@@ -338,20 +338,39 @@
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
     
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:15px; margin-bottom:25px;">
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:10px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <div><label style="font-weight:bold; font-size:0.9rem;">Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-    </div>
+    // TABELA DE PREÇOS ATUALIZADA
+  const _0xtp = {
+    2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
+    4.5: 16740.00, 5.0: 18270.00, 5.5: 19679.00, 6.0: 21072.00, 6.5: 22334.00,
+    7.0: 23520.00, 7.5: 24705.00, 8.0: 25744.00, 8.5: 27115.00, 9.0: 28530.00,
+    9.5: 29754.00, 10.0: 31040.00, 10.5: 32487.00, 11.0: 33616.00, 11.5: 34914.00,
+    12.0: 36096.00, 12.5: 37600.00, 13.0: 38870.00, 13.5: 40365.00, 14.0: 41720.00,
+    14.5: 43210.00, 15.0: 44700.00, 15.5: 45911.00, 16.0: 47392.00, 16.5: 48873.00,
+    17.0: 50048.00, 17.5: 51345.00, 18.0: 52812.00, 18.5: 54279.00, 19.0: 55746.00,
+    19.5: 56862.00, 20.0: 58320.00, 20.5: 59778.00, 21.0: 60648.00, 21.5: 62092.00,
+    22.0: 63536.00, 22.5: 64980.00, 23.0: 66424.00, 23.5: 67445.00, 24.0: 68880.00,
+    24.5: 70315.00, 25.0: 71050.00, 25.5: 72471.00, 26.0: 73892.00, 26.5: 75313.00,
+    27.0: 76734.00, 27.5: 77660.00, 28.0: 79072.00, 28.5: 80199.00, 29.0: 81084.00,
+    29.5: 82482.00, 30.0: 83880.00, 30.5: 85278.00, 31.0: 86676.00, 31.5: 88074.00,
+    32.0: 89472.00, 32.5: 90870.00, 33.0: 92268.00, 33.5: 94001.00, 34.0: 95404.00,
+    34.5: 96807.00, 35.0: 98210.00, 35.5: 100252.00, 36.0: 101664.00, 36.5: 103076.00,
+    37.0: 104488.00, 37.5: 105900.00, 38.0: 107312.00, 38.5: 108724.00, 39.0: 110136.00,
+    39.5: 111548.00, 40.0: 113360.00, 40.5: 114777.00, 41.0: 116194.00, 41.5: 117611.00,
+    42.0: 119028.00, 42.5: 120445.00, 43.0: 121862.00, 43.5: 123279.00, 44.0: 124696.00,
+    44.5: 126113.00, 45.0: 128340.00, 45.5: 129766.00, 46.0: 131192.00, 46.5: 132618.00,
+    47.0: 134514.00, 47.5: 135945.00, 48.0: 137376.00, 48.5: 138807.00, 49.0: 140238.00,
+    49.5: 141669.00, 50.0: 143100.00, 50.5: 145036.00, 51.0: 146982.00, 51.5: 148423.00,
+    52.0: 149448.00, 52.5: 151410.00, 53.0: 153382.00, 53.5: 154829.00, 54.0: 156816.00,
+    54.5: 158813.00, 55.0: 159830.00, 55.5: 161838.00, 56.0: 163296.00, 56.5: 165319.00,
+    57.0: 167352.00, 57.5: 169395.00, 58.0: 169824.00, 58.5: 171873.00, 59.0: 173932.00,
+    59.5: 176001.00, 60.0: 178080.00, 60.5: 179564.00, 61.0: 180560.00, 61.5: 182655.00,
+    62.0: 184760.00, 62.5: 186250.00, 63.0: 188370.00, 63.5: 190500.00, 64.0: 192640.00,
+    64.5: 193629.00, 65.0: 195130.00, 65.5: 197286.00, 66.0: 199452.00, 66.5: 201628.00,
+    67.0: 203814.00, 67.5: 204120.00, 68.0: 206312.00, 68.5: 208514.00, 69.0: 210726.00,
+    69.5: 212253.00, 70.0: 214480.00, 70.5: 215448.00, 71.0: 217686.00, 71.5: 219934.00,
+    72.0: 221472.00, 72.5: 223735.00, 73.0: 226008.00, 73.5: 226968.00, 74.0: 228512.00,
+    74.5: 230801.00, 75.0: 233100.00
+  };
 
     <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
 
