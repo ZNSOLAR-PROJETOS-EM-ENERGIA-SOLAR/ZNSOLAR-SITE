@@ -564,8 +564,8 @@
 *Resultado da Economia:*
 • Gasto Atual Estimado: R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
-• Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês`); // <-- CORRIGIDO: Fechamento da crase e do parêntese
-  
+• Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês`);
+
     r.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -578,7 +578,7 @@
         <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
         <div style="font-size:0.9rem;color:#388e3c;font-weight:bold;margin-top:5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
 
-        <div style="position: relative; height:200px; width:100%; margin: 20px 0;">
+        <div style="position: relative; height:250px; width:100%; margin: 20px 0;">
             <canvas id="graficoConsumoMensal"></canvas>
         </div>
 
@@ -600,8 +600,17 @@
     r.style.border = "1px solid #a5d6a7";
     r.style.color = "#2e7d32";
 
+    // --- LÓGICA DO GRÁFICO (CONSUMO VS GERAÇÃO) ---
     const ctx = document.getElementById('graficoConsumoMensal').getContext('2d');
-    const dadosParaGrafico = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
+    const dadosConsumo = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
+    
+    // Dados de HSP mensais (Jan-Dez) de São Paulo conforme as fotos
+    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+    const PR_SISTEMA = 0.76;
+    const POTENCIA_MOD_KW = 0.575;
+    
+    // Geração Mensal Real: (Qtd Placas * Potência Placa * HSP * 30 dias * PR)
+    const dadosGeracao = hspSP.map(hsp => n * POTENCIA_MOD_KW * hsp * 30 * PR_SISTEMA);
 
     if (window.meuGraficoConsumo) { window.meuGraficoConsumo.destroy(); }
 
@@ -609,17 +618,30 @@
         type: 'bar',
         data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            datasets: [{
-                label: 'Consumo (kWh)',
-                data: dadosParaGrafico,
-                backgroundColor: '#2e7d32',
-                borderRadius: 5
-            }]
+            datasets: [
+                {
+                    label: 'Consumo (kWh)',
+                    data: dadosConsumo,
+                    backgroundColor: '#e53935', // Vermelho
+                    borderRadius: 4
+                },
+                {
+                    label: 'Geração ZNSOLAR (kWh)',
+                    data: dadosGeracao,
+                    backgroundColor: '#2e7d32', // Verde
+                    borderRadius: 4
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } }
+            plugins: { 
+                legend: { display: true, position: 'top' } 
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'kWh' } }
+            }
         }
     });
   }
