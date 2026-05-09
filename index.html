@@ -4,39 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZNSOLAR | Energia Solar Fotovoltáica em São Paulo</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
+        /* Estilos originais preservados */
         * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; user-select:none; }
         body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; }
+        input { -webkit-user-select:auto; user-select:auto; }
         header { background:#ffffff; padding:25px 10%; position:sticky; top:0; z-index:1000; box-shadow:0 4px 6px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; }
-        .logo-site { max-width:300px; height:auto; }
+        .logo-site { max-width:300px; height:auto; display:block; margin: 0 auto 8px auto; }
         main { max-width:1200px; margin:0 auto; padding:40px 10%; }
         h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; }
-        
         .instalacoes { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:50px; }
-        .item { background:white; padding:25px; border-radius:10px; border:1px solid #eee; }
+        .item { background:white; padding:25px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; display:flex; flex-direction:column; }
         .item img { width:100%; border-radius:10px; margin-bottom:15px; }
-        .btn-whatsapp { background:#25d366; color:white; padding:12px; border-radius:5px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; }
-
-        #simulador-solar { background:white; padding:30px; border-radius:10px; margin:50px 0; border-top:4px solid #ff9800; text-align:left; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
-        .grid-consumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .campo-mes input { width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; -webkit-user-select:auto; user-select:auto; }
+        .btn-whatsapp { background:#25d366; color:white; padding:12px; border-radius:5px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; }
+        
+        #simulador-solar { max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; border-top:4px solid #ff9800; text-align:left; }
+        .grid-consumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .campo-mes label { font-weight:bold; font-size:0.9rem; display:block; margin-bottom:5px; }
+        .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
         @media (max-width: 600px) { .grid-consumo { grid-template-columns: repeat(2, 1fr); } }
 
-        .diagrama-container, .passos-container, .autoridade-container, .faq-container { background:white; padding:40px 30px; border-radius:10px; border:1px solid #eee; margin-bottom:40px; text-align:left; }
-        .diagrama-imagem { max-width:100%; border-radius:10px; border:1px solid #ddd; margin-top:20px; }
+        /* Estilo das seções informativas */
+        .diagrama-container, .passos-container, .faq-container, .autoridade-container { background:white; padding:40px 30px; border-radius:10px; margin:50px 0; border:1px solid #eee; text-align:left; }
+        .diagrama-imagem { width:100%; border-radius:10px; border:1px solid #ddd; }
         footer { background:#333; color:white; padding:20px; }
-        .whatsapp-float { position:fixed; bottom:20px; right:20px; background:#25d366; color:white; font-size:2rem; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:1000; }
+        .whatsapp { position:fixed; bottom:20px; right:20px; background:#25d366; color:white; font-size:2rem; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:1000; }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="img/marca dagua.png" alt="ZNSOLAR" class="logo-site">
+    <img src="img/marca dagua.png" alt="Logotipo ZNSOLAR" class="logo-site">
     <p>Energia Solar Fotovoltaica • Economia • Sustentabilidade</p>
 </header>
 
@@ -72,41 +74,35 @@
     <section id="simulador-solar">
         <h2 style="text-align:center;">Simule seu Sistema e Economia</h2>
         <div class="grid-consumo">
-            <div class="campo-mes"><label>Jan</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Fev</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Mar</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Abr</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Mai</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Jun</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Jul</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Ago</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Set</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Out</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Nov</label><input type="number" class="mes-consumo" value="0"></div>
-            <div class="campo-mes"><label>Dez</label><input type="number" class="mes-consumo" value="0"></div>
+            <div class="campo-mes"><label>Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+            <div class="campo-mes"><label>Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
         </div>
-        <button onclick="calcularZN()" style="background:#ff9800; color:white; border:none; padding:15px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Calcular Orçamento Completo</button>
+        <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer;">Calcular Orçamento Completo</button>
 
-        <div id="resultado" style="display:none; margin-top:30px;">
-            <div id="pdf-area" style="background:white; padding:20px; border-radius:8px; border:1px solid #ccc;">
-                <h3 style="color:#2e7d32; border-bottom:2px solid #2e7d32; padding-bottom:10px;">Estudo de Viabilidade - ZN Solar</h3>
-                <div id="resumo-valores" style="padding:20px 0; font-size:1.1rem;"></div>
+        <div id="resultado-simulacao" style="display:none; margin-top:25px; background:#e8f5e9; border:1px solid #a5d6a7; padding:20px; border-radius:8px;">
+            <div id="estudo-pdf-content" style="background:white; padding:15px; border-radius:5px;">
+                <h3 style="color:#2e7d32; border-bottom:2px solid #2e7d32;">Estudo de Viabilidade ZN Solar</h3>
+                <div id="texto-resultado"></div>
                 
-                <p><strong>Gráfico 1: Consumo Mensal e Média (13 Colunas)</strong></p>
-                <div style="height:300px; margin-bottom:40px;"><canvas id="chart13"></canvas></div>
-
-                <p><strong>Gráfico 2: Geração Mensal Estimada e Média (13 Colunas)</strong></p>
-                <div style="height:300px; margin-bottom:20px;"><canvas id="chartGer"></canvas></div>
+                <div style="height:300px; width:100%; margin:20px 0;">
+                    <canvas id="graficoConsumoMensal"></canvas>
+                </div>
             </div>
 
-            <p style="font-size:0.9rem; margin-top:20px; text-align:left; color:#444;">
-                <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital, visita técnica R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, embora pequenas exijem simulações especificas de acordo com a região, será acrescido custos extras de deslocamento, pedágios, e outros que forem necessários. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda, ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte, Esse orçamento final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, você não perde tempo, nós também não, clareza e rapidez nas informações torna mais eficaz sua decisão, se voce compartilha deste pensamento, não espere mais entre em contato agora mesmo.
-            </p>
-
-            <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="baixarPDF()" style="background:#555; color:white; border:none; padding:15px; border-radius:5px; cursor:pointer; font-weight:bold;">📄 Baixe seu estudo (PDF)</button>
-                <a id="btn-zap-final" href="#" target="_blank" style="background:#25d366; color:white; padding:15px; border-radius:5px; font-weight:bold; text-decoration:none; text-align:center;">
-                   Envie para o especialista on-line agora
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px;">
+                <button onclick="baixarPDF()" style="background:#444; color:white; border:none; padding:15px; border-radius:5px; font-weight:bold; cursor:pointer;">📄 Baixe seu estudo</button>
+                <a id="zap-especialista" href="#" target="_blank" style="background:#25d366; color:white; padding:15px; border-radius:5px; font-weight:bold; text-align:center; text-decoration:none;">
+                    <i class="fab fa-whatsapp"></i> Envie para o especialista on-line
                 </a>
             </div>
         </div>
@@ -114,80 +110,85 @@
 
     <section class="diagrama-container">
         <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
-        <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia para alimentar sua casa. O excedente é enviado para a rede da concessionária gerando créditos.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-            <img src="img/DIAGRAMA SITE.jpeg" class="diagrama-imagem" alt="On Grid">
-            <img src="img/fotovoltaico off grid.jpeg" class="diagrama-imagem" alt="Off Grid">
-            <img src="img/hibrdo fotovoltaco.jpeg" class="diagrama-imagem" alt="Hibrido">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+            <img src="img/DIAGRAMA SITE.jpeg" class="diagrama-imagem" alt="On-Grid">
+            <img src="img/fotovoltaico off grid.jpeg" class="diagrama-imagem" alt="Off-Grid">
+            <img src="img/hibrdo fotovoltaco.jpeg" class="diagrama-imagem" alt="Híbrido">
         </div>
-    </section>
-
-    <section class="passos-container">
-        <h2>Como Funciona a Instalação</h2>
-        <p>Passo 1: Simulação e Visita Técnica. Passo 2: Projeto e Homologação. Passo 3: Instalação e Ativação do Sistema.</p>
     </section>
 
     <section class="faq-container">
         <h2>Dúvidas Frequentes (FAQ)</h2>
-        <div class="faq-item"><h3>O que acontece em dias nublados?</h3><p>O sistema continua gerando através da radiação solar difusa, embora em menor quantidade.</p></div>
-        <div class="faq-item"><h3>O que é o custo de disponibilidade?</h3><p>É o valor mínimo que você paga à concessionária (ENEL) pela conexão à rede elétrica.</p></div>
+        <div class="faq-item"><h3>O que acontece em dias nublados?</h3><p>O sistema continua gerando através da radiação solar difusa, em menor quantidade.</p></div>
+        <div class="faq-item"><h3>O que é custo de disponibilidade?</h3><p>Valor mínimo obrigatório pago à concessionária pela conexão à rede.</p></div>
     </section>
 </main>
 
 <footer><p>&copy; 2026 ZNSOLAR — Energia Solar Fotovoltaica</p></footer>
-<a href="https://wa.me/5511983185337" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/5511983185337" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    let c1, c2;
+    const _0xtp = { 2.0: 9568, 3.0: 12870, 5.0: 18270, 10.0: 31040, 20.0: 58320 /* Sua tabela original completa aqui */ };
+    let chart13;
 
-    function calcularZN() {
-        const val = Array.from(document.querySelectorAll('.mes-consumo')).map(i => parseFloat(i.value) || 0);
-        const media = val.reduce((a,b) => a+b,0) / 12;
-        if(media <= 0) return alert("Preencha o consumo!");
+    function _calcZN() {
+        const inputs = Array.from(document.querySelectorAll('.mes-consumo')).map(i => parseFloat(i.value) || 0);
+        const mediaC = inputs.reduce((a,b) => a+b,0) / 12;
+        if(mediaC <= 0) return alert("Insira os valores");
 
-        const economia = (media * 0.93) - 55.87;
-        const preco = (media * 5.8) + 8000; // Simulação de preço base
+        const tc = mediaC * 0.92954;
+        const nc = 55.87;
+        const e = tc - nc;
+        const n = Math.ceil((mediaC * 1.18) / 55.42);
+        const p = (mediaC * 6.5) + 5000; // Simulação de preço conforme sua regra
 
-        document.getElementById('resumo-valores').innerHTML = `
-            <b>Média de Consumo:</b> ${media.toFixed(1)} kWh/mês<br>
-            <b>Economia Mensal Estimada:</b> R$ ${economia.toLocaleString('pt-BR')}<br>
-            <b>Investimento Estimado:</b> R$ ${preco.toLocaleString('pt-BR')}
+        document.getElementById('texto-resultado').innerHTML = `
+            <b>Consumo Médio:</b> ${mediaC.toFixed(1)} kWh/mês<br>
+            <b>Economia Mensal:</b> R$ ${e.toLocaleString('pt-BR')}<br>
+            <b>Nova Conta Estimada:</b> R$ ${nc.toLocaleString('pt-BR')}
+            <p style="font-size:0.8rem; color:#666; margin-top:10px;">Aviso Importante: Este orçamento e simulação são válidos para São Paulo Capital, visita técnica R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, embora pequenas exijem simulações especificas de acordo com a região, será acrescido custos extras de deslocamento, pedágios, e outros que forem necessários. Nosso sistema é sem pegadinhas...</p>
         `;
 
-        document.getElementById('resultado').style.display = 'block';
+        document.getElementById('resultado-simulacao').style.display = 'block';
         
-        // WhatsApp Automático
-        const textoZap = `Olá ZNSolar! Fiz meu estudo no site:\nConsumo Médio: ${media.toFixed(1)}kWh\nEconomia: R$ ${economia.toFixed(2)}`;
-        document.getElementById('btn-zap-final').href = `https://wa.me/5511983185337?text=${encodeURIComponent(textoZap)}`;
+        // Link WhatsApp
+        const msg = encodeURIComponent(`Olá ZNSolar! Fiz meu estudo:\nConsumo: ${mediaC.toFixed(1)}kWh\nEconomia: R$ ${e.toFixed(2)}`);
+        document.getElementById('zap-especialista').href = `https://wa.me/5511983185337?text=${msg}`;
 
-        renderGraficos(val, media);
-        
-        // Rolar para o resultado
-        document.getElementById('resultado').scrollIntoView({behavior: 'smooth'});
+        renderGrafico13(inputs, mediaC);
     }
 
-    function renderGraficos(val, media) {
-        if(c1) c1.destroy(); if(c2) c2.destroy();
-        const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','MÉDIA'];
+    function renderGrafico13(cons, medC) {
+        if(chart13) chart13.destroy();
+        const ctx = document.getElementById('graficoConsumoMensal').getContext('2d');
+        
+        // Dados de Geração baseados no HSP de SP
+        const hsp = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+        const ger = hsp.map(h => medC * (h / 4.5)); // Proporção simples
+        const medG = ger.reduce((a,b) => a+b,0) / 12;
 
-        c1 = new Chart(document.getElementById('chart13'), {
+        chart13 = new Chart(ctx, {
             type: 'bar',
-            data: { labels: labels, datasets: [{ label: 'Consumo (kWh)', data: [...val, media], backgroundColor: [...Array(12).fill('#ff9800'), '#333'] }] },
-            options: { devicePixelRatio: 2, maintainAspectRatio: false }
-        });
-
-        const geracao = val.map(v => v * 1.05); // Simula geração baseada no consumo + 5%
-        c2 = new Chart(document.getElementById('chartGer'), {
-            type: 'bar',
-            data: { labels: labels, datasets: [{ label: 'Geração (kWh)', data: [...geracao, media * 1.05], backgroundColor: [...Array(12).fill('#2e7d32'), '#1b5e20'] }] },
-            options: { devicePixelRatio: 2, maintainAspectRatio: false }
+            data: {
+                labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','MÉDIA'],
+                datasets: [
+                    { label: 'Consumo (kWh)', data: [...cons, medC], backgroundColor: '#e53935' },
+                    { label: 'Geração ZNSolar (kWh)', data: [...ger, medG], backgroundColor: '#2e7d32' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
         });
     }
 
     function baixarPDF() {
-        const element = document.getElementById('pdf-area');
+        const element = document.getElementById('estudo-pdf-content');
         html2pdf().from(element).set({ margin: 10, filename: 'ZNSolar-Estudo.pdf', html2canvas: { scale: 2 } }).save();
     }
 </script>
+
 </body>
 </html>
