@@ -345,7 +345,6 @@
       <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
-      <!-- JULHO CORRIGIDO ABAIXO -->
       <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
       <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
@@ -477,7 +476,7 @@
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
 
-  // OS VALORES ABAIXO FORAM ATUALIZADOS COM A NOVA TABELA DE PREÇOS
+  // TABELA DE PREÇOS ATUALIZADA - ZNSOLAR 2026
   const _0xtp = {
     2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
     4.5: 16740.00, 5.0: 18270.00, 5.5: 19679.00, 6.0: 21072.00, 6.5: 22334.00,
@@ -519,10 +518,13 @@
     if (m === 0) { alert("Por favor, preencha o consumo de pelo menos um mês."); return; }
     
     const c = t / m;
-    const n = Math.ceil(c / 55.42);
-    const pr = n * 0.575;
     
-    // REGRA DE ARREDONDAMENTO ESPECÍFICA DO NEGÓCIO
+    // CALCULO BASEADO NA NOVA TABELA: 18% DE MARGEM SOBRE O CONSUMO
+    const consumoComMargem = c * 1.18;
+    const n = Math.ceil(consumoComMargem / 55.42); // 55.42 kWh/mês por módulo conforme estudo
+    const pr = n * 0.575; // Potência nominal baseada em módulos de 575W
+    
+    // REGRA DE ARREDONDAMENTO PARA ENCONTRAR CHAVE NA TABELA DE PREÇOS
     let pf;
     if (pr < 2.5) {
       pf = 2.0;
@@ -531,27 +533,30 @@
     } else if (pr > 2.5 && pr <= 3.0) {
       pf = 3.0;
     } else {
-      pf = Math.round(pr * 2) / 2; // Mantém o padrão de 0.5 em 0.5 para potências maiores
+      pf = Math.round(pr * 2) / 2; 
     }
 
     if (pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
 
-    const a = (n * 2.58) * 1.15;
-    const tc = c * 0.92954;
-    const nc = 55.87;
+    // ÁREA COM 18% DE MARGEM PARA CIRCULAÇÃO
+    const a = (n * 2.58) * 1.18;
+    
+    const tc = c * 0.92954; // Tarifa ENEL SP aplicada
+    const nc = 55.87; // Valor mínimo (Taxa de disponibilidade)
     const e = tc - nc;
+    
     r.style.display = "block";
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
 
     const payback = (p / (e * 12)).toFixed(1);
 
-    // Formatação da mensagem detalhada para o WhatsApp
     const msgWhatsapp = encodeURIComponent(
 `Olá ZNSolar! Acabei de fazer uma simulação completa no site.
 
 *Dados do meu consumo e sistema:*
 • Consumo Médio Apurado: ${c.toFixed(1)} kWh/mês
+• Potência Necessária: ${pr.toFixed(2)} kWp
 • Área Necessária Estimada: ${a.toFixed(1)} m²
 
 *Resultado da Economia:*
@@ -573,6 +578,7 @@ Gostaria de prosseguir com o meu projeto!`
     r.innerHTML = `
       <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
       <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
+      <strong>Potência do Sistema Sugerido:</strong> ${pr.toFixed(2)} kWp (${n} módulos)<br>
       <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
       <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
@@ -584,11 +590,11 @@ Gostaria de prosseguir com o meu projeto!`
       <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
       <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
       <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
-      <div style="font-size:0.9rem; color:#555;">Depois desse período, toda a economia vai direto para o seu bolso por mais de 20 anos!</div>
+      <div style="font-size:0.9rem; color:#555;">Após esse período, toda a economia gera lucro direto por mais de 20 anos!</div>
       <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">
-        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa mes 05 de 2026 bandeira verde ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Esta Simulação e orçamento é válido para São Paulo Capital, outras cidades do estado podem ter variações especificas na geração, ocorrendo mudanças na simulação  e custos , mesmo com poucas diferenças. Formalização da Visita técnica valor de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda, ressalvas à parte elétrica do imóvel inerentes a instalção, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, se você não tem tempo a perder, nós também não, a clareza e rapidez nas informações tornam  mais eficazes suas decisões, se voce compartilha deste mesmo pensamento, não espere mais entre em contato agora mesmo.
+        * O valor inclui equipamentos, instalação profissional e homologação técnica. Cálculos baseados no HSP de São Paulo e margem de segurança de 18%. Tarifa ref. 05/2026 ENEL SP. Valores sujeitos a alteração.<br><br>
+        <strong>Aviso Importante:</strong> Simulação válida para São Paulo Capital. Visita técnica formal R$ 150,00. Cidades fora da Capital sujeitas a custos extras de deslocamento. Nosso sistema é direto e transparente: o preço final é divulgado sem surpresas. Se você valoriza clareza e rapidez, entre em contato agora mesmo.
       </div>
       <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
         <i class="fab fa-whatsapp"></i> Falar com Especialista no WhatsApp
