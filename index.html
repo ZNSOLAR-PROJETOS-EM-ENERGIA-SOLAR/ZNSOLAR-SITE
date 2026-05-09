@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-  <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltaica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
+  <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
   <meta name="keywords" content="energia solar, energia fotovoltaica, instalação solar, placas solares, energia solar São Paulo">
   <meta name="author" content="ZNSOLAR">
   <meta name="robots" content="index, follow">
@@ -338,39 +338,20 @@
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
     <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
     
-    // TABELA DE PREÇOS ATUALIZADA
-  const _0xtp = {
-    2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
-    4.5: 16740.00, 5.0: 18270.00, 5.5: 19679.00, 6.0: 21072.00, 6.5: 22334.00,
-    7.0: 23520.00, 7.5: 24705.00, 8.0: 25744.00, 8.5: 27115.00, 9.0: 28530.00,
-    9.5: 29754.00, 10.0: 31040.00, 10.5: 32487.00, 11.0: 33616.00, 11.5: 34914.00,
-    12.0: 36096.00, 12.5: 37600.00, 13.0: 38870.00, 13.5: 40365.00, 14.0: 41720.00,
-    14.5: 43210.00, 15.0: 44700.00, 15.5: 45911.00, 16.0: 47392.00, 16.5: 48873.00,
-    17.0: 50048.00, 17.5: 51345.00, 18.0: 52812.00, 18.5: 54279.00, 19.0: 55746.00,
-    19.5: 56862.00, 20.0: 58320.00, 20.5: 59778.00, 21.0: 60648.00, 21.5: 62092.00,
-    22.0: 63536.00, 22.5: 64980.00, 23.0: 66424.00, 23.5: 67445.00, 24.0: 68880.00,
-    24.5: 70315.00, 25.0: 71050.00, 25.5: 72471.00, 26.0: 73892.00, 26.5: 75313.00,
-    27.0: 76734.00, 27.5: 77660.00, 28.0: 79072.00, 28.5: 80199.00, 29.0: 81084.00,
-    29.5: 82482.00, 30.0: 83880.00, 30.5: 85278.00, 31.0: 86676.00, 31.5: 88074.00,
-    32.0: 89472.00, 32.5: 90870.00, 33.0: 92268.00, 33.5: 94001.00, 34.0: 95404.00,
-    34.5: 96807.00, 35.0: 98210.00, 35.5: 100252.00, 36.0: 101664.00, 36.5: 103076.00,
-    37.0: 104488.00, 37.5: 105900.00, 38.0: 107312.00, 38.5: 108724.00, 39.0: 110136.00,
-    39.5: 111548.00, 40.0: 113360.00, 40.5: 114777.00, 41.0: 116194.00, 41.5: 117611.00,
-    42.0: 119028.00, 42.5: 120445.00, 43.0: 121862.00, 43.5: 123279.00, 44.0: 124696.00,
-    44.5: 126113.00, 45.0: 128340.00, 45.5: 129766.00, 46.0: 131192.00, 46.5: 132618.00,
-    47.0: 134514.00, 47.5: 135945.00, 48.0: 137376.00, 48.5: 138807.00, 49.0: 140238.00,
-    49.5: 141669.00, 50.0: 143100.00, 50.5: 145036.00, 51.0: 146982.00, 51.5: 148423.00,
-    52.0: 149448.00, 52.5: 151410.00, 53.0: 153382.00, 53.5: 154829.00, 54.0: 156816.00,
-    54.5: 158813.00, 55.0: 159830.00, 55.5: 161838.00, 56.0: 163296.00, 56.5: 165319.00,
-    57.0: 167352.00, 57.5: 169395.00, 58.0: 169824.00, 58.5: 171873.00, 59.0: 173932.00,
-    59.5: 176001.00, 60.0: 178080.00, 60.5: 179564.00, 61.0: 180560.00, 61.5: 182655.00,
-    62.0: 184760.00, 62.5: 186250.00, 63.0: 188370.00, 63.5: 190500.00, 64.0: 192640.00,
-    64.5: 193629.00, 65.0: 195130.00, 65.5: 197286.00, 66.0: 199452.00, 66.5: 201628.00,
-    67.0: 203814.00, 67.5: 204120.00, 68.0: 206312.00, 68.5: 208514.00, 69.0: 210726.00,
-    69.5: 212253.00, 70.0: 214480.00, 70.5: 215448.00, 71.0: 217686.00, 71.5: 219934.00,
-    72.0: 221472.00, 72.5: 223735.00, 73.0: 226008.00, 73.5: 226968.00, 74.0: 228512.00,
-    74.5: 230801.00, 75.0: 233100.00
-  };
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:15px; margin-bottom:25px;">
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jan (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Fev (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Mar (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Abr (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Mai (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jun (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Jul (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:10px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Ago (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Set (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Out (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Nov (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+      <div><label style="font-weight:bold; font-size:0.9rem;">Dez (kWh)</label><input type="number" class="mes-consumo" placeholder="0" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+    </div>
 
     <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
 
@@ -439,7 +420,7 @@
     <div class="autoridade-texto">
       <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido com total segurança, transparência e rigor técnico.</p>
       <ul>
-        <li><strong>✓ Equipe Qualificada:</strong> Projetos e instalações desenvolvidos por Técnicos em Sistemas de Energia Renovável e Eletricista.</li>
+        <li><strong>✓ Equipe Qualificada:</strong> Projetos e instalações desenvolvidos em conformidade com as normas Técnicas e com Documentação de responsabilidade Técnica.</li>
         <li><strong>✓ Conformidade Legal:</strong> Projetos rigorosamente alinhados com a Lei 14.300 e as normas vigentes da Enel SP.</li>
         <li><strong>✓ Simulação Precisa:</strong> Nada de estimativas vagas; usamos cálculos exatos baseados no seu histórico real de consumo e nos dados de radiação locais.</li>
       </ul>
@@ -495,7 +476,39 @@
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
 
-  const _0xtp = {2.0:8224,2.5:9745,3.0:11010,3.5:12047,4.0:12912,4.5:14220,5.0:15510,5.5:16687,6.0:17856,6.5:18902,7.0:19880,7.5:20865,8.0:21712,8.5:22865,9.0:24030,9.5:25042,10.0:26120,10.5:27321,11.0:28248,11.5:29302,12.0:30288,12.5:30037.5,13.0:31070,13.5:32265,14.0:33320,14.5:34510,15.0:35700,15.5:36688.5,16.0:37872,16.5:39055.5,17.0:40018,17.5:41020,18.0:42192,18.5:43364,19.0:44536,19.5:45454.5,20.0:46620,20.5:47785.5,21.0:48468,21.5:49622,22.0:50776,22.5:51930,23.0:53084,23.5:53932.5,24.0:55080,24.5:56227.5,25.0:56800,25.5:57936,26.0:59072,26.5:60208,27.0:61344,27.5:62122.5,28.0:63252,28.5:64096.5,29.0:64844,29.5:65962,30.0:67080,30.5:68198,31.0:69316,31.5:70434,32.0:71552,32.5:72670,33.0:73788,33.5:75241,34.0:76364,34.5:77487,35.0:78610,35.5:80194.5,36.0:81324,36.5:82453.5,37.0:83583,37.5:84712.5,38.0:85842,38.5:86971.5,39.0:88101,39.5:89230.5,40.0:90760,40.5:91894.5,41.0:93029,41.5:94163.5,42.0:95298,42.5:96432.5,43.0:97567,43.5:98701.5,44.0:99836,44.5:100970.5,45.0:102690,45.5:103831,46.0:104972,46.5:106113,47.0:107724,47.5:108870,48.0:110016,48.5:111162,49.0:112308,49.5:113454,50.0:114600,50.5:116251,51.0:117912,51.5:119068,52.0:120068,52.5:121747.5,53.0:123437,53.5:124601.5,54.0:126306,54.5:128020.5,55.0:129030,55.5:130758,56.0:131936,56.5:133679,57.0:135432,57.5:137195,58.0:137634,58.5:139405.5,59.0:141187,59.5:142978.5,60.0:144780,60.5:145986.5,61.0:147010,61.5:148830,62.0:150660,62.5:151875,63.0:153720,63.5:155575,64.0:157440,64.5:158476.5,65.0:159705,65.5:161588.5,66.0:163482,66.5:165385.5,67.0:167299,67.5:167670,68.0:169592,68.5:171524,69.0:173466,69.5:174723,70.0:176680,70.5:177730.5,71.0:179701,71.5:181681.5,72.0:182952,72.5:184947.5,73.0:186953,73.5:188013,74.0:189292,74.5:191316,75.0:193350};
+  // TABELA DE PREÇOS ATUALIZADA
+  const _0xtp = {
+    2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
+    4.5: 16740.00, 5.0: 18270.00, 5.5: 19679.00, 6.0: 21072.00, 6.5: 22334.00,
+    7.0: 23520.00, 7.5: 24705.00, 8.0: 25744.00, 8.5: 27115.00, 9.0: 28530.00,
+    9.5: 29754.00, 10.0: 31040.00, 10.5: 32487.00, 11.0: 33616.00, 11.5: 34914.00,
+    12.0: 36096.00, 12.5: 37600.00, 13.0: 38870.00, 13.5: 40365.00, 14.0: 41720.00,
+    14.5: 43210.00, 15.0: 44700.00, 15.5: 45911.00, 16.0: 47392.00, 16.5: 48873.00,
+    17.0: 50048.00, 17.5: 51345.00, 18.0: 52812.00, 18.5: 54279.00, 19.0: 55746.00,
+    19.5: 56862.00, 20.0: 58320.00, 20.5: 59778.00, 21.0: 60648.00, 21.5: 62092.00,
+    22.0: 63536.00, 22.5: 64980.00, 23.0: 66424.00, 23.5: 67445.00, 24.0: 68880.00,
+    24.5: 70315.00, 25.0: 71050.00, 25.5: 72471.00, 26.0: 73892.00, 26.5: 75313.00,
+    27.0: 76734.00, 27.5: 77660.00, 28.0: 79072.00, 28.5: 80199.00, 29.0: 81084.00,
+    29.5: 82482.00, 30.0: 83880.00, 30.5: 85278.00, 31.0: 86676.00, 31.5: 88074.00,
+    32.0: 89472.00, 32.5: 90870.00, 33.0: 92268.00, 33.5: 94001.00, 34.0: 95404.00,
+    34.5: 96807.00, 35.0: 98210.00, 35.5: 100252.00, 36.0: 101664.00, 36.5: 103076.00,
+    37.0: 104488.00, 37.5: 105900.00, 38.0: 107312.00, 38.5: 108724.00, 39.0: 110136.00,
+    39.5: 111548.00, 40.0: 113360.00, 40.5: 114777.00, 41.0: 116194.00, 41.5: 117611.00,
+    42.0: 119028.00, 42.5: 120445.00, 43.0: 121862.00, 43.5: 123279.00, 44.0: 124696.00,
+    44.5: 126113.00, 45.0: 128340.00, 45.5: 129766.00, 46.0: 131192.00, 46.5: 132618.00,
+    47.0: 134514.00, 47.5: 135945.00, 48.0: 137376.00, 48.5: 138807.00, 49.0: 140238.00,
+    49.5: 141669.00, 50.0: 143100.00, 50.5: 145036.00, 51.0: 146982.00, 51.5: 148423.00,
+    52.0: 149448.00, 52.5: 151410.00, 53.0: 153382.00, 53.5: 154829.00, 54.0: 156816.00,
+    54.5: 158813.00, 55.0: 159830.00, 55.5: 161838.00, 56.0: 163296.00, 56.5: 165319.00,
+    57.0: 167352.00, 57.5: 169395.00, 58.0: 169824.00, 58.5: 171873.00, 59.0: 173932.00,
+    59.5: 176001.00, 60.0: 178080.00, 60.5: 179564.00, 61.0: 180560.00, 61.5: 182655.00,
+    62.0: 184760.00, 62.5: 186250.00, 63.0: 188370.00, 63.5: 190500.00, 64.0: 192640.00,
+    64.5: 193629.00, 65.0: 195130.00, 65.5: 197286.00, 66.0: 199452.00, 66.5: 201628.00,
+    67.0: 203814.00, 67.5: 204120.00, 68.0: 206312.00, 68.5: 208514.00, 69.0: 210726.00,
+    69.5: 212253.00, 70.0: 214480.00, 70.5: 215448.00, 71.0: 217686.00, 71.5: 219934.00,
+    72.0: 221472.00, 72.5: 223735.00, 73.0: 226008.00, 73.5: 226968.00, 74.0: 228512.00,
+    74.5: 230801.00, 75.0: 233100.00
+  };
 
   function _calcZN() {
     const i = document.querySelectorAll('.mes-consumo');
@@ -573,8 +586,8 @@ Gostaria de prosseguir com o meu projeto!`
       <div style="font-size:0.9rem; color:#555;">Depois desse período, toda a economia vai direto para o seu bolso por mais de 20 anos!</div>
       <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
       <div style="font-size:0.85rem;color:#555;margin-top:10px;border-top:1px solid #c8e6c9;padding-top:8px;">
-        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento é válido para São Paulo Capital e possui uma taxa de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios, etc. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do cliente, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem precisar de entrar em contato , fazendo tudo pelo site, se você não tem tempo a perder, nós também não, a clarezae rapidez nas informações torna  ais eficaz sua decisão, se voce compartilha deste mesmo pensamento, não espera mais entre em contato agora mesmo.
+        * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes 05 de 2025 bandeira verde Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Esta simulação e orçamento são válidos para São Paulo Capital e possui uma cobrança de validação de visita técnica de R$ 150,00. Cidades fora de São Paulo Capital estão sujeitas a custos extras de deslocamento, pedágios,e variações nas simulações e orçamentos. Nosso sistema é sem pegadinhas, ou quaisquer outros custos referente ao dimensonamento do sistema e preço de venda do sistema, ressalvas a parte elétrica do imóvel, caso seja necessário alterações o valor é cobrado a parte, nosso preço final é divulgado sem necessidade de contato , fazendo tudo pelo site, você não perde tempo, nós também não! A clarezae rapidez nas informações tornam  mais eficaz sua decisão, se voce compartilha deste mesmo pensamento, não espere mais entre em contato agora mesmo.
       </div>
       <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
         <i class="fab fa-whatsapp"></i> Falar com Especialista no WhatsApp
