@@ -294,59 +294,100 @@
     74.5: 230801.00, 75.0: 233100.00
   };
 
-  function _calcZN() {
-    const i = document.querySelectorAll('.mes-consumo');
-    let t = 0, m = 0;
-    i.forEach(x => { const v = parseFloat(x.value); if (!isNaN(v) && v >= 0) { t += v; m++; } });
-    const r = document.getElementById('resultado-simulacao');
-    if (m === 0) { alert("Por favor, preencha o consumo de pelo menos um mês."); return; }
-    
-    const c = t / m;
-    const n = Math.ceil(c / 55.42);
-    const pr = n * 0.575;
-    
-    let pf;
-    if (pr < 2.5) pf = 2.0;
-    else if (pr === 2.5) pf = 2.5;
-    else if (pr > 2.5 && pr <= 3.0) pf = 3.0;
-    else pf = Math.round(pr * 2) / 2;
+ function _calcZN() {
+    const inputs = document.querySelectorAll('.mes-consumo');
+    let consumosMensais = [];
+    let totalConsumo = 0;
+    let mesesPreenchidos = 0;
 
-    if (pf < 2.0) pf = 2.0;
-    if (pf > 75.0) pf = 75.0;
+    inputs.forEach((input) => {
+      const valor = parseFloat(input.value);
+      if (!isNaN(valor) && valor >= 0) {
+        consumosMensais.push(valor);
+        totalConsumo += valor;
+        mesesPreenchidos++;
+      } else {
+        consumosMensais.push(0);
+      }
+    });
 
-    const a = (n * 2.58) * 1.15;
-    const tc = c * 0.92954;
-    const nc = 55.87;
-    const e = tc - nc;
-    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
-    const payback = (p / (e * 12)).toFixed(1);
+    const resultadoDiv = document.getElementById('resultado-simulacao');
+    if (mesesPreenchidos === 0) {
+      alert("Por favor, preencha o consumo de pelo menos um mês.");
+      return;
+    }
+    
+    // Cálculo com a margem de 18% que você estabeleceu
+    const mediaConsumo = totalConsumo / mesesPreenchidos;
+    const numPlacas = Math.ceil((mediaConsumo / 55.42) * 1.18); 
+    const potenciaReal = numPlacas * 0.575;
+    
+    let potenciaFinal;
+    if (potenciaReal < 2.5) potenciaFinal = 2.0;
+    else if (potenciaReal === 2.5) potenciaFinal = 2.5;
+    else if (potenciaReal > 2.5 && potenciaReal <= 3.0) potenciaFinal = 3.0;
+    else potenciaFinal = Math.round(potenciaReal * 2) / 2;
 
-    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh/mês. Investimento: R$ ${p.toLocaleString('pt-BR')}. Payback: ${payback} anos.`);
+    if (potenciaFinal < 2.0) potenciaFinal = 2.0;
+    if (potenciaFinal > 75.0) potenciaFinal = 75.0;
+
+    // Cálculo considerando Tarifa Enel SP e COSIP
+    const custoAtual = mediaConsumo * 0.92954; 
+    const novaConta = 55.87; 
+    const economiaMensal = custoAtual - novaConta;
+    const precoKit = _0xtp[potenciaFinal.toFixed(1)] || _0xtp[potenciaFinal];
+    const payback = (precoKit / (economiaMensal * 12)).toFixed(1);
+
+    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo Médio ${mediaConsumo.toFixed(1)} kWh/mês. Investimento: R$ ${precoKit.toLocaleString('pt-BR')}. Payback: ${payback} anos.`);
     
-    r.style.display = "block";
-    r.style.backgroundColor = "#e8f5e9";
-    r.style.border = "1px solid #a5d6a7";
-    r.style.color = "#2e7d32";
-    
-    r.innerHTML = `
-      <strong>Consumo Médio:</strong> ${c.toFixed(1)} kWh/mês<br>
-      <strong>Gasto Atual:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-      <strong>Nova Conta:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-      <strong>Economia:</strong> R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-      <div style="max-width: 350px; margin: 20px auto;"><canvas id="graficoEconomia"></canvas></div>
-      <strong>Investimento Estimado:</strong> R$ ${p.toLocaleString('pt-BR')}<br>
-      <strong>Retorno (Payback):</strong> ${payback} anos.<br>
-      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block;background:#25d366;color:white;padding:12px;border-radius:5px;text-align:center;font-weight:bold;margin-top:10px;">Falar no WhatsApp</a>
+    resultadoDiv.style.display = "block";
+    resultadoDiv.innerHTML = `
+      <h3 style="margin-bottom:15px; color:#ff9800;">Resultado da sua Simulação</h3>
+      <p><strong>Consumo Médio:</strong> ${mediaConsumo.toFixed(1)} kWh/mês</p>
+      <p><strong>Sistema Recomendado:</strong> ${potenciaFinal.toFixed(1)} kWp (${numPlacas} placas)</p>
+      
+      <div style="margin: 25px 0; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+        <p style="font-weight:bold; text-align:center; margin-bottom:10px;">Sazonalidade: Seu Consumo vs Geração Estimada</p>
+        <canvas id="graficoMensal" height="180"></canvas>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; align-items: center;">
+        <div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; flex: 1; min-width: 250px;">
+            <p><strong>Gasto Atual:</strong> <span style="color:#e53935;">R$ ${custoAtual.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
+            <p><strong>Com Solar:</strong> <span style="color:#2e7d32;">R$ ${novaConta.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></p>
+            <p><strong>Economia Anual:</strong> R$ ${(economiaMensal * 12).toLocaleString('pt-BR',{minimumFractionDigits:2})}</p>
+            <p style="font-size: 1.1rem; margin-top:10px;"><strong>Investimento:</strong> R$ ${precoKit.toLocaleString('pt-BR')}</p>
+            <p><strong>Payback:</strong> ${payback} anos</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 280px;">
+            <canvas id="graficoFinanceiro"></canvas>
+        </div>
+      </div>
+
+      <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block;background:#25d366;color:white;padding:15px;border-radius:5px;text-align:center;font-weight:bold;margin-top:20px; text-decoration:none;">
+        <i class="fab fa-whatsapp"></i> Solicitar Orçamento Detalhado
+      </a>
     `;
 
-    const ctx = document.getElementById('graficoEconomia').getContext('2d');
-    new Chart(ctx, {
+    // Gráfico de Barras + Linha (Sazonalidade)
+    new Chart(document.getElementById('graficoMensal').getContext('2d'), {
       type: 'bar',
       data: {
-        labels: ['Conta Atual', 'Com Solar'],
-        datasets: [{ data: [tc.toFixed(2), nc.toFixed(2)], backgroundColor: ['#e53935', '#2e7d32'] }]
-      },
-      options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        datasets: [
+          { label: 'Seu Consumo (kWh)', data: consumosMensais, backgroundColor: 'rgba(54, 162, 235, 0.4)', borderColor: 'rgb(54, 162, 235)', borderWidth: 1 },
+          { label: 'Geração Estimada (kWh)', data: Array(12).fill(mediaConsumo.toFixed(1)), type: 'line', borderColor: '#ff9800', borderWidth: 3, fill: false }
+        ]
+      }
+    });
+
+    // Gráfico de Pizza (Financeiro)
+    new Chart(document.getElementById('graficoFinanceiro').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Custo Atual', 'Com Solar'],
+        datasets: [{ data: [custoAtual.toFixed(2), novaConta.toFixed(2)], backgroundColor: ['#e53935', '#2e7d32'] }]
+      }
     });
   }
 </script>
