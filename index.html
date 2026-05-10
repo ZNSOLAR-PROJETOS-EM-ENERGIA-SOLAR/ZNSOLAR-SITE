@@ -287,8 +287,8 @@
   <body>
   
   <header>
-    <img src="img/marca dagua.png" alt="Logotipo ZNSOLAR" class="logo-site">
-    <p>Projetos em Energia Solar Fotovoltáica • Economia • Sustentabilidade</p>
+    <img src="marca dagua.png" id="LogoSite" alt="Logotipo ZNSOLAR" class="logo-site">
+        <p>Projetos em Energia Solar Fotovoltáica • Economia • Sustentabilidade</p>
   </header>
   
   <main>
@@ -680,13 +680,27 @@ async function gerarPDF() {
         return;
     }
 
-    // CABEÇALHO
+    // --- AQUI ENTRA O LOGOTIPO NO PDF ---
+    const logoImg = document.getElementById('LogoSite');
+    if (logoImg) {
+        try {
+            const canvasLogo = await html2canvas(logoImg, { backgroundColor: null });
+            const imgDataLogo = canvasLogo.toDataURL('image/png');
+            // Posiciona o logo no canto superior esquerdo (X:10, Y:5, L:40, A:25)
+            doc.addImage(imgDataLogo, 'PNG', 10, 5, 40, 25);
+        } catch (e) {
+            console.log("Erro ao carregar logo no PDF");
+        }
+    }
+
+    // CABEÇALHO (O seu retângulo laranja)
     doc.setFillColor(255, 152, 0); 
     doc.rect(0, 0, 210, 40, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
-    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
+    // Texto movido para X:60 para não ficar em cima do logo
+    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 60, 25);
     
     // CORPO
     doc.setTextColor(0, 0, 0);
