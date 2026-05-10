@@ -575,6 +575,7 @@
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês`);
 
+   // --- NOVO BLOCO DO PDF ATUALIZADO ---
     r.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -585,22 +586,11 @@
         <strong>Gasto Atual Estimado:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
         <strong>Nova Conta com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
         <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
-        <div style="font-size:0.9rem;color:#388e3c;font-weight:bold;margin-top:5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
 
-        <div style="position: relative; height:250px; width:100%; margin: 20px 0;">
-            <canvas id="graficoConsumoMensal"></canvas>
-        </div>
+        <div style="height:220px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
+        <div style="height:180px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
-        <div style="position: relative; height:250px; width:100%; margin: 30px 0;">
-            <canvas id="graficoCustoFinanceiro"></canvas>
-        </div>
-
-        <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
-        <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
-        <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
-       
-        <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; text-align:center; font-weight:bold; width:100%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <button onclick="window.gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
         </button>
 
@@ -608,8 +598,8 @@
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ff9800; padding-bottom: 15px;">
                 <img src="img/marca dagua.png" style="width: 200px;" alt="ZNSOLAR">
                 <div style="text-align: right;">
-                    <h1 style="margin: 0; color: #333; font-size: 24px;">PROPOSTA COMERCIAL PRELIMINAR</h1>
-                    <p style="margin: 5px 0; color: #666;">Consultor Técnico: <strong>Rafael Silva</strong></p>
+                    <h1 style="margin: 0; color: #333; font-size: 22px;">PROPOSTA COMERCIAL PRELIMINAR</h1>
+                    <p style="margin: 5px 0; color: #666;">Consultor Responsável: <strong>Departamento Técnico</strong></p>
                     <p style="margin: 0; color: #666;">WhatsApp: (11) 98318-5337</p>
                 </div>
             </div>
@@ -618,30 +608,29 @@
                 <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
                     <h3 style="color: #ff9800; margin-top: 0;">Dados do Sistema</h3>
                     <p>Consumo Médio: <strong>${c.toFixed(1)}</strong> kWh/mês</p>
-                    <p>Geração Estimada (+18%): <strong>${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
+                    <p>Geração Estimada: <strong>${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
                     <p>Área de Telhado Estimada: <strong>${a.toFixed(1)}</strong> m²</p>
                 </div>
                 <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border: 1px solid #2e7d32;">
                     <h3 style="color: #2e7d32; margin-top: 0;">Investimento e Retorno</h3>
                     <p style="font-size: 20px;">Valor Total: <strong>R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></p>
-                    <p style="font-size: 18px; color: #1b5e20;">Payback (Retorno): <strong>${payback}</strong> anos</p>
+                    <p style="font-size: 18px; color: #1b5e20;">Payback Estimado: <strong>${payback}</strong> anos</p>
                 </div>
             </div>
 
-            <div style="margin-top: 30px; text-align: center;">
-                <h3 style="color: #444;">Análise de Viabilidade Econômica</h3>
-                <div id="grafico-pdf-container" style="width: 100%; height: 350px; background: #fff;"></div>
+            <div style="margin-top: 25px; text-align: center;">
+                <h3 style="color: #444; font-size: 16px;">Comparativo de Geração vs. Consumo</h3>
+                <div id="grafico-pdf-consumo" style="width: 100%; height: 280px;"></div>
+                
+                <h3 style="color: #444; font-size: 16px; margin-top: 20px;">Comparativo de Custos Mensais (Antes vs. Depois)</h3>
+                <div id="grafico-pdf-financeiro" style="width: 100%; height: 150px;"></div>
             </div>
 
-            <div style="margin-top: 40px; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 15px;">
-                <p><strong>Observações:</strong> Esta proposta é uma estimativa baseada na tarifa ENEL SP vigente e na Lei 14.300. A viabilidade final depende de visita técnica obrigatória.</p>
-                <p style="text-align: center; margin-top: 10px;"><strong>ZNSOLAR - Engenharia Solar com Precisão</strong></p>
+            <div style="margin-top: 30px; font-size: 11px; color: #555; border-top: 1px solid #eee; padding-top: 15px;">
+                <p><strong>Notas Técnicas:</strong> Simulação baseada na <strong>Tarifa Verde (Maio/2026) da Enel São Paulo</strong> e Lei 14.300. A viabilidade final e o projeto executivo dependem de visita técnica obrigatória. <strong>Valor da visita técnica: R$ 150,00.</strong></p>
+                <p style="text-align: center; margin-top: 10px; font-weight: bold;">ZNSOLAR - Engenharia Solar com Precisão</p>
             </div>
         </div>
-
-        <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
-          <i class="fab fa-whatsapp"></i> Receber Simulação e Falar com Especialista no WhatsApp Agora
-        </a>
     `;
 
     r.style.display = "block";
@@ -679,13 +668,13 @@
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
     });
 
-    // Copia o gráfico para a área do PDF
+  // --- CAPTURA DOS DOIS GRÁFICOS PARA O PDF ---
     setTimeout(() => {
-        const containerPdf = document.getElementById('grafico-pdf-container');
-        const canvasOriginal = document.getElementById('graficoConsumoMensal');
-        if (canvasOriginal && containerPdf) {
-            containerPdf.innerHTML = `<img src="${canvasOriginal.toDataURL()}" style="width:100%;">`;
-        }
+        const imgConsumo = document.getElementById('graficoConsumoMensal').toDataURL();
+        const imgFinanceiro = document.getElementById('graficoCustoFinanceiro').toDataURL();
+        
+        document.getElementById('grafico-pdf-consumo').innerHTML = `<img src="${imgConsumo}" style="width:100%;">`;
+        document.getElementById('grafico-pdf-financeiro').innerHTML = `<img src="${imgFinanceiro}" style="width:100%;">`;
     }, 600);
   }
 
