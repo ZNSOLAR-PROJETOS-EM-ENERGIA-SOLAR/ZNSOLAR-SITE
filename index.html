@@ -555,11 +555,12 @@
       const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
       const payback = (p / (e * 12)).toFixed(1);
   
-      const msgWhatsapp = encodeURIComponent(
+    const msgWhatsapp = encodeURIComponent(
 `Olá ZNSolar! Acabei de fazer uma simulação completa no site.
 *Dados do meu consumo e sistema:*
 • Consumo Médio Apurado: ${c.toFixed(1)} kWh/mês
 • Área Necessária Estimada: ${a.toFixed(1)} m²
+• Investimento Total Estimado: R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}
 *Resultado da Economia:*
 • Gasto Atual Estimado: R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
