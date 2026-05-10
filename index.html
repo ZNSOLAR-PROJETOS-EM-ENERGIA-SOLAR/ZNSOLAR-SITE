@@ -674,9 +674,12 @@ async function gerarPDF() {
     doc.save("Proposta_ZNSolar.pdf");
 }
 
-// Script de Proteção
-    if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0))) return false;
-  }
+// Script de Proteção Corrigido
+document.onkeydown = function(e) {
+    if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0))) {
+        return false;
+    }
+};  
 </script>
 </body>
 </html>
