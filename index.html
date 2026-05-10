@@ -638,16 +638,28 @@
         options: { responsive: true, maintainAspectRatio: false }
     });
 
-    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+ const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Atual', 'Com Solar'],
-            datasets: [{ data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
+            labels: ['Sem Sistema Solar', 'Com Sistema Solar'], // Nomes nas barras
+            datasets: [{
+                label: 'Custo Mensal (R$)', // Corrigido: Aqui não aparecerá mais undefined
+                data: [tc, nc], 
+                backgroundColor: ['#e53935', '#2e7d32'] 
+            }]
         },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
-    });
-  }
+        options: { 
+            indexAxis: 'y', 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true 
+                }
+            }
+        }
+    });  
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
@@ -716,7 +728,7 @@ async function gerarPDF() {
     // 5. RODAPÉ
     doc.setFontSize(9);
     doc.setTextColor(150);
-    doc.text("Proposta elaborada por: ZNSOLAR - Especialista Rafael Silva", 20, 285);
+    doc.text("Proposta elaborada por: ZNSOLAR, 20, 285);
     doc.text("Documento preliminar sujeito a vistoria técnica no local.", 20, 291);
 
     // 6. SALVAR
