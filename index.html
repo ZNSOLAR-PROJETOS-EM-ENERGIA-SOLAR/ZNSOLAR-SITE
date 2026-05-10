@@ -649,7 +649,6 @@
     });
   }
 async function gerarPDF() {
-    // 1. Verifica se a biblioteca jsPDF existe
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
         return;
@@ -658,60 +657,70 @@ async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // 2. BUSCA OS DADOS DA VARIÁVEL GLOBAL (Onde o valor R$ 9.568,00 está guardado)
-    const p = dadosPDF.p;
+    // 1. DADOS (Verifique se esses nomes batem com suas variáveis globais)
+    const p = dadosPDF.p; // Investimento
     const payback = dadosPDF.payback;
-    const a = dadosPDF.a;
-    const c = dadosPDF.c;
+    const a = dadosPDF.a; // Área
+    const c = dadosPDF.c; // Consumo Médio
+    const tc = dadosPDF.tc; // Total Conta Atual
+    const nc = dadosPDF.nc; // Nova Conta
 
-    // 3. SE NÃO HOUVER SIMULAÇÃO, PARA AQUI
     if (!p) {
-        alert("Por favor, clique em SIMULAR primeiro para gerar os dados da proposta.");
+        alert("Por favor, clique em SIMULAR primeiro.");
         return;
     }
 
-    // 4. CABEÇALHO LARANJA ZNSOLAR
+    // 2. CABEÇALHO COM LOGOTIPO (Retângulo Laranja)
     doc.setFillColor(255, 152, 0); 
-    doc.rect(0, 0, 210, 35, 'F');
+    doc.rect(0, 0, 210, 40, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
-    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 23);
+    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
     
-    // 5. CORPO DA PROPOSTA
+    // 3. INFORMAÇÕES DO PROJETO
     doc.setTextColor(0, 0, 0);
-    doc.setFontSize(14);
-    doc.text("Detalhamento do Sistema Fotovoltaico", 20, 50);
+    doc.setFontSize(16);
+    doc.text("Resumo da Proposta", 20, 55);
     
     doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
+    
     doc.setFont("helvetica", "normal");
-    doc.text(`- Investimento Estimado: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 20, 65);
-    doc.text(`- Retorno do Investimento (Payback): ${payback} anos`, 20, 75);
-    doc.text(`- Área de Telhado Necessária: ${a.toFixed(1)} m²`, 20, 85);
-    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 95);
+    doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
+    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
+    doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
+    doc.text(`- Custo Mensal Atual: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
+    doc.text(`- Custo Mensal Estimado com Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
 
-    // 6. CAPTURA DO GRÁFICO (USANDO HTML2CANVAS)
-    const grafico = document.getElementById('graficoConsumoMensal');
-    if (grafico) {
-        try {
-            const canvas = await html2canvas(grafico);
-            const imgData = canvas.toDataURL('image/png');
-            doc.setFont("helvetica", "bold");
-            doc.text("Comparativo de Consumo vs Geração:", 20, 115);
-            doc.addImage(imgData, 'PNG', 20, 120, 170, 80);
-        } catch (e) {
-            console.log("Erro no gráfico, gerando PDF sem imagem.");
-        }
+    // 4. CAPTURA DOS DOIS GRÁFICOS
+    try {
+        // Gráfico 1: Consumo vs Geração
+        const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
+        const imgData1 = canvas1.toDataURL('image/png');
+        doc.setFont("helvetica", "bold");
+        doc.text("Gráfico: Comparativo de Consumo vs Geração", 20, 130);
+        doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
+
+        // Gráfico 2: Custo Financeiro (Aquele das barras vermelha/verde)
+        const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
+        const imgData2 = canvas2.toDataURL('image/png');
+        doc.text("Gráfico: Economia Financeira Estimada", 20, 210);
+        doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
+
+    } catch (e) {
+        console.log("Erro ao processar gráficos para o PDF.");
     }
 
-    // 7. RODAPÉ PROFISSIONAL
+    // 5. RODAPÉ
     doc.setFontSize(9);
     doc.setTextColor(150);
-    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 280);
-    doc.text("Simulação gerada por: Rafael Silva - ZNSolar", 20, 287);
+    doc.text("Proposta elaborada por: ZNSOLAR - Especialista Rafael Silva", 20, 285);
+    doc.text("Documento preliminar sujeito a vistoria técnica no local.", 20, 291);
 
-    // 8. SALVAR
-    doc.save("Proposta_ZNSolar.pdf");
+    // 6. SALVAR
+    doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
 }
 </script>
     
