@@ -614,7 +614,7 @@
           Falar no WhatsApp Agora
         </a>
         <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações especificas de acordo com a região, custos extras de deslocamento, pedágios, e outros que sejam necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
+        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações especificas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
     `;
 
 
@@ -638,29 +638,18 @@
         options: { responsive: true, maintainAspectRatio: false }
     });
 
- const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Sem Sistema Solar', 'Com Sistema Solar'], // Nomes nas barras
-            datasets: [{
-                label: 'Custo Mensal (R$)', // Corrigido: Aqui não aparecerá mais undefined
-                data: [tc, nc], 
-                backgroundColor: ['#e53935', '#2e7d32'] 
-            }]
+            labels: ['Atual', 'Com Solar'],
+            datasets: [{ data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
         },
-        options: { 
-            indexAxis: 'y', 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true 
-                }
-            }
-        }
-    });  
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+    });
+  }
 async function gerarPDF() {
+    // 1. Verifica se a biblioteca jsPDF existe
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
         return;
@@ -669,70 +658,60 @@ async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // 1. DADOS (Verifique se esses nomes batem com suas variáveis globais)
-    const p = dadosPDF.p; // Investimento
+    // 2. BUSCA OS DADOS DA VARIÁVEL GLOBAL (Onde o valor R$ 9.568,00 está guardado)
+    const p = dadosPDF.p;
     const payback = dadosPDF.payback;
-    const a = dadosPDF.a; // Área
-    const c = dadosPDF.c; // Consumo Médio
-    const tc = dadosPDF.tc; // Total Conta Atual
-    const nc = dadosPDF.nc; // Nova Conta
+    const a = dadosPDF.a;
+    const c = dadosPDF.c;
 
+    // 3. SE NÃO HOUVER SIMULAÇÃO, PARA AQUI
     if (!p) {
-        alert("Por favor, clique em SIMULAR primeiro.");
+        alert("Por favor, clique em SIMULAR primeiro para gerar os dados da proposta.");
         return;
     }
 
-    // 2. CABEÇALHO COM LOGOTIPO (Retângulo Laranja)
+    // 4. CABEÇALHO LARANJA ZNSOLAR
     doc.setFillColor(255, 152, 0); 
-    doc.rect(0, 0, 210, 40, 'F');
+    doc.rect(0, 0, 210, 35, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
-    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
+    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 23);
     
-    // 3. INFORMAÇÕES DO PROJETO
+    // 5. CORPO DA PROPOSTA
     doc.setTextColor(0, 0, 0);
-    doc.setFontSize(16);
-    doc.text("Resumo da Proposta", 20, 55);
+    doc.setFontSize(14);
+    doc.text("Detalhamento do Sistema Fotovoltaico", 20, 50);
     
     doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
-    
     doc.setFont("helvetica", "normal");
-    doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
-    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
-    doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
-    doc.text(`- Custo Mensal Atual: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
-    doc.text(`- Custo Mensal Estimado com Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
+    doc.text(`- Investimento Estimado: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 20, 65);
+    doc.text(`- Retorno do Investimento (Payback): ${payback} anos`, 20, 75);
+    doc.text(`- Área de Telhado Necessária: ${a.toFixed(1)} m²`, 20, 85);
+    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 95);
 
-    // 4. CAPTURA DOS DOIS GRÁFICOS
-    try {
-        // Gráfico 1: Consumo vs Geração
-        const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
-        const imgData1 = canvas1.toDataURL('image/png');
-        doc.setFont("helvetica", "bold");
-        doc.text("Gráfico: Comparativo de Consumo vs Geração", 20, 130);
-        doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
-
-        // Gráfico 2: Custo Financeiro (Aquele das barras vermelha/verde)
-        const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
-        const imgData2 = canvas2.toDataURL('image/png');
-        doc.text("Gráfico: Economia Financeira Estimada", 20, 210);
-        doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
-
-    } catch (e) {
-        console.log("Erro ao processar gráficos para o PDF.");
+    // 6. CAPTURA DO GRÁFICO (USANDO HTML2CANVAS)
+    const grafico = document.getElementById('graficoConsumoMensal');
+    if (grafico) {
+        try {
+            const canvas = await html2canvas(grafico);
+            const imgData = canvas.toDataURL('image/png');
+            doc.setFont("helvetica", "bold");
+            doc.text("Comparativo de Consumo vs Geração:", 20, 115);
+            doc.addImage(imgData, 'PNG', 20, 120, 170, 80);
+        } catch (e) {
+            console.log("Erro no gráfico, gerando PDF sem imagem.");
+        }
     }
 
-    // 5. RODAPÉ
+    // 7. RODAPÉ PROFISSIONAL
     doc.setFontSize(9);
     doc.setTextColor(150);
-    doc.text("Proposta elaborada por: ZNSOLAR, 20, 285);
-    doc.text("Documento preliminar sujeito a vistoria técnica no local.", 20, 291);
+    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 280);
+    doc.text("Simulação gerada por: Rafael Silva - ZNSolar", 20, 287);
 
-    // 6. SALVAR
-    doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
+    // 8. SALVAR
+    doc.save("Proposta_ZNSolar.pdf");
 }
 </script>
     
