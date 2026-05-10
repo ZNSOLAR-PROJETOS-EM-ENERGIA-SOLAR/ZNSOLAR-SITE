@@ -575,7 +575,7 @@
 • Nova Conta com Solar: R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês
 • Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês`);
 
-   // --- NOVO BLOCO DO PDF ATUALIZADO ---
+   // --- RENDERIZAÇÃO COMPLETA (TELA + PDF) COM PREÇO E WHATSAPP ---
     r.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -586,19 +586,32 @@
         <strong>Gasto Atual Estimado:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
         <strong>Nova Conta com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
         <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+        <div style="font-size:0.9rem;color:#388e3c;font-weight:bold;margin-top:5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
 
-        <div style="height:220px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
-        <div style="height:180px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+        <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
+        <div style="position: relative; height:250px; width:100%; margin: 30px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
-        <button onclick="window.gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
+        <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
+        
+        <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
+        <span style="font-size:1.8rem;font-weight:bold;color:#1b5e20;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
+        
+        <button onclick="window.gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; text-align:center; font-weight:bold; width:100%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
         </button>
+
+        <p style="font-size:0.9rem; margin-top:15px;">* O valor acima inclui todos os equipamentos, instalação completa e homologação técnica. Tarifa ENEL SP (Maio/2026).</p>
+        
+        <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
+          <i class="fab fa-whatsapp"></i> Receber Simulação e Falar com Especialista no WhatsApp Agora
+        </a>
 
         <div id="proposta-pdf-area" style="position: absolute; left: -9999px; width: 800px; background: white; padding: 40px; color: black; font-family: Arial, sans-serif;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ff9800; padding-bottom: 15px;">
                 <img src="img/marca dagua.png" style="width: 200px;" alt="ZNSOLAR">
                 <div style="text-align: right;">
-                    <h1 style="margin: 0; color: #333; font-size: 22px;">PROPOSTA COMERCIAL PRELIMINAR</h1>
+                    <h1 style="margin: 0; color: #333; font-size: 24px;">PROPOSTA COMERCIAL PRELIMINAR</h1>
                     <p style="margin: 5px 0; color: #666;">Consultor Responsável: <strong>Departamento Técnico</strong></p>
                     <p style="margin: 0; color: #666;">WhatsApp: (11) 98318-5337</p>
                 </div>
@@ -609,73 +622,28 @@
                     <h3 style="color: #ff9800; margin-top: 0;">Dados do Sistema</h3>
                     <p>Consumo Médio: <strong>${c.toFixed(1)}</strong> kWh/mês</p>
                     <p>Geração Estimada: <strong>${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
-                    <p>Área de Telhado Estimada: <strong>${a.toFixed(1)}</strong> m²</p>
+                    <p>Área de Telhado: <strong>${a.toFixed(1)}</strong> m²</p>
                 </div>
                 <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border: 1px solid #2e7d32;">
                     <h3 style="color: #2e7d32; margin-top: 0;">Investimento e Retorno</h3>
-                    <p style="font-size: 20px;">Valor Total: <strong>R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></p>
-                    <p style="font-size: 18px; color: #1b5e20;">Payback Estimado: <strong>${payback}</strong> anos</p>
+                    <p style="font-size: 22px; color:#1b5e20;"><strong>R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></p>
+                    <p style="font-size: 18px;">Payback: <strong>${payback}</strong> anos</p>
                 </div>
             </div>
 
-            <div style="margin-top: 25px; text-align: center;">
-                <h3 style="color: #444; font-size: 16px;">Comparativo de Geração vs. Consumo</h3>
-                <div id="grafico-pdf-consumo" style="width: 100%; height: 280px;"></div>
-                
-                <h3 style="color: #444; font-size: 16px; margin-top: 20px;">Comparativo de Custos Mensais (Antes vs. Depois)</h3>
-                <div id="grafico-pdf-financeiro" style="width: 100%; height: 150px;"></div>
+            <div style="margin-top: 30px; text-align: center;">
+                <h3 style="color: #444; font-size: 16px;">Viabilidade Econômica (Consumo x Geração)</h3>
+                <div id="grafico-pdf-consumo" style="width: 100%; height: 320px;"></div>
+                <h3 style="color: #444; font-size: 16px; margin-top: 20px;">Comparativo de Custos Mensais</h3>
+                <div id="grafico-pdf-financeiro" style="width: 100%; height: 180px;"></div>
             </div>
 
-            <div style="margin-top: 30px; font-size: 11px; color: #555; border-top: 1px solid #eee; padding-top: 15px;">
-                <p><strong>Notas Técnicas:</strong> Simulação baseada na <strong>Tarifa Verde (Maio/2026) da Enel São Paulo</strong> e Lei 14.300. A viabilidade final e o projeto executivo dependem de visita técnica obrigatória. <strong>Valor da visita técnica: R$ 150,00.</strong></p>
+            <div style="margin-top: 40px; font-size: 11px; color: #555; border-top: 1px solid #eee; padding-top: 15px;">
+                <p><strong>Notas:</strong> Simulação baseada na Tarifa Verde (Maio/2026) da Enel SP. <strong>Visita técnica obrigatória: R$ 150,00.</strong></p>
                 <p style="text-align: center; margin-top: 10px; font-weight: bold;">ZNSOLAR - Engenharia Solar com Precisão</p>
             </div>
         </div>
     `;
-
-    r.style.display = "block";
-    r.style.backgroundColor = "#e8f5e9";
-    r.style.border = "1px solid #a5d6a7";
-    r.style.color = "#2e7d32";
-
-    // --- GRÁFICOS ---
-    const ctx = document.getElementById('graficoConsumoMensal').getContext('2d');
-    const inputsConsumo = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
-    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
-    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
-    
-    if (window.meuGraficoConsumo) { window.meuGraficoConsumo.destroy(); }
-    window.meuGraficoConsumo = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
-            datasets: [
-                { label: 'Consumo', data: [...inputsConsumo, c], backgroundColor: '#e53935' },
-                { label: 'Geração', data: [...dadosGeracao, (c*1.18)], backgroundColor: '#2e7d32' }
-            ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    const ctxFinanceiro = document.getElementById('graficoCustoFinanceiro').getContext('2d');
-    if (window.meuGraficoFinanceiro) { window.meuGraficoFinanceiro.destroy(); }
-    window.meuGraficoFinanceiro = new Chart(ctxFinanceiro, {
-        type: 'bar',
-        data: {
-            labels: ['Gasto Atual', 'Nova Conta'],
-            datasets: [{ label: 'R$', data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
-        },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
-    });
-
-  // --- CAPTURA DOS DOIS GRÁFICOS PARA O PDF ---
-    setTimeout(() => {
-        const imgConsumo = document.getElementById('graficoConsumoMensal').toDataURL();
-        const imgFinanceiro = document.getElementById('graficoCustoFinanceiro').toDataURL();
-        
-        document.getElementById('grafico-pdf-consumo').innerHTML = `<img src="${imgConsumo}" style="width:100%;">`;
-        document.getElementById('grafico-pdf-financeiro').innerHTML = `<img src="${imgFinanceiro}" style="width:100%;">`;
-    }, 600);
   }
 
   // --- DOWNLOAD PDF ---
