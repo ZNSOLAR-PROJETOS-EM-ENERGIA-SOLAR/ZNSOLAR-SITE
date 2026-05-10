@@ -375,7 +375,7 @@
         <div class="campo-mes"><label> 12 mes   (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
       </div>
   
-      <button onclick="executarCalculoZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
+      <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
   
       <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
   </section>
@@ -497,9 +497,7 @@
   
   <script>
     document.getElementById('ano').textContent = new Date().getFullYear();
-    </script>
-  <script>
-    
+  
     // TABELA DE PREÇOS ATUALIZADA
     const _0xtp = {
       2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
@@ -534,28 +532,37 @@
       74.5: 230801.00, 75.0: 233100.00
     };
   
-    // 1. Mantenha a variável global no topo
+ // Variável para o PDF funcionar (fora da função)
   let dadosPDF = {};
 
-  // 2. Função de cálculo corrigida
-  function executarCalculoZN() {
-    console.log("Botão clicado, iniciando cálculo..."); // Para você ver no F12 que funcionou
-    
-    const i = document.querySelectorAll('.mes-consumo');
-    let t = 0, m = 0;
-    i.forEach(x => { 
-        const v = parseFloat(x.value); 
-        if (!isNaN(v) && v >= 0) { t += v; m++; } 
+  function _calcZN() {
+    // 1. Pegar os inputs
+    const campos = document.querySelectorAll('.mes-consumo');
+    let totalKwh = 0;
+    let mesesComValor = 0;
+    const listaValores = [];
+
+    campos.forEach(campo => {
+      const valor = parseFloat(campo.value);
+      if (!isNaN(valor) && valor >= 0) {
+        totalKwh += valor;
+        mesesComValor++;
+        listaValores.push(valor);
+      } else {
+        listaValores.push(0);
+      }
     });
 
-    const r = document.getElementById('resultado-simulacao');
-    
-    if (m === 0) { 
-        alert("Por favor, preencha o consumo de pelo menos um mês."); 
-        return; 
+    const divResultado = document.getElementById('resultado-simulacao');
+
+    // Validação
+    if (mesesComValor === 0) {
+      alert("Por favor, preencha o consumo de pelo menos um mês.");
+      return;
     }
-    
-    const c = t / m;
+
+    // 2. Seus cálculos exatos (Regra dos 18% e taxas)
+    const c = totalKwh / mesesComValor;
     const n = Math.ceil((c * 1.18) / 55.42); 
     const pr = n * 0.575;
     
@@ -572,39 +579,140 @@
     const tc = c * 0.92954;
     const nc = 55.87;
     const e = tc - nc;
-    
-    // Verifique se a variável _0xtp está definida no seu código acima
-    const p = (typeof _0xtp !== 'undefined') ? (_0xtp[pf.toFixed(1)] || _0xtp[pf]) : 0;
-    
-    const payback = (p > 0) ? (p / (e * 12)).toFixed(1) : "0.0";
+    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+    const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
-    // ALIMENTA O PDF
-    dadosPDF = { p: p, payback: payback, a: a, c: c };
+    // Guardar para o PDF
+    dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-    // ... (restante do código do innerHTML e Gráficos que você já tem)
-    
-    // IMPORTANTE: Certifique-se de que o r.innerHTML está correto como mandei antes
- // Escreve os resultados direto nos campos do seu site
-   // Tenta mostrar o preço na tela de forma segura
-    const campoPreco = document.getElementById('investimento-total') || document.querySelector('.investimento-total');
-    if(campoPreco) {
-        campoPreco.innerHTML = `R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-    }
+    // 3. Gerar o HTML (mantendo seu texto original)
+    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
 
-    const campoPayback = document.getElementById('payback-estimado');
-    if(campoPayback) {
-        campoPayback.innerHTML = `${payback} anos`;
-    }
+    divResultado.innerHTML = `
+        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
+        <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
+        <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
+        <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
+        
+        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
+        <strong>Gasto Atual Estimado:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Nova Conta com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+        
+        <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
+        <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
-    // DISPARA O DOWNLOAD DO PDF AUTOMATICAMENTE
-    if (typeof gerarPDF === "function") {
-        gerarPDF(); 
-    } else {
-        alert("Cálculo pronto! Clique no botão de PDF agora.");
-    }
+        <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
+        <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
+       
+        <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
+            <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
+        </button>
+
+        <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
+          Falar no WhatsApp Agora
+        </a>
+        <p style="font-size:0.8rem; margin-top:20px;">* O valor acima inclui todos os equipamentos, instalação e homologação. HSP SP, Tarifa ENEL Maio/2026.</p>
+    `;
+
+    divResultado.style.display = "block";
+
+    // 4. Renderizar Gráficos
+    const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
+    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
+    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
+
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+            datasets: [
+                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
+                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Atual', 'Com Solar'],
+            datasets: [{ data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
+        },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+    });
   }
-  </script>
+async function gerarPDF() {
+    // 1. Verifica se a biblioteca jsPDF existe
+    if (!window.jspdf) {
+        alert("Erro: Biblioteca PDF não carregada.");
+        return;
+    }
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
+    // 2. BUSCA OS DADOS DA VARIÁVEL GLOBAL (Onde o valor R$ 9.568,00 está guardado)
+    const p = dadosPDF.p;
+    const payback = dadosPDF.payback;
+    const a = dadosPDF.a;
+    const c = dadosPDF.c;
+
+    // 3. SE NÃO HOUVER SIMULAÇÃO, PARA AQUI
+    if (!p) {
+        alert("Por favor, clique em SIMULAR primeiro para gerar os dados da proposta.");
+        return;
+    }
+
+    // 4. CABEÇALHO LARANJA ZNSOLAR
+    doc.setFillColor(255, 152, 0); 
+    doc.rect(0, 0, 210, 35, 'F');
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 23);
+    
+    // 5. CORPO DA PROPOSTA
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(14);
+    doc.text("Detalhamento do Sistema Fotovoltaico", 20, 50);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`- Investimento Estimado: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 20, 65);
+    doc.text(`- Retorno do Investimento (Payback): ${payback} anos`, 20, 75);
+    doc.text(`- Área de Telhado Necessária: ${a.toFixed(1)} m²`, 20, 85);
+    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 95);
+
+    // 6. CAPTURA DO GRÁFICO (USANDO HTML2CANVAS)
+    const grafico = document.getElementById('graficoConsumoMensal');
+    if (grafico) {
+        try {
+            const canvas = await html2canvas(grafico);
+            const imgData = canvas.toDataURL('image/png');
+            doc.setFont("helvetica", "bold");
+            doc.text("Comparativo de Consumo vs Geração:", 20, 115);
+            doc.addImage(imgData, 'PNG', 20, 120, 170, 80);
+        } catch (e) {
+            console.log("Erro no gráfico, gerando PDF sem imagem.");
+        }
+    }
+
+    // 7. RODAPÉ PROFISSIONAL
+    doc.setFontSize(9);
+    doc.setTextColor(150);
+    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 280);
+    doc.text("Simulação gerada por: Rafael Silva - ZNSolar", 20, 287);
+
+    // 8. SALVAR
+    doc.save("Proposta_ZNSolar.pdf");
+}
+</script>
+    
 <script>
   // Script de Proteção
   document.addEventListener('contextmenu', e => e.preventDefault());
@@ -618,3 +726,6 @@
     if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
   }
 </script>
+
+</body>
+</html>
