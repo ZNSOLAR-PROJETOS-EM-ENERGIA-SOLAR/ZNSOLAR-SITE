@@ -8,6 +8,8 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
     <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo">
@@ -287,7 +289,7 @@
   <body>
   
   <header>
-    <img src="marca dagua.png" id="LogoSite" alt="Logotipo ZNSOLAR" class="logo-site">
+    <img src="marca dagua.png" id="LogoSite" alt="ZNSOLAR" class="logo-site">
         <p>Projetos em Energia Solar Fotovoltáica • Economia • Sustentabilidade</p>
   </header>
   
@@ -660,17 +662,18 @@
 } // <--- AQUI FECHA A FUNÇÃO _calcZN CORRETAMENTE
 
 async function gerarPDF() {
-    if (!window.jspdf) {
-        alert("Erro: Biblioteca PDF não carregada.");
+    // Verificação de segurança para o botão não travar
+    if (typeof window.html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+        alert("As ferramentas de PDF ainda estão carregando. Aguarde 3 segundos e tente de novo.");
         return;
     }
-    
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
+    
+    // Puxa os dados que você já calculou
     const p = dadosPDF.p;
     const payback = dadosPDF.payback;
-    const a = dadosPDF.a;
     const c = dadosPDF.c;
     const tc = dadosPDF.tc;
     const nc = dadosPDF.nc;
@@ -680,27 +683,27 @@ async function gerarPDF() {
         return;
     }
 
-    // --- AQUI ENTRA O LOGOTIPO NO PDF ---
+    // TENTA PEGAR O LOGO
     const logoImg = document.getElementById('LogoSite');
     if (logoImg) {
         try {
-            const canvasLogo = await html2canvas(logoImg, { backgroundColor: null });
+            const canvasLogo = await window.html2canvas(logoImg, { backgroundColor: null });
             const imgDataLogo = canvasLogo.toDataURL('image/png');
-            // Posiciona o logo no canto superior esquerdo (X:10, Y:5, L:40, A:25)
             doc.addImage(imgDataLogo, 'PNG', 10, 5, 40, 25);
         } catch (e) {
-            console.log("Erro ao carregar logo no PDF");
+            console.log("Erro ao carregar logo, gerando sem ele.");
         }
     }
 
-    // CABEÇALHO (O seu retângulo laranja)
+    // CABEÇALHO LARANJA
     doc.setFillColor(255, 152, 0); 
     doc.rect(0, 0, 210, 40, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
-    // Texto movido para X:60 para não ficar em cima do logo
     doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 60, 25);
+
+    // Mantenha todo o resto do seu código original abaixo disso...
     
     // CORPO
     doc.setTextColor(0, 0, 0);
