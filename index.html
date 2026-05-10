@@ -647,18 +647,36 @@
     });
   }
 async function gerarPDF() {
+    // 1. Verifica se a biblioteca jsPDF existe
+    if (!window.jspdf) {
+        alert("Erro: Biblioteca PDF não carregada.");
+        return;
+    }
+    
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // 1. Cabeçalho com as cores da ZNSOLAR
-    doc.setFillColor(255, 152, 0); // Laranja ZNSolar
+    // 2. BUSCA OS DADOS DA VARIÁVEL GLOBAL (Onde o valor R$ 9.568,00 está guardado)
+    const p = dadosPDF.p;
+    const payback = dadosPDF.payback;
+    const a = dadosPDF.a;
+    const c = dadosPDF.c;
+
+    // 3. SE NÃO HOUVER SIMULAÇÃO, PARA AQUI
+    if (!p) {
+        alert("Por favor, clique em SIMULAR primeiro para gerar os dados da proposta.");
+        return;
+    }
+
+    // 4. CABEÇALHO LARANJA ZNSOLAR
+    doc.setFillColor(255, 152, 0); 
     doc.rect(0, 0, 210, 35, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
     doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 23);
     
-    // 2. Dados técnicos da Proposta
+    // 5. CORPO DA PROPOSTA
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14);
     doc.text("Detalhamento do Sistema Fotovoltaico", 20, 50);
@@ -670,27 +688,27 @@ async function gerarPDF() {
     doc.text(`- Área de Telhado Necessária: ${a.toFixed(1)} m²`, 20, 85);
     doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 95);
 
-    // 3. Captura Automática dos Gráficos
+    // 6. CAPTURA DO GRÁFICO (USANDO HTML2CANVAS)
     const grafico = document.getElementById('graficoConsumoMensal');
     if (grafico) {
         try {
-            // Captura o container que envolve o gráfico para o PDF
-            const canvas = await html2canvas(grafico.parentElement);
+            const canvas = await html2canvas(grafico);
             const imgData = canvas.toDataURL('image/png');
             doc.setFont("helvetica", "bold");
-            doc.text("Comparativo e Viabilidade:", 20, 115);
-            doc.addImage(imgData, 'PNG', 20, 120, 170, 75);
-        } catch (err) {
-            console.error("Erro ao gerar imagem do gráfico", err);
+            doc.text("Comparativo de Consumo vs Geração:", 20, 115);
+            doc.addImage(imgData, 'PNG', 20, 120, 170, 80);
+        } catch (e) {
+            console.log("Erro no gráfico, gerando PDF sem imagem.");
         }
     }
 
-    // 4. Rodapé e Finalização
+    // 7. RODAPÉ PROFISSIONAL
     doc.setFontSize(9);
     doc.setTextColor(150);
     doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 280);
     doc.text("Simulação gerada por: Rafael Silva - ZNSolar", 20, 287);
 
+    // 8. SALVAR
     doc.save("Proposta_ZNSolar.pdf");
 }
 </script>
