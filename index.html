@@ -531,13 +531,12 @@
       72.0: 221472.00, 72.5: 223735.00, 73.0: 226008.00, 73.5: 226968.00, 74.0: 228512.00,
       74.5: 230801.00, 75.0: 233100.00
     };
-  
- // Variável para o PDF funcionar (fora da função)
-  let dadosPDF = {};
 
-  function _calcZN() {
-    // 1. Pegar os inputs
-    const campos = document.querySelectorAll('.mes-consumo');
+    // Variável global para armazenar os dados da simulação e o PDF funcionar
+let dadosPDF = {};
+
+function _calcZN() { 
+  //     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
     let mesesComValor = 0;
     const listaValores = [];
@@ -555,13 +554,12 @@
 
     const divResultado = document.getElementById('resultado-simulacao');
 
-    // Validação
     if (mesesComValor === 0) {
       alert("Por favor, preencha o consumo de pelo menos um mês.");
       return;
     }
 
-    // 2. Seus cálculos exatos (Regra dos 18% e taxas)
+    // Cálculos com suas regras (18% e taxas)
     const c = totalKwh / mesesComValor;
     const n = Math.ceil((c * 1.18) / 55.42); 
     const pr = n * 0.575;
@@ -582,82 +580,100 @@
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
     const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
-    // Guardar para o PDF
-    dadosPDF = { p, payback, a, c, tc, nc, e, n };
+    // Salva tudo para o PDF abrir com os dados certos
+    dadosPDF = { p, payback, a, c, tc, nc, e, n, listaValores };
 
-    // 3. Gerar o HTML (mantendo seu texto original)
     const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
 
+    // AQUI ESTÁ SEU TEXTO ORIGINAL COMPLETO DE VOLTA
     divResultado.innerHTML = `
-        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
-        <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
-        <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
-        <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
-        
-        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
-        <strong>Gasto Atual Estimado:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Nova Conta com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
-        
-        <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
-        <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+        <div style="padding:20px; border:1px solid #ddd; border-radius:8px; background:#fff;">
+            <h2 style="color:#e67e22; margin-top:0;">Simulação Finalizada!</h2>
+            
+            <p><strong>Consumo Médio:</strong> ${c.toFixed(1)} kWh/mês</p>
+            <p><strong>Área Estimada:</strong> ${a.toFixed(1)} m²</p>
+            
+            <div style="background:#f9f9f9; padding:15px; border-left:5px solid #2e7d32; margin:15px 0;">
+                <p><strong>Gasto Atual:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})}</p>
+                <p><strong>Nova Conta:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})}</p>
+                <p style="font-size:1.2rem; color:#2e7d32;"><strong>Economia Mensal: R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></p>
+            </div>
 
-        <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
-        <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
-       
-        <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
-            <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
-        </button>
+            <div style="height:250px; margin:20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
+            <div style="height:180px; margin:20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
-        <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
-          Falar no WhatsApp Agora
-        </a>
-        <p style="font-size:0.8rem; margin-top:20px;">* O valor acima inclui todos os equipamentos, instalação e homologação. HSP SP, Tarifa ENEL Maio/2026.</p>
+            <h3 style="margin-bottom:5px;">Investimento Total:</h3>
+            <span style="font-size:2rem; font-weight:bold; color:#2c3e50;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+            <p style="font-weight:bold; color:#2e7d32;">Tempo de Retorno (Payback): Cerca de ${payback} anos.</p>
+
+            <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
+                <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
+            </button>
+
+            <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:15px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:10px; text-align:center;">
+                Falar no WhatsApp Agora
+            </a>
+
+            <div style="margin-top:25px; font-size:0.9rem; color:#666; line-height:1.5;">
+                <p>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026.</p>
+                <p><strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Nosso sistema é sem pegadinhas. Clareza e rapidez nas informações tornam mais eficaz sua decisão.</p>
+                <p><em>Obs: A proposta final depende de visita técnica no local para avaliar telhado e infraestrutura elétrica.</em></p>
+            </div>
+        </div>
     `;
 
     divResultado.style.display = "block";
 
-    // 4. Renderizar Gráficos
+    // Gráfico 1 (Consumo x Geração)
     const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
-    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
+    const mediaGeracao = dadosGeracao.reduce((v, acc) => v + acc, 0) / 12;
 
     new Chart(ctx1, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+            labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','MÉDIA'],
             datasets: [
-                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
-                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+                { label: 'Seu Consumo', data: [...listaValores, c], backgroundColor: '#e74c3c' },
+                { label: 'Geração Solar', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
             ]
         },
         options: { responsive: true, maintainAspectRatio: false }
     });
 
+    // Gráfico 2 (Custo)
     const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Atual', 'Com Solar'],
-            datasets: [{ data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
+            labels: ['Gasto Atual', 'Com Solar'],
+            datasets: [{ label: 'Valor em R$', data: [tc, nc], backgroundColor: ['#e74c3c', '#2e7d32'] }]
         },
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
     });
-  }
+  } // 
 async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // ESTA LINHA É A CHAVE: Ela puxa os valores da variável global que agrupaste
+    const { p, payback, a, c } = dadosPDF;
+
+    // Verificação de segurança
+    if (!p) {
+        alert("Por favor, clique em Simular primeiro para gerar os dados.");
+        return;
+    }
+
     // 1. Cabeçalho com as cores da ZNSOLAR
-    doc.setFillColor(255, 152, 0); // Laranja ZNSolar
+    doc.setFillColor(255, 152, 0); 
     doc.rect(0, 0, 210, 35, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
     doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 23);
-    
+           
     // 2. Dados técnicos da Proposta
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14);
