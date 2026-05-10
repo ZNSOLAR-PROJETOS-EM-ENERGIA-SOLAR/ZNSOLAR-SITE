@@ -572,7 +572,7 @@ function _calcZN() {
 • Área Necessária Estimada: ${a.toFixed(1)} m²
 • Investimento Total Estimado: R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}`);
 
-    // Renderização na Tela com Textos Originais
+    // Renderização na Tela com TODOS os textos e gráficos
     r.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -586,7 +586,7 @@ function _calcZN() {
         <div style="font-size:0.9rem;color:#388e3c;font-weight:bold;margin-top:5px;">Com este sistema sua conta de luz será apenas o valor mínimo de R$ 55,87.</div>
         
         <div style="height:250px; margin:20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
-        <div style="height:250px; margin:30px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+        <div style="height:180px; margin:30px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
         <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
@@ -597,44 +597,14 @@ function _calcZN() {
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
         </button>
 
-        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Nosso sistema é sem pegadinhas. Clareza e rapidez nas informações tornam mais eficaz sua decisão.
+        <br>
+        <p>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026.</p>
+        <p><strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Nosso sistema é sem pegadinhas. Clareza e rapidez nas informações tornam mais eficaz sua decisão.</p>
 
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
-          <i class="fab fa-whatsapp"></i> Receber Simulação e Falar com Especialista no WhatsApp Agora
+          <i class="fab fa-whatsapp"></i> Receber Simulação no WhatsApp
         </a>
-
-        <div id="proposta-pdf-area" style="position: absolute; left: -9999px; width: 800px; background: white; padding: 40px; color: black; font-family: Arial, sans-serif;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ff9800; padding-bottom: 15px;">
-                <img src="img/marca dagua.png" style="width: 200px;" alt="ZNSOLAR">
-                <div style="text-align: right;">
-                    <h1 style="margin: 0; color: #333; font-size: 24px;">PROPOSTA COMERCIAL PRELIMINAR</h1>
-                    <p style="margin: 5px 0; color: #666;">Consultor Técnico: <strong>Departamento Técnico</strong></p>
-                    <p style="margin: 0; color: #666;">WhatsApp: (11) 98318-5337</p>
-                </div>
-            </div>
-            <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
-                    <h3 style="color: #ff9800; margin-top: 0;">Dados do Sistema</h3>
-                    <p>Consumo Médio: <strong>${c.toFixed(1)}</strong> kWh/mês</p>
-                    <p>Geração Estimada: <strong>${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
-                    <p>Área de Telhado Estimada: <strong>${a.toFixed(1)}</strong> m²</p>
-                </div>
-                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border: 1px solid #2e7d32;">
-                    <h3 style="color: #2e7d32; margin-top: 0;">Investimento e Retorno</h3>
-                    <p style="font-size: 20px;">Valor Total: <strong>R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></p>
-                    <p style="font-size: 18px; color: #1b5e20;">Payback (Retorno): <strong>${payback}</strong> anos</p>
-                </div>
-            </div>
-            <div id="pdf-graf-1" style="margin-top:20px; text-align:center;"></div>
-            <div id="pdf-graf-2" style="margin-top:20px; text-align:center;"></div>
-            <div style="margin-top: 40px; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 15px;">
-                <p><strong>Observações:</strong> Esta proposta é uma estimativa baseada na Tarifa Verde ENEL SP (Maio/2026) e Lei 14.300. A viabilidade final depende de visita técnica obrigatória. Valor da visita: R$ 150,00.</p>
-                <p style="text-align: center; margin-top: 10px;"><strong>ZNSOLAR - Engenharia Solar com Precisão</strong></p>
-            </div>
-        </div>
     `;
-
     r.style.display = "block";
 
     // Gráficos
