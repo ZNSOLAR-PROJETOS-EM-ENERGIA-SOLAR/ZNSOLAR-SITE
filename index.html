@@ -584,7 +584,12 @@
     // ... (restante do código do innerHTML e Gráficos que você já tem)
     
     // IMPORTANTE: Certifique-se de que o r.innerHTML está correto como mandei antes
-  //  exibirResultados(c, a, p, tc, nc, e, payback, n); 
+ // Escreve os resultados direto nos campos do seu site
+    document.getElementById('investimento-total').innerHTML = `R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    document.getElementById('payback-estimado').innerHTML = `${payback} anos`;
+    document.getElementById('geracao-mensal').innerHTML = `${Math.round(c)} kWh/mês`;
+    
+    alert("Cálculo concluído! Agora você pode baixar o PDF.");
   }
   </script>
 
