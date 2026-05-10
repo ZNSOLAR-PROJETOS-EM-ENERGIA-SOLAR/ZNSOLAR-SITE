@@ -534,7 +534,7 @@
       74.5: 230801.00, 75.0: 233100.00
     };
   
-  // --- FUNÇÃO ÚNICA E CORRIGIDA ---
+// --- FUNÇÃO ÚNICA E CORRIGIDA ---
     function _calcZN() {
       const i = document.querySelectorAll('.mes-consumo');
       let t = 0, m = 0;
@@ -563,14 +563,8 @@
       const p = _0xtp[pf.toFixed(1)] || _0xtp[pf];
       const payback = (p / (e * 12)).toFixed(1);
 
-      // --- ALIMENTANDO A ÁREA DO PDF COM OS DADOS CALCULADOS ---
-      document.getElementById('pdf-consumo').innerText = c.toFixed(1);
-      document.getElementById('pdf-geracao').innerText = (c * 1.18).toFixed(1);
-      document.getElementById('pdf-area').innerText = a.toFixed(1);
-      document.getElementById('pdf-investimento').innerText = p.toLocaleString('pt-BR', {minimumFractionDigits:2});
-      document.getElementById('pdf-payback').innerText = payback;
-  
-    const msgWhatsapp = encodeURIComponent(
+      // --- GERANDO O CONTEÚDO NA TELA ---
+      const msgWhatsapp = encodeURIComponent(
 `Olá ZNSolar! Acabei de fazer uma simulação completa no site.
 *Dados do meu consumo e sistema:*
 • Consumo Médio Apurado: ${c.toFixed(1)} kWh/mês
@@ -606,7 +600,7 @@
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
         <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado (Payback): Cerca de ${payback} anos.</div>
        
-        <button onclick="window.gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; text-align:center; font-weight:bold; width:100%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; text-align:center; font-weight:bold; width:100%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
         </button>
 
@@ -623,9 +617,9 @@
             <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
                     <h3 style="color: #ff9800; margin-top: 0;">Dados do Sistema</h3>
-                    <p>Consumo Médio: <strong id="pdf-consumo-label">${c.toFixed(1)}</strong> kWh/mês</p>
-                    <p>Geração Estimada (+18%): <strong id="pdf-geracao-label">${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
-                    <p>Área de Telhado Estimada: <strong id="pdf-area-label">${a.toFixed(1)}</strong> m²</p>
+                    <p>Consumo Médio: <strong>${c.toFixed(1)}</strong> kWh/mês</p>
+                    <p>Geração Estimada (+18%): <strong>${(c * 1.18).toFixed(1)}</strong> kWh/mês</p>
+                    <p>Área de Telhado Estimada: <strong>${a.toFixed(1)}</strong> m²</p>
                 </div>
                 <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border: 1px solid #2e7d32;">
                     <h3 style="color: #2e7d32; margin-top: 0;">Investimento e Retorno</h3>
@@ -640,14 +634,11 @@
             </div>
 
             <div style="margin-top: 40px; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 15px;">
-                <p><strong>Observações:</strong> Esta proposta é uma estimativa baseada na tarifa ENEL SP vigente e na Lei 14.300. A viabilidade final depende de visita técnica obrigatória. Valor da visita: R$ 150,00.</p>
+                <p><strong>Observações:</strong> Esta proposta é uma estimativa baseada na tarifa ENEL SP vigente e na Lei 14.300. A viabilidade final depende de visita técnica obrigatória.</p>
                 <p style="text-align: center; margin-top: 10px;"><strong>ZNSOLAR - Engenharia Solar com Precisão</strong></p>
             </div>
         </div>
 
-        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Nosso sistema é sem pegadinhas. Clareza e rapidez nas informações tornam mais eficaz sua decisão.
-        
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:white;padding:12px 20px;border-radius:5px;text-decoration:none;font-weight:bold;margin-top:12px;font-size:1rem;width:100%;text-align:center;">
           <i class="fab fa-whatsapp"></i> Receber Simulação e Falar com Especialista no WhatsApp Agora
         </a>
@@ -658,61 +649,53 @@
     r.style.border = "1px solid #a5d6a7";
     r.style.color = "#2e7d32";
 
-    // --- LÓGICA DO GRÁFICO 1 ---
+    // --- GRÁFICOS ---
     const ctx = document.getElementById('graficoConsumoMensal').getContext('2d');
     const inputsConsumo = Array.from(document.querySelectorAll('.mes-consumo')).map(input => parseFloat(input.value) || 0);
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
-    const PR_SISTEMA = 0.76;
-    const POTENCIA_MOD_KW = 0.575;
-    const dadosGeracao = hspSP.map(hsp => n * POTENCIA_MOD_KW * hsp * 30 * PR_SISTEMA);
-    const mediaConsumo = inputsConsumo.reduce((a, b) => a + b, 0) / (inputsConsumo.filter(v => v > 0).length || 1);
-    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
-    const labelsComMedia = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'];
+    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
     
     if (window.meuGraficoConsumo) { window.meuGraficoConsumo.destroy(); }
     window.meuGraficoConsumo = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labelsComMedia,
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
             datasets: [
-                { label: 'Consumo (kWh)', data: [...inputsConsumo, mediaConsumo], backgroundColor: '#e53935' },
-                { label: 'Geração Solar (kWh)', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+                { label: 'Consumo', data: [...inputsConsumo, c], backgroundColor: '#e53935' },
+                { label: 'Geração', data: [...dadosGeracao, (c*1.18)], backgroundColor: '#2e7d32' }
             ]
         },
         options: { responsive: true, maintainAspectRatio: false }
     });
 
-    // --- LÓGICA DO GRÁFICO 2 ---
     const ctxFinanceiro = document.getElementById('graficoCustoFinanceiro').getContext('2d');
     if (window.meuGraficoFinanceiro) { window.meuGraficoFinanceiro.destroy(); }
     window.meuGraficoFinanceiro = new Chart(ctxFinanceiro, {
         type: 'bar',
         data: {
-            labels: ['Gasto Mensal Atual', 'Nova Conta com Solar'],
-            datasets: [{ label: 'Valor em R$', data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
+            labels: ['Gasto Atual', 'Nova Conta'],
+            datasets: [{ label: 'R$', data: [tc, nc], backgroundColor: ['#e53935', '#2e7d32'] }]
         },
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
     });
 
-    // --- PREPARAR GRÁFICO PARA O PDF ---
+    // Copia o gráfico para a área do PDF
     setTimeout(() => {
         const containerPdf = document.getElementById('grafico-pdf-container');
         const canvasOriginal = document.getElementById('graficoConsumoMensal');
         if (canvasOriginal && containerPdf) {
             containerPdf.innerHTML = `<img src="${canvasOriginal.toDataURL()}" style="width:100%;">`;
         }
-    }, 500);
+    }, 600);
   }
 
-  // --- FUNÇÃO DE DOWNLOAD CORRIGIDA ---
+  // --- DOWNLOAD PDF ---
   async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     const elemento = document.getElementById('proposta-pdf-area');
-    
-    const canvas = await html2canvas(elemento, { scale: 2, useCORS: true });
-    const imgData = canvas.toDataURL('image/png');
-    doc.addImage(imgData, 'PNG', 0, 0, 210, 297); 
+    const canvas = await html2canvas(elemento, { scale: 2 });
+    doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
     doc.save("Proposta_ZNSolar.pdf");
   }
 
