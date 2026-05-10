@@ -585,9 +585,23 @@
     
     // IMPORTANTE: Certifique-se de que o r.innerHTML está correto como mandei antes
  // Escreve os resultados direto nos campos do seu site
-   alert("Cálculo concluído! Agora você pode baixar o PDF.");
-    alert("Cálculo concluído! Agora você pode baixar o PDF.");
-    alert("Cálculo concluído! Agora você pode baixar o PDF.");
+   // Tenta mostrar o preço na tela de forma segura
+    const campoPreco = document.getElementById('investimento-total') || document.querySelector('.investimento-total');
+    if(campoPreco) {
+        campoPreco.innerHTML = `R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    }
+
+    const campoPayback = document.getElementById('payback-estimado');
+    if(campoPayback) {
+        campoPayback.innerHTML = `${payback} anos`;
+    }
+
+    // DISPARA O DOWNLOAD DO PDF AUTOMATICAMENTE
+    if (typeof gerarPDF === "function") {
+        gerarPDF(); 
+    } else {
+        alert("Cálculo pronto! Clique no botão de PDF agora.");
+    }
   }
   </script>
 
