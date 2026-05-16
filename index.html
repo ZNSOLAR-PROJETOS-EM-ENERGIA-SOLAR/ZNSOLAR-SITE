@@ -769,7 +769,7 @@ async function gerarPDF() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); 
+    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
 
     let p = dadosPDF.p;
     const payback_bi = dadosPDF.payback_bi;
@@ -786,7 +786,7 @@ async function gerarPDF() {
     }
 
     // ==========================================
-    // 1. CABEÇALHO COM LOGOTIPO OFICIAL E CONFIGURAÇÕES
+    // 1. CABEÇALHO (Logo Oficial, Título e Contato)
     // ==========================================
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -796,27 +796,30 @@ async function gerarPDF() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     doc.setTextColor(100, 100, 100);
-    doc.text("Consultor Técnico: Rafael Silva", 200, 33, { align: "right" });
+    doc.text("Consultor Técnico", 200, 33, { align: "right" }); // Removido o nome Rafael
     doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
 
-    // Linha horizontal laranja decorativa abaixo do cabeçalho
+    // Desenha a linha horizontal laranja decorativa abaixo do cabeçalho
     doc.setDrawColor(255, 152, 0);
     doc.setLineWidth(1);
     doc.line(10, 46, 200, 46);
 
-    // Inserção da sua Imagem de Logotipo Oficial do Repositório do GitHub
-    // Ajustado para o posicionamento exato do seu modelo visual
+    // Inserção do Logotipo Oficial ZNSOLAR do Repositório do GitHub
     try {
-        // Altere para 'marca_dagua.png.png' ou o caminho exato que usa no GitHub
+        // Altere para o nome exato da imagem que usa no repositório
         doc.addImage('marca_dagua.png.png', 'PNG', 10, 15, 55, 26); 
     } catch (e) {
-        // Fallback elegante caso a imagem falhe ou demore para carregar no local
+        // Fallback elegante caso a imagem falhe ou demore para carregar
         doc.setFont("helvetica", "bold");
         doc.setFontSize(24);
-        doc.setTextColor(21, 101, 192);
+        doc.setTextColor(21, 101, 192); // Azul principal
         doc.text("ZN ", 12, 32);
-        doc.setTextColor(255, 152, 0);
+        doc.setTextColor(255, 152, 0); // Laranja principal
         doc.text("SOLAR", 26, 32);
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(100, 100, 100);
+        doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
     }
 
     // ==========================================
@@ -829,7 +832,7 @@ async function gerarPDF() {
     
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(255, 152, 0); 
+    doc.setTextColor(255, 152, 0); // Título Laranja
     doc.text("Dados do Sistema", 15, 62);
     
     doc.setFont("helvetica", "normal");
@@ -857,7 +860,7 @@ async function gerarPDF() {
     
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(46, 125, 50); 
+    doc.setTextColor(46, 125, 50); // Título Verde
     doc.text("Investimento e Retorno", 111, 62);
     
     doc.setFont("helvetica", "normal");
