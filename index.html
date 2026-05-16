@@ -765,7 +765,7 @@ async function gerarPDF() {
 
     const p = dadosPDF.p;
    const p = dadosPDF.p;
-    const payback_bi = dadosPDF.payback_bi;
+    const payback_bi = dadosPDF.payback_bi;  
     const payback_tri = dadosPDF.payback_tri;
     const a = dadosPDF.a;
     const c = dadosPDF.c;
@@ -776,7 +776,6 @@ async function gerarPDF() {
         alert("Por favor, clique em SIMULAR primeiro.");
         return;
     }
-
     // CABEÇALHO
     doc.setFillColor(255, 152, 0); 
     doc.rect(0, 0, 210, 40, 'F');
@@ -785,15 +784,12 @@ async function gerarPDF() {
     doc.setTextColor(255, 255, 255);
     doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
     
-   // // CORPO
-// ==========================================
-        // SEÇÃO: RESUMO DA PROPOSTA
-        // ==========================================
-        doc.setTextColor(0, 0, 0);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text("Resumo da Proposta Comercial", 20, 55);
-
+  // CABEÇALHO
+doc.setFillColor(255, 152, 0);
+doc.rect(0, 0, 210, 40, 'F');
+    doc.text(`Resultados do Sistema Fotovoltaico:`, 20, 135);
+doc.text(`Payback Bifacial: ${payback_bi} anos | Número de módulos Bifacial: ${nc_bi}`, 20, 145);
+  
         // Linha fina divisória abaixo do título para organizar o espaço
         doc.setDrawColor(200, 200, 200);
         doc.setLineWidth(0.5);
