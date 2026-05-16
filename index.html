@@ -589,42 +589,51 @@ function _calcZN() {
         return; 
     }
 
-    // 2. CÁLCULOS EXATOS
+    // 2. CÁLCULOS EXATOS (Com a sua margem de 1.22 do Fio B)
     const c = totalKwh / 12; 
-    const n = Math.ceil((c * 1.22) / 55.42); 
-    const pr = n * 0.575;
+    const n_teorico = Math.ceil((c * 1.22) / 55.42); 
+    const pr = n_teorico * 0.575;
     
+    // REGRA DE ARREDONDAMENTO RIGOROSA DE POTÊNCIA (pf)
     let pf;
-    if (pr < 2.5) { pf = 2.0; } 
-    else if (pr === 2.5) { pf = 2.5; } 
-    else if (pr > 2.5 && pr <= 3.0) { pf = 3.0; } 
-    else { pf = Math.round(pr * 2) / 2; }
-
-    // REGRA DE ARREDONDAMENTO MÍNIMO AUTOMÁTICO
-    if (totalKwh < 2 || pf < 2.0) {
-        pf = 2.0;
+    if (pr < 2.5) { 
+        pf = 2.0; 
+    } else if (pr === 2.5) { 
+        pf = 2.5; 
+    } else if (pr > 2.5 && pr <= 3.0) { 
+        pf = 3.0; 
+    } else { 
+        // Para os outros casos: se passar de .0 ou de .5, arredonda para cima de 0.5 em 0.5
+        pf = Math.ceil(pr * 2) / 2; 
     }
-    
+
+    // Forçar limites comerciais da sua tabela
+    if (totalKwh < 2 || pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
+
+    // Ajustar o número de placas real (n) baseado na potência final escolhida (pf)
+    // Isso garante que o preço, área e gráficos usem a mesma potência travada
+    const n = Math.ceil(pf / 0.575);
 
     const a = (n * 2.58) * 1.15;
     const tc = c * 0.92954;
     const nc = 55.87;
     const e = tc - nc;
     
+    // Buscar preço correto na sua tabela _0xtp
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
     const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
     // Guardar para o PDF
     dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-    // CÁLCULO PRÉVIO DA GERAÇÃO MÉDIA PARA O WHATSAPP
+    // CÁLCULO DA GERAÇÃO MÉDIA
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
     const mediaGeracao = dadosGeracao.reduce((x, y) => x + y, 0) / 12;
 
-    // TEXTO DETALHADO EXCLUSIVO PARA O SEU WHATSAPP
-    const textoWhatsapp = `Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS DO SISTEMA:*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
+    // TEXTO ESPECÍFICO QUE VAI PRO SEU WHATSAPP (O cliente envia, mas o texto foi ocultado da tela dele)
+    const textoWhatsapp = `Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS EXCLUSIVOS DO SISTEMA:*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
 
     const msgWhatsapp = encodeURIComponent(textoWhatsapp);
 
@@ -633,7 +642,7 @@ function _calcZN() {
     divResultado.style.borderLeft = "none";
     divResultado.style.padding = "0";
 
-    // 3. HTML DO CLIENTE (O que aparece na tela do seu site - Sem a quantidade de módulos)
+    // 3. HTML DO CLIENTE (O que aparece na tela do site - TOTALMENTE SEM A QUANTIDADE DE PLACAS E SEM POTÊNCIA)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
