@@ -769,7 +769,7 @@ async function gerarPDF() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
+    const doc = new jsPDF('p', 'mm', 'a4'); 
 
     let p = dadosPDF.p;
     const payback_bi = dadosPDF.payback_bi;
@@ -786,38 +786,41 @@ async function gerarPDF() {
     }
 
     // ==========================================
-    // 1. CABEÇALHO (Logo, Título e Contacto)
+    // 1. CABEÇALHO COM LOGOTIPO OFICIAL E CONFIGURAÇÕES
     // ==========================================
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
+    doc.setFontSize(20);
     doc.setTextColor(34, 34, 34);
     doc.text("PROPOSTA COMERCIAL PRELIMINAR", 200, 25, { align: "right" });
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(100, 100, 100);
-    doc.text("Consultor Técnico: ZNSOLAR", 200, 33, { align: "right" });
+    doc.text("Consultor Técnico: Rafael Silva", 200, 33, { align: "right" });
     doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
 
-    // Desenha a linha horizontal laranja decorativa
+    // Linha horizontal laranja decorativa abaixo do cabeçalho
     doc.setDrawColor(255, 152, 0);
     doc.setLineWidth(1);
     doc.line(10, 46, 200, 46);
 
-    // O logótipo ZNSOLAR estilizado no topo esquerdo
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(24);
-    doc.setTextColor(21, 101, 192); // Azul principal
-    doc.text("ZN ", 12, 32);
-    doc.setTextColor(255, 152, 0); // Laranja principal
-    doc.text("SOLAR", 26, 32);
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
-    doc.setTextColor(100, 100, 100);
-    doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
+    // Inserção da sua Imagem de Logotipo Oficial do Repositório do GitHub
+    // Ajustado para o posicionamento exato do seu modelo visual
+    try {
+        // Altere para 'marca_dagua.png.png' ou o caminho exato que usa no GitHub
+        doc.addImage('marca_dagua.png.png', 'PNG', 10, 15, 55, 26); 
+    } catch (e) {
+        // Fallback elegante caso a imagem falhe ou demore para carregar no local
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(21, 101, 192);
+        doc.text("ZN ", 12, 32);
+        doc.setTextColor(255, 152, 0);
+        doc.text("SOLAR", 26, 32);
+    }
 
     // ==========================================
-    // 2. BLOCOS LADO A LADO (Dados vs Retorno)
+    // 2. BLOCOS LADO A LADO (Dados vs Retorno) - SEM PORCENTAGENS
     // ==========================================
     
     // Bloco Esquerdo: Dados do Sistema (Cinza)
@@ -826,7 +829,7 @@ async function gerarPDF() {
     
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(255, 152, 0); // Título Laranja
+    doc.setTextColor(255, 152, 0); 
     doc.text("Dados do Sistema", 15, 62);
     
     doc.setFont("helvetica", "normal");
@@ -837,9 +840,9 @@ async function gerarPDF() {
     doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
     
     doc.setFont("helvetica", "normal");
-    doc.text(`Geração Estimada (+18%): `, 15, 79);
+    doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
     doc.setFont("helvetica", "bold");
-    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 59, 79);
+    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 50, 79);
     
     doc.setFont("helvetica", "normal");
     doc.text(`Área de Telhado Estimada: `, 15, 87);
@@ -854,7 +857,7 @@ async function gerarPDF() {
     
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(46, 125, 50); // Título Verde
+    doc.setTextColor(46, 125, 50); 
     doc.text("Investimento e Retorno", 111, 62);
     
     doc.setFont("helvetica", "normal");
@@ -876,7 +879,7 @@ async function gerarPDF() {
     doc.text(`${payback_tri} anos`, 162, 89);
 
     // ==========================================
-    // 3. SECÇÃO DE GRÁFICOS (Alinhamento Vertical)
+    // 3. SECÇÃO DE GRÁFICOS (Sincronizados e Alinhados)
     // ==========================================
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
@@ -903,13 +906,27 @@ async function gerarPDF() {
         doc.addImage(imgData2, 'PNG', 15, 206, 180, 68);
     }
 
-    // Rodapé padrão institucional
+    // ==========================================
+    // 4. AVISO IMPORTANTE E TERMOS NO RODAPÉ DO PDF
+    // ==========================================
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(183, 28, 28); // Vermelho escuro discreto para o aviso
+    doc.text("Aviso Importante:", 10, 278);
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(120, 120, 120);
-    doc.text("Proposta elaborada por: ZNSOLAR", 10, 287);
+    doc.setTextColor(100, 100, 100);
+    
+    // Divide o texto longo automaticamente para caber nas margens do PDF perfeitamente
+    const textoAviso = "Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco.";
+    const linhasSplit = doc.splitTextToSize(textoAviso, 190);
+    doc.text(linhasSplit, 10, 282);
 
-    // Salva o documento diretamente para download do cliente
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(8);
+    doc.text("Proposta preliminar gerada por ZNSOLAR via Sistema de Dimensionamento Fotovoltaico.", 10, 294);
+
+    // Salva o documento diretamente para download
     doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
 }
 </script>
