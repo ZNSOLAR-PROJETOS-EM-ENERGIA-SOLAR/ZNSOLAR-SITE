@@ -636,7 +636,7 @@ const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
 const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
 
 // Passando os dois paybacks novos para o objeto do PDF puxar sem travar
-dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri };
+dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
     // Geração mensal baseada no HSP de São Paulo
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
@@ -698,7 +698,8 @@ Desejo mais informações sobre esta simulação e orçamento._`;
 
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
+   <p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi.toFixed(1)} anos</p>
+<p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri.toFixed(1)} anos</p>
        
         <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
