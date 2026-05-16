@@ -780,8 +780,8 @@ async function gerarPDF() {
     doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
     doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
     doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
-    doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
-    doc.text(`- Conta Com Sistema Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
+    doc.text(`- Conta Sem Sistema Solar (Consumo Bifásico): R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
+    doc.text(`- Conta Com Sistema Solar (Consumo Bifásico): R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
 
     try {
         const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
