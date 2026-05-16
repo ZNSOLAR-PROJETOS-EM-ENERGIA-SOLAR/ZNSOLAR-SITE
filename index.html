@@ -618,15 +618,22 @@
     // Sincronização comercial das variáveis
     const n = Math.ceil(pf / 0.575);
     const a = (n * 2.58) * 1.15;
-    
-    const tc = c * 0.92954;
-    const nc = 55.87;
-    const e = tc - nc;
-    
-    // Buscar preço correto na tabela _0xtp
-    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
-    const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
+  const tc = c * 0.92954;
 
+// Definição dos dois custos mínimos da sua tabela
+const nc_bi = 55.87;    // Bifásico (50 kWh + COSIP)
+const nc_tri = 102.34;  // Trifásico (100 kWh + COSIP)
+
+// Cálculo das duas economias separadas
+const e_bi = tc - nc_bi;
+const e_tri = tc - nc_tri;
+
+// Buscar preço correto na tabela _0xtp
+const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+
+// Gerar as duas referências de payback
+const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
+const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
     // Guardar dados para o PDF
     dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
@@ -720,13 +727,23 @@ Desejo mais informações sobre esta simulação e orçamento._`;
     const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
-        data: {
-            labels: ['Sem Sistema Solar', 'Com Sistema Solar'],
+       data: {
+            labels: [
+                'Sem Sistema Solar', 
+                'Com Sistema Solar (Bifásico)', 
+                'Com Sistema Solar (Trifásico)'
+            ],
             datasets: [{
                 label: 'Custo Mensal (R$)',
-                data: [tc, nc], 
-                backgroundColor: ['#e53935', '#2e7d32'] 
+                data: [tc, nc_bi, nc_tri], // Injeta as três variáveis de custo calculadas
+                backgroundColor: [
+                    '#DC3545', // Vermelho para destacar o custo alto sem sistema
+                    '#28A745', // Verde para o custo mínimo do Bifásico
+                    '#17A2B8'  // Ciano/Azul para o custo mínimo do Trifásico
+                ],
+                borderWidth: 1
             }]
+        },
         },
         options: { 
             indexAxis: 'y', 
@@ -767,22 +784,63 @@ async function gerarPDF() {
     doc.setTextColor(255, 255, 255);
     doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
     
-    // CORPO
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(16);
-    doc.text("Resumo da Proposta", 20, 55);
-    
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
-    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
-    doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
-    doc.text(`- Conta Sem Sistema Solar (Consumo Bifásico): R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
-    doc.text(`- Conta Com Sistema Solar (Consumo Bifásico): R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
+   // // CORPO
+// ==========================================
+        // SEÇÃO: RESUMO DA PROPOSTA
+        // ==========================================
+        doc.setTextColor(0, 0, 0);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.text("Resumo da Proposta Comercial", 20, 55);
 
+        // Linha fina divisória abaixo do título para organizar o espaço
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.5);
+        doc.line(20, 59, 190, 59);
+
+        // CARD DE INVESTIMENTO (Retângulo destacado com fundo cinza bem claro)
+        doc.setFillColor(245, 247, 250); 
+        doc.setDrawColor(220, 130, 0);    // Borda combinando com o laranja do cabeçalho
+        doc.setLineWidth(0.8);
+        doc.roundedRect(20, 65, 170, 16, 2, 2, 'FD'); // Retângulo com cantos levemente arredondados
+
+        // Texto em destaque dentro do Card de Investimento
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 75);
+
+
+        // ==========================================
+        // BLOCO DE METRICAS (TEXTO CORRIDO E ORGANIZADO)
+        // ==========================================
+        doc.setTextColor(50, 50, 50); // Grafite escuro para uma leitura mais elegante
+        doc.setFontSize(11);
+
+        // Indicadores com marcadores (•) e negrito apenas nos títulos
+        doc.setFont("helvetica", "bold");
+        doc.text("• Tempo de Retorno (Payback Bifásico):", 20, 92);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${payback_bi} anos`, 95, 92);
+
+        doc.setFont("helvetica", "bold");
+        doc.text("• Tempo de Retorno (Payback Trifásico):", 20, 100);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${payback_tri} anos`, 95, 100);
+
+        doc.setFont("helvetica", "bold");
+        doc.text("• Consumo Médio Mensal:", 20, 108);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${c.toFixed(1)} kWh/mês`, 68, 108);
+
+        doc.setFont("helvetica", "bold");
+        doc.text("• Área Necessária para Instalação:", 20, 116);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${a.toFixed(1)} m²`, 82, 116);
+// Detalhamento das contas sem e com sistema para os dois padrões
+doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 107);
+doc.text(`- Conta Com Sistema Solar (Mínimo Bifásico): R$ ${nc_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
+doc.text(`- Conta Com Sistema Solar (Mínimo Trifásico): R$ ${nc_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 123);
     try {
         const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
         const imgData1 = canvas1.toDataURL('image/png');
