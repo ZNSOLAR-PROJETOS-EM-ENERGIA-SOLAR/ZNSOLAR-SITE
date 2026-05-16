@@ -634,9 +634,9 @@ const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
 // Gerar as duas referências de payback
 const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
 const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
-    // Guardar dados para o PDF
-    dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
+// Passando os dois paybacks novos para o objeto do PDF puxar sem travar
+dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e, n };
     // Geração mensal baseada no HSP de São Paulo
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
