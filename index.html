@@ -700,6 +700,26 @@ Desejo mais informações sobre esta simulação e orçamento._`;
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
 <p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi} anos</p>
 <p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri} anos</p>
+
+  <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
+    <h3 style="text-align: center; color: #2c3e50; font-size: 18px; margin-top: 0; margin-bottom: 25px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia e Valorização sobre 25 Anos</h3>
+    
+    <div style="margin-bottom: 30px;">
+        <h4 style="color: #1565C0; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: #1565C0; margin-right: 8px; border-radius: 2px;"></span>
+            Economia Acumulada no Período (R$)
+        </h4>
+        <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+
+    <div>
+        <h4 style="color: #2E7D32; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 12px; height: 12px; background: #2E7D32; margin-right: 8px; border-radius: 2px;"></span>
+            Valorização do Capital Próprio Aplicado (1% a.m.)
+        </h4>
+        <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+</div>
        
         <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
@@ -952,6 +972,26 @@ doc.setFontSize(8.5);
 doc.setTextColor(21, 101, 192);
 doc.text("Economia Acumulada no Período (R$)", 15, 44);
 
+// =========================================================================
+// SUBSTITUA A PARTIR DA LINHA 975 (A PARTIR DE CONST PECO) POR ESTE BLOCO:
+// =========================================================================
+
+// 1. Definição inicial da posição Y (Abaixo do comparativo de contas da página 1)
+let yDinamico = 175; 
+
+doc.setFont("helvetica", "bold");
+doc.setFontSize(10);
+doc.setTextColor(34, 34, 34);
+doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
+
+// -------------------------------------------------------------------------
+// GRÁFICO 1: ECONOMIA ACUMULADA (AZUL)
+// -------------------------------------------------------------------------
+yDinamico += 10;
+doc.setFontSize(8.5);
+doc.setTextColor(21, 101, 192); // Azul institucional
+doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
+
 const pEco = [
     { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
     { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
@@ -961,78 +1001,85 @@ const pEco = [
     { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
 ];
 
+const maxEco = dadosPDF.economia_25_anos || 46012.23;
+
+yDinamico += 5;
 pEco.forEach((p) => {
-    const larg = (p.valor / maxEco) * 110;
-    doc.setFont("helvetica", "bold");
+    const larg = maxEco > 0 ? (p.valor / maxEco) * 110 : 0; // Escala máxima de 110mm
+    
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
-    doc.setTextColor(80, 80, 80);
-    doc.text(p.ano, 15, g1Y + 4);
-
-    doc.setFillColor(21, 101, 192);
-    doc.rect(g1X, g1Y, larg, 5, "F");
-
-    doc.setFontSize(7);
+    doc.setTextColor(100, 100, 100);
+    doc.text(p.ano, 15, yDinamico + 3.5);
+    
+    doc.setFillColor(21, 101, 192); // Cor Azul
+    doc.rect(32, yDinamico, larg, 4.5, "F");
+    
     doc.setTextColor(34, 34, 34);
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, g1X + larg + 3, g1Y + 4);
-    g1Y += 9;
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+    
+    yDinamico += 6.5; // Espaçamento entre as barras
 });
 
-// 3. Gráfico 2: Linhas Horizontais de Rendimento (Laranja)
-let g2Y = 120;
-const maxRen = dadosPDF.payback_tri || 214723.74;
-
+// -------------------------------------------------------------------------
+// GRÁFICO 2: VALORIZAÇÃO DO CAPITAL (VERDE)
+// -------------------------------------------------------------------------
+yDinamico += 5;
 doc.setFont("helvetica", "bold");
 doc.setFontSize(8.5);
-doc.setTextColor(255, 152, 0);
-doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, 114);
+doc.setTextColor(46, 125, 50); // Verde institucional
+doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
 
 const pRen = [
-    { ano: "1 Ano", valor: dadosPDF.payback_bi || 1717.79 },
-    { ano: "5 Anos", valor: dadosPDF.payback_5_anos || 8588.95 },
-    { ano: "10 Anos", valor: dadosPDF.payback_10_anos || 17177.90 },
-    { ano: "15 Anos", valor: dadosPDF.payback_15_anos || 25766.85 },
-    { ano: "20 Anos", valor: dadosPDF.payback_20_anos || 17178.99 },
-    { ano: "25 Anos", valor: dadosPDF.payback_tri || 214723.74 }
+    { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
+    { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
+    { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
+    { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
+    { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
+    { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
 ];
 
+const maxRen = dadosPDF.rendimento_25_anos || 214723.74;
+
+yDinamico += 5;
 pRen.forEach((p) => {
-    const larg = (p.valor / maxRen) * 110;
-    doc.setFont("helvetica", "bold");
+    const larg = maxRen > 0 ? (p.valor / maxRen) * 110 : 0; // Escala máxima de 110mm
+    
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
-    doc.setTextColor(80, 80, 80);
-    doc.text(p.ano, 15, g2Y + 4);
-
-    doc.setDrawColor(255, 152, 0);
-    doc.setLineWidth(0.6);
-    doc.line(g1X, g2Y + 2.5, g1X + larg, g2Y + 2.5);
-
-    doc.setFillColor(255, 152, 0);
-    doc.circle(g1X + larg, g2Y + 2.5, 1.2, "F");
-
-    doc.setFontSize(7);
+    doc.setTextColor(100, 100, 100);
+    doc.text(p.ano, 15, yDinamico + 3.5);
+    
+    doc.setFillColor(46, 125, 50); // Cor Verde
+    doc.rect(32, yDinamico, larg, 4.5, "F");
+    
     doc.setTextColor(34, 34, 34);
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, g1X + larg + 3, g2Y + 4);
-    g2Y += 9;
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+    
+    yDinamico += 6.5; // Espaçamento entre as barras
 });
 
-// 4. Texto Comercial e Avisos na Página 2
-doc.setFont("helvetica", "normal");
-doc.setFontSize(8.5);
-doc.setTextColor(50, 50, 50);
-const txtComercial = "Nota Comercial: Os gráficos acima comparam a economia acumulada gerada pelo sistema fotovoltaico contra o rendimento potencial caso o valor equivalente do investimento fosse aplicado a uma taxa de 1% ao mês. O retorno em ativos reais oferece excelente segurança ao longo dos 25 anos de vida útil.";
-doc.text(doc.splitTextToSize(txtComercial, 180), 15, 180);
+// -------------------------------------------------------------------------
+// SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
+// -------------------------------------------------------------------------
+yDinamico += 8; 
 
 doc.setFont("helvetica", "bold");
 doc.setFontSize(9);
-doc.setTextColor(180, 0, 0);
-doc.text("Aviso Importante:", 15, 205);
+doc.setTextColor(180, 0, 0); // Vermelho para o título do Aviso
+doc.text("Aviso Importante:", 15, yDinamico);
 
 doc.setFont("helvetica", "normal");
-doc.setFontSize(7);
+doc.setFontSize(6.8);
 doc.setTextColor(60, 60, 60);
-const linhasSplit = doc.splitTextToSize(textoAviso, 180);
-doc.text(linhasSplit, 15, 210, { lineHeight: 3.5 });
 
+const linhasSplit = doc.splitTextToSize(textoAviso, 180);
+doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
+
+// O código abaixo continua igual ao seu rodapé padrão (linhas 930-936 das suas imagens)
+// =========================================================================
 // 5. Rodapé Geral e Comando de Salvar (Fecha a função gerarPDF)
 doc.setFont("helvetica", "italic");
 doc.setFontSize(6.5);
