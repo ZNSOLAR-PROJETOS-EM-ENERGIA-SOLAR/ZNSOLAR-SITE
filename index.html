@@ -535,12 +535,13 @@
  // Variável para o PDF funcionar (fora da função)
   let dadosPDF = {};
 
-  function _calcZN() {
+ function _calcZN() {
     // 1. Pegar os inputs dos 12 meses
     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
     let mesesComValor = 0;
     const listaValores = [];
+    const nomesMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
     campos.forEach(campo => {
         const valor = parseFloat(campo.value);
@@ -595,22 +596,17 @@
     
     // REGRA DE EXATIDÃO COMERCIAL (SÓ MANTÉM SE FOR EXATO)
     let pf;
-    
-    // Verifica se o valor calculado é inteiro ou termina exatamente em .5
     const ehExato = (pr % 1 === 0) || (Math.abs(pr % 1 - 0.5) < 0.0001);
 
     if (ehExato) {
-        pf = pr; // Se for exato (ex: 2.5 ou 3.0), mantém travado nele
+        pf = pr; 
     } else {
-        // Se NÃO for exato, precisamos saber se ele passou ou ficou abaixo do meio (.5)
-        const baseInteira = Math.floor(pr); // Ex: de 2.37 vira 2
-        const restoDecimal = pr - baseInteira; // Ex: de 2.37 vira 0.37
+        const baseInteira = Math.floor(pr); 
+        const restoDecimal = pr - baseInteira; 
 
         if (restoDecimal < 0.5) {
-            // Se está abaixo de .5 (caso do 2.37), arredonda para o anterior (2.0)
             pf = baseInteira; 
         } else {
-            // Se está acima de .5 (ex: 2.51), arredonda para o seguinte (3.0)
             pf = baseInteira + 1.0; 
         }
     }
@@ -619,7 +615,7 @@
     if (totalKwh < 2 || pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
 
-    // Sincronização matemática dos módulos e área baseada no pf comercial final
+    // Sincronização comercial das variáveis
     const n = Math.ceil(pf / 0.575);
     const a = (n * 2.58) * 1.15;
     
@@ -627,31 +623,55 @@
     const nc = 55.87;
     const e = tc - nc;
     
-    // Buscar preço correto correspondente na tabela _0xtp
+    // Buscar preço correto na tabela _0xtp
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
     const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
     // Guardar dados para o PDF
     dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-    // Geração média baseada no sistema real escolhido
+    // Geração mensal baseada no HSP de São Paulo
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
     const mediaGeracao = dadosGeracao.reduce((x, y) => x + y, 0) / 12;
 
     // =========================================================================
-    // CONFIGURAÇÃO WHATSAPP: DADOS TÉCNICOS EXCLUSIVOS PARA SEU CELULAR
+    // 3. MONTAGEM DA TABELA TEXTUAL DE MESES PARA O WHATSAPP
     // =========================================================================
-    const textoWhatsappCompletoParaVoce = Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS DO SISTEMA:*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
+    let tabelaMesesWhats = `📅 *HISTÓRICO DE CONSUMO vs GERAÇÃO:*\n`;
+    tabelaMesesWhats += `_Mês | Consumo | Geração Estimada_\n`;
+    tabelaMesesWhats += `----------------------------------\n`;
+    
+    for (let i = 0; i < 12; i++) {
+        tabelaMesesWhats += `• ${nomesMeses[i]}: ${listaValores[i].toFixed(0)} kWh  ➔  ${dadosGeracao[i].toFixed(0)} kWh\n`;
+    }
+    tabelaMesesWhats += `----------------------------------`;
 
-    const msgWhatsapp = encodeURIComponent(textoWhatsappCompletoParaVoce);
+    // TEXTO COMERCIAL DO WHATSAPP (Totalmente sem potência kWp e sem número de placas)
+    const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar:
+----------------------------------
+💰 *INVESTIMENTO E RETORNO:*
+• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+• Tempo de Retorno (Payback): ${payback} anos
+• Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+
+📊 *MÉDIAS DO SISTEMA:*
+• Consumo Médio: ${c.toFixed(1)} kWh/mês
+• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês
+• Área Necessária: ${a.toFixed(1)} m²
+----------------------------------
+${tabelaMesesWhats}
+
+_Gostaria de agendar a visita técnica de R$ 150,00 para validar o local da instalação e confirmar o orçamento._`;
+
+    const msgWhatsapp = encodeURIComponent(textoWhatsappCliente);
 
     // Limpa estilizações residuais
     divResultado.style.background = "transparent";
     divResultado.style.borderLeft = "none";
     divResultado.style.padding = "0";
 
-    // 3. HTML DO CLIENTE (Na tela do site não mostra placas nem potência)
+    // HTML DO CLIENTE (O que aparece na tela do site - Sem placas e sem potência)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
