@@ -709,7 +709,7 @@ Desejo mais informações sobre esta simulação e orçamento._`;
           Falar no WhatsApp Agora  
         </a>
         <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
+        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico in loco  . Não espere mais entre em contato agora mesmo.
     `;
 
     divResultado.style.display = "block";
@@ -763,143 +763,148 @@ async function gerarPDF() {
         alert("Erro: Biblioteca PDF não carregada.");
         return;
     }
-    
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
 
-     let p = dadosPDF.p;
-    const payback_bi = dadosPDF.payback_bi;  
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
+
+    let p = dadosPDF.p;
+    const payback_bi = dadosPDF.payback_bi;
     const payback_tri = dadosPDF.payback_tri;
     const a = dadosPDF.a;
     const c = dadosPDF.c;
     const tc = dadosPDF.tc;
     const nc_bi = dadosPDF.nc_bi;
-    const nc_tri = dadosPDF.nc_tri;    
+    const nc_tri = dadosPDF.nc_tri;
+    const e_bi = dadosPDF.e_bi;
+    const e_tri = dadosPDF.e_tri;
+
     if (!p) {
         alert("Por favor, clique em SIMULAR primeiro.");
         return;
     }
-    // CABEÇALHO
-    doc.setFillColor(255, 152, 0); 
-    doc.rect(0, 0, 210, 40, 'F');
+
+    // ==========================================
+    // 1. CABEÇALHO (Logo, Título e Contacto)
+    // ==========================================
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255);
-    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
+    doc.setTextColor(34, 34, 34);
+    doc.text("PROPOSTA COMERCIAL PRELIMINAR", 200, 25, { align: "right" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Consultor Técnico: ZNSOLAR", 200, 33, { align: "right" });
+    doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
+
+    // Desenha a linha horizontal laranja decorativa
+    doc.setDrawColor(255, 152, 0);
+    doc.setLineWidth(1);
+    doc.line(10, 46, 200, 46);
+
+    // Nota: O logótipo ZNSOLAR em texto estilizado no topo esquerdo (ou imagem se configurado)
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.setTextColor(21, 101, 192); // Azul principal
+    doc.text("ZN ", 12, 32);
+    doc.setTextColor(255, 152, 0); // Laranja principal
+    doc.text("SOLAR", 26, 32);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(100, 100, 100);
+    doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
+
+    // ==========================================
+    // 2. BLOCOS LADO A LADO (Dados vs Retorno)
+    // ==========================================
     
-  // CABEÇALHO
-doc.setFillColor(255, 152, 0);
-doc.rect(0, 0, 210, 40, 'F');
-    doc.text(`Resultados do Sistema Fotovoltaico:`, 20, 135);
-doc.text(`Payback Bifacial: ${payback_bi} anos | Número de módulos Bifacial: ${nc_bi}`, 20, 145);
-  
-        // Linha fina divisória abaixo do título para organizar o espaço
-        doc.setDrawColor(200, 200, 200);
-        doc.setLineWidth(0.5);
-        doc.line(20, 59, 190, 59);
+    // Bloco Esquerdo: Dados do Sistema (Cinza)
+    doc.setFillColor(245, 245, 245);
+    doc.roundedRect(10, 54, 92, 48, 3, 3, 'F');
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(255, 152, 0); // Título Laranja
+    doc.text("Dados do Sistema", 15, 62);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10.5);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Consumo Médio: `, 15, 71);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Geração Estimada (+18%): `, 15, 79);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 59, 79);
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Área de Telhado Estimada: `, 15, 87);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${a.toFixed(1)} m²`, 59, 87);
 
-        // CARD DE INVESTIMENTO (Retângulo destacado com borda na cor ZNSOLAR)
-        doc.setFillColor(245, 247, 250); // Fundo cinza bem claro
-        doc.setDrawColor(255, 152, 0);    // Laranja idêntico ao seu cabeçalho
-        doc.setLineWidth(0.8);
-        doc.roundedRect(20, 65, 170, 15, 2, 2, 'FD'); // Cantos arredondados
+    // Bloco Direito: Investimento e Retorno (Verde)
+    doc.setFillColor(240, 248, 240);
+    doc.setDrawColor(76, 175, 80);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(106, 54, 94, 48, 3, 3, 'FD');
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(46, 125, 50); // Título Verde
+    doc.text("Investimento e Retorno", 111, 62);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Valor Total: `, 111, 72);
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 132, 72);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(46, 125, 50);
+    doc.text(`Payback (Retorno Bifásico): `, 111, 81);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${payback_bi} anos`, 161, 81);
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Payback (Retorno Trifásico): `, 111, 89);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${payback_tri} anos`, 162, 89);
 
-        // Texto em destaque dentro do Card de Investimento
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(11.5);
-        doc.setFont("helvetica", "bold");
-        doc.text(`INVESTIMENTO TOTAL ESTIMADO: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 75);
+    // ==========================================
+    // 3. SECÇÃO DE GRÁFICOS (Alinhamento Vertical)
+    // ==========================================
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(34, 34, 34);
+    doc.text("Análise de Viabilidade Económica", 105, 114, { align: "center" });
 
-        // ==========================================
-        // BLOCO DE METRICAS (TEXTO CORRIDO E ORGANIZADO)
-        // ==========================================
-        doc.setTextColor(50, 50, 50); // Grafite escuro para leitura confortável
+    // Captura o Gráfico 1: Comparativo de Consumo vs Geração
+    const canvas1 = document.getElementById('chartConsumo'); // Verifique se o id do seu primeiro canvas é este
+    if (canvas1) {
         doc.setFontSize(11);
+        doc.text("Comparativo de Consumo vs Geração:", 10, 124);
+        const imgData1 = canvas1.toDataURL('image/png', 1.0);
+        doc.addImage(imgData1, 'PNG', 10, 127, 190, 65);
+    }
 
-        // Indicadores com marcadores (•) e negrito apenas nos títulos
-        doc.setFont("helvetica", "bold");
-        doc.text("• Tempo de Retorno (Payback Bifásico):", 20, 92);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${payback_bi} anos`, 95, 92);
+    // Captura o Gráfico 2: Economia Financeira Estimada
+    const canvas2 = document.getElementById('chartEconomia'); // Verifique se o id do seu segundo canvas é este
+    if (canvas2) {
+        doc.text("Economia Financeira Estimada:", 10, 202);
+        const imgData2 = canvas2.toDataURL('image/png', 1.0);
+        doc.addImage(imgData2, 'PNG', 15, 206, 180, 68);
+    }
 
-        doc.setFont("helvetica", "bold");
-        doc.text("• Tempo de Retorno (Payback Trifásico):", 20, 100);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${payback_tri} anos`, 95, 100);
-
-        doc.setFont("helvetica", "bold");
-        doc.text("• Consumo Médio Mensal:", 20, 108);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${c.toFixed(1)} kWh/mês`, 68, 108);
-
-        doc.setFont("helvetica", "bold");
-        doc.text("• Área Necessária para Instalação:", 20, 116);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${a.toFixed(1)} m²`, 82, 116);
-
-        // ==========================================
-        // CARD COMPARATIVO DE CONTAS (ANTES vs DEPOIS)
-        // ==========================================
-        // Uma caixa cinza claro para envelopar o comparativo de tarifas
-        doc.setFillColor(248, 249, 250);
-        doc.setDrawColor(220, 224, 230);
-        doc.setLineWidth(0.5);
-        doc.roundedRect(20, 124, 170, 31, 2, 2, 'FD');
-
-        doc.setFontSize(10.5);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(220, 53, 69); // Vermelho para alertar o custo sem o sistema
-        doc.text(`Conta Atual (Sem Sistema Solar): R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 131);
-
-        doc.setTextColor(40, 167, 69); // Verde para economia no Bifásico
-        doc.text(`Nova Conta Estimada (Padrão Bifásico): R$ ${nc_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 140);
-
-        doc.setTextColor(23, 162, 184); // Azul/Ciano técnico para o Trifásico
-        doc.text(`Nova Conta Estimada (Padrão Trifásico): R$ ${nc_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 149);
-    try {
-            const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
-            const imgData1 = canvas1.toDataURL('image/png');
-            doc.setFont("helvetica", "bold");
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
-            
-            // Reajusta para a posição vertical Y = 163 para dar respiro ao texto
-            doc.text("Comparativo de Consumo vs Geração:", 20, 163);
-            doc.addImage(imgData1, 'PNG', 20, 168, 170, 52);
-
-            const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
-            const imgData2 = canvas2.toDataURL('image/png');
-            
-            // Empurra o gráfico financeiro para Y = 227 na base da folha
-            doc.text("Economia Financeira Estimada:", 20, 227);
-            doc.addImage(imgData2, 'PNG', 20, 232, 170, 45); 
-        } catch (e) {
-            console.log("Erro nos gráficos.");
-        }
-
-    // RODAPÉ
+    // Rodapé padrão institucional
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
-    doc.setTextColor(150);
-    doc.text("Proposta elaborada por: ZNSOLAR", 20, 285);
-    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 291);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Proposta elaborada por: ZNSOLAR", 10, 287);
 
-    doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
+    // Salva o documento diretamente para download do cliente
+    doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
 }
-</script>
-    
-<script>
-  // Script de Proteção
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('selectstart', e => e.preventDefault());
-  document.onkeydown = function(e) {
-    if(e.keyCode == 123) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
-  }
-</script>
-
-</body>
-</html>
