@@ -833,7 +833,7 @@ function gerarPDF() {
     let yDinamico = 108;
 
     // =========================================================================
-    // GRÁFICO 1: ACÚMULO DE ECONOMIA EM DINHEIRO (Barras Azuis / Pretas no PDF)
+    // GRÁFICO 1: ACÚMULO DE ECONOMIA EM DINHEIRO
     // =========================================================================
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
@@ -849,19 +849,17 @@ function gerarPDF() {
         { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
     ];
 
-    // Calcula o valor máximo dinamicamente ISOLADO para o PDF não quebrar a tela
     let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
 
     yDinamico += 5;
     pEco.forEach((p) => {
-        const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm
+        const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; 
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(85, 85, 85);
         doc.text(p.ano, 15, yDinamico + 3.5);
 
-        // Desenha a barra horizontal cinza escuro/preto no PDF
         doc.setFillColor(44, 62, 80); 
         doc.rect(32, yDinamico, larg, 4.5, "F");
 
@@ -875,7 +873,7 @@ function gerarPDF() {
     yDinamico += 8; 
 
     // =========================================================================
-    // GRÁFICO 2: RETORNO E VALORIZAÇÃO DO CAPITAL (Barras Verdes)
+    // GRÁFICO 2: RETORNO E VALORIZAÇÃO DO CAPITAL
     // =========================================================================
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
@@ -891,19 +889,17 @@ function gerarPDF() {
         { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 42944.74 }  
     ];
 
-    // Calcula o valor máximo dinamicamente ISOLADO para o PDF verde
     let maxRenPDF = Math.max(...pRen.map(p => p.valor));
 
     yDinamico += 5;
     pRen.forEach((p) => {
-        const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
+        const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; 
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(85, 85, 85);
         doc.text(p.ano, 15, yDinamico + 3.5);
 
-        // Desenha a barra horizontal verde no PDF
         doc.setFillColor(39, 174, 96); 
         doc.rect(32, yDinamico, larg, 4.5, "F");
 
@@ -928,7 +924,9 @@ function gerarPDF() {
     doc.setFontSize(6.8);
     doc.setTextColor(60, 60, 60);
 
+    // Correção: Criando a variável textoAviso que o console reclamou!
     const textoAviso = "Os calculos apresentados sao estimativas baseadas no historico de consumo informado, taxas vigentes da Enel SP e regras da Lei 14.300 (Fio B). Os valores reais podem variar de acordo com as condicoes climaticas, orientacao do telhado e alteracoes tarifarias da concessionaria. Este documento nao garante proposta comercial final e serve como demonstrativo de viabilidade tecnica.";
+    
     const linhasSplit = doc.splitTextToSize(textoAviso, 180);
     doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
 
@@ -944,10 +942,6 @@ function gerarPDF() {
     doc.text("ZNSOLAR — Gerado pelo Simulador Web Oficial", 15, 285);
     doc.text("Página 1 de 1", 180, 285);
 
-    // Salva o PDF com o nome do cliente
+    // Salva o PDF
     doc.save("ZN_Solar_Orcamento_Simulacao.pdf");
-}
-// =========================================================================
-</script>
-</body>
-</html>
+} // <- Correção: Fechando a função gerarPDF com chave perfeita aqui!
