@@ -659,8 +659,10 @@ dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri };
 ----------------------------------
 💰 *INVESTIMENTO E RETORNO:*
 • Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
-• Tempo de Retorno (Payback): ${payback} anos
-• Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+• Retorno Padrão Bifásico: ${payback_bi} anos
+• Retorno Padrão Trifásico: ${payback_tri} anos
+• Economia Mensal (Bifásico): R$ ${e_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+• Economia Mensal (Trifásico): R$ ${e_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
 
 📊 *MÉDIAS DO SISTEMA:*
 • Consumo Médio: ${c.toFixed(1)} kWh/mês
@@ -685,10 +687,11 @@ Desejo mais informações sobre esta simulação e orçamento._`;
         <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
         <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
         
-        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
         <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Conta Com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+<strong>Nova Conta (Padrão Bifásico):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+<strong>Nova Conta (Padrão Trifásico):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+<strong>Economia Mensal (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
+<strong>Economia Mensal (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
         
         <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
         <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
