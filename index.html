@@ -536,7 +536,7 @@
   let dadosPDF = {};
 
 function _calcZN() {
-    // 1. Pegar os inputs
+    // 1. Pegar os inputs dos 12 meses
     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
     let mesesComValor = 0;
@@ -589,60 +589,70 @@ function _calcZN() {
         return; 
     }
 
-    // 2. CÁLCULOS EXATOS (Com a sua margem de 1.22 do Fio B)
+    // 2. CÁLCULOS EXATOS (Com fator de ajuste calibrado)
     const c = totalKwh / 12; 
-    const n_teorico = Math.ceil((c * 1.22) / 55.42); 
-    const pr = n_teorico * 0.575;
     
-    // REGRA DE ARREDONDAMENTO RIGOROSA DE POTÊNCIA (pf)
+    // Cálculo da potência preliminar necessária baseada no consumo real com a margem do Fio B (1.22)
+    // Dividimos por 55.42 e multiplicamos pelo módulo de 0.575 para achar a potência pura necessária em kWp
+    const pr = ((c * 1.22) / 55.42) * 0.575;
+    
+    // REGRA DE ARREDONDAMENTO COMERCIAL REVISADA E CORRIGIDA
     let pf;
-    if (pr < 2.5) { 
+    if (pr <= 2.0) { 
         pf = 2.0; 
-    } else if (pr === 2.5) { 
+    } else if (pr > 2.0 && pr <= 2.5) { 
         pf = 2.5; 
     } else if (pr > 2.5 && pr <= 3.0) { 
         pf = 3.0; 
     } else { 
-        // Para os outros casos: se passar de .0 ou de .5, arredonda para cima de 0.5 em 0.5
+        // Para os demais casos, arredonda de 0.5 em 0.5 para cima
         pf = Math.ceil(pr * 2) / 2; 
     }
 
-    // Forçar limites comerciais da sua tabela
+    // Aplicação das travas físicas da tabela comercial
     if (totalKwh < 2 || pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
 
-    // Ajustar o número de placas real (n) baseado na potência final escolhida (pf)
-    // Isso garante que o preço, área e gráficos usem a mesma potência travada
+    // Sincronização matemática: O número de módulos (n) e a área passam a ser derivados da potência final travada (pf)
     const n = Math.ceil(pf / 0.575);
-
     const a = (n * 2.58) * 1.15;
+    
     const tc = c * 0.92954;
     const nc = 55.87;
     const e = tc - nc;
     
-    // Buscar preço correto na sua tabela _0xtp
+    // Buscar preço correto correspondente na tabela _0xtp
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
     const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
-    // Guardar para o PDF
+    // Guardar para o gerador de PDF
     dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-    // CÁLCULO DA GERAÇÃO MÉDIA
+    // CÁLCULO DA GERAÇÃO MÉDIA MENSAL DO SISTEMA ESCOLHIDO
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
     const mediaGeracao = dadosGeracao.reduce((x, y) => x + y, 0) / 12;
 
-    // TEXTO ESPECÍFICO QUE VAI PRO SEU WHATSAPP (O cliente envia, mas o texto foi ocultado da tela dele)
-    const textoWhatsapp = `Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS EXCLUSIVOS DO SISTEMA:*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
+    // =========================================================================
+    // CONFIGURAÇÃO DAS MENSAGENS DO WHATSAPP (SEPARAÇÃO DE ACESSO)
+    // =========================================================================
+    
+    // MENSAGEM DO CLIENTE: O que ele envia pelo app (Contém apenas os dados permitidos por você)
+    const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar:\n----------------------------------\n💰 *FINANCEIRO E RETORNO:*\n• Investimento Estimado: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Tempo de Retorno (Payback): ${payback} anos\n• Economia Mensal Estimada: R$ ${e.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n📊 *DADOS DE CONSUMO & LOCAL:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n• Área Necessária Estimada: ${a.toFixed(1)} m²\n----------------------------------\n_Gostaria de agendar uma avaliação técnica para validar esses valores._`;
 
-    const msgWhatsapp = encodeURIComponent(textoWhatsapp);
+    // NOTA PARA O SEU CONTROLE INTERNO (OPCIONAL): Caso queira que o mesmo clique envie em formato embutido oculto 
+    // os dados técnicos adicionais para o seu terminal de atendimento, concatenamos as variáveis abaixo.
+    // Como solicitado que venha tudo para o seu celular, esta estrutura envia o bloco completo direto na API do link.
+    const textoWhatsappCompletoParaVoce = `Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS TÉCNICOS INTERNOS (ENGENHARIA):*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO GERAL:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
 
-    // Limpa qualquer estilização de erro residual
+    const msgWhatsapp = encodeURIComponent(textoWhatsappCompletoParaVoce);
+
+    // Limpa estilizações de erro residuais do container
     divResultado.style.background = "transparent";
     divResultado.style.borderLeft = "none";
     divResultado.style.padding = "0";
 
-    // 3. HTML DO CLIENTE (O que aparece na tela do site - TOTALMENTE SEM A QUANTIDADE DE PLACAS E SEM POTÊNCIA)
+    // 3. HTML DO CLIENTE (O que é renderizado na tela do site - Sem quantidade de placas e sem potência)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
