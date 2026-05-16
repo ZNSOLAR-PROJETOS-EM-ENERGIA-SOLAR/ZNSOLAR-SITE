@@ -280,7 +280,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  </head> ```
+  </head> 
  
   </head>
   
@@ -535,7 +535,7 @@
  // Variável para o PDF funcionar (fora da função)
   let dadosPDF = {};
 
- function _calcZN() {
+function _calcZN() {
     // 1. Pegar os inputs
     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
@@ -555,15 +555,43 @@
 
     const divResultado = document.getElementById('resultado-simulacao');
 
-    // Validação
-    if (mesesComValor === 0) {
-        alert("Por favor, preencha o consumo de pelo menos um mês.");
-        return;
+    // REGRA OBRIGATÓRIA: Precisa preencher EXATAMENTE os 12 meses
+    if (mesesComValor < 12) {
+        alert("Por favor, preencha o consumo de todos os 12 meses para realizar a simulação.");
+        return; 
     }
 
-    // 2. Cálculos exatos (Regra dos 18% e taxas)
-    const c = totalKwh / mesesComValor;
-    const n = Math.ceil((c * 1.18) / 55.42); 
+    // REGRA DE BLOQUEIO MÁXIMO (75.000 kWh/ano ou média de 6.250 kWh)
+    const consumoMedioValidacao = totalKwh / 12;
+
+    if (totalKwh > 75000 || consumoMedioValidacao > 6250) {
+        divResultado.style.display = "block";
+        divResultado.style.borderLeft = "4px solid #e53935";
+        divResultado.style.background = "#ffebee";
+        divResultado.style.padding = "20px";
+        divResultado.style.borderRadius = "8px";
+        
+        divResultado.innerHTML = `
+            <div style="font-size:1.2rem; font-weight:bold; color:#c62828; margin-bottom:10px;">
+                <i class="fas fa-exclamation-triangle"></i> Potência acima do limite da categoria
+            </div>
+            <p style="color:#333; line-height:1.5;">
+                O consumo informado indica que o seu sistema precisa de um dimensionamento com mais detalhes técnicos.
+            </p>
+            <p style="font-weight:bold; color:#c62828;">
+                Por favor, entre em contato diretamente conosco para realizarmos um estudo personalizado!
+            </p>
+            <a href="https://wa.me/5511983185337?text=Olá! Meu consumo mensal passou de 6.250 kWh e preciso de uma simulação detalhada para o meu sistema solar." 
+               target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center;">
+               Falar no WhatsApp com Engenheiro
+            </a>
+        `;
+        return; 
+    }
+
+    // 2. CÁLCULOS EXATOS
+    const c = totalKwh / 12; 
+    const n = Math.ceil((c * 1.22) / 55.42); 
     const pr = n * 0.575;
     
     let pf;
@@ -572,22 +600,40 @@
     else if (pr > 2.5 && pr <= 3.0) { pf = 3.0; } 
     else { pf = Math.round(pr * 2) / 2; }
 
-    if (pf < 2.0) pf = 2.0;
+    // REGRA DE ARREDONDAMENTO MÍNIMO AUTOMÁTICO
+    if (totalKwh < 2 || pf < 2.0) {
+        pf = 2.0;
+    }
+    
     if (pf > 75.0) pf = 75.0;
 
     const a = (n * 2.58) * 1.15;
     const tc = c * 0.92954;
     const nc = 55.87;
     const e = tc - nc;
+    
     const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
     const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
     // Guardar para o PDF
     dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-    // 3. Gerar o HTML
-    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
+    // CÁLCULO PRÉVIO DA GERAÇÃO MÉDIA PARA O WHATSAPP
+    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
+    const mediaGeracao = dadosGeracao.reduce((x, y) => x + y, 0) / 12;
 
+    // TEXTO DETALHADO EXCLUSIVO PARA O SEU WHATSAPP
+    const textoWhatsapp = `Olá ZNSolar! Seguem os dados da Simulação:\n----------------------------------\n📊 *DADOS DO SISTEMA:*\n• Potência do Sistema: ${pf.toFixed(1)} kWp\n• Qtd. de Módulos (Placas): ${n} unidades\n• Área Necessária: ${a.toFixed(1)} m²\n• Geração Média Estimada: ${mediaGeracao.toFixed(1)} kWh/mês\n\n💰 *FINANCEIRO:*\n• Consumo Médio Informado: ${c.toFixed(1)} kWh/mês\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Payback Simples: ${payback} anos\n----------------------------------`;
+
+    const msgWhatsapp = encodeURIComponent(textoWhatsapp);
+
+    // Limpa qualquer estilização de erro residual
+    divResultado.style.background = "transparent";
+    divResultado.style.borderLeft = "none";
+    divResultado.style.padding = "0";
+
+    // 3. HTML DO CLIENTE (O que aparece na tela do seu site - Sem a quantidade de módulos)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -614,17 +660,13 @@
           Falar no WhatsApp Agora  
         </a>
         <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações especificas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
+        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
     `;
 
     divResultado.style.display = "block";
 
-    // 4. Renderizar Gráficos
+    // 4. RENDERIZAR GRÁFICOS
     const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
-    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
-    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
-    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
-
     new Chart(ctx1, {
         type: 'bar',
         data: {
@@ -657,8 +699,7 @@
             }
         }
     });
-} // <--- AQUI FECHA A FUNÇÃO _calcZN CORRETAMENTE
-
+}
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
