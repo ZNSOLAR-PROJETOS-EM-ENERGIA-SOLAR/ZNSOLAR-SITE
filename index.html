@@ -707,57 +707,61 @@ Desejo mais informações sobre esta simulação e orçamento._`;
 
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
           Falar no WhatsApp Agora  
-        </a>
-        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico in loco  . Não espere mais entre em contato agora mesmo.
-    `;
-
-    divResultado.style.display = "block";
-
-    // 4. RENDERIZAR GRÁFICOS
-    const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
-    new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
-            datasets: [
-                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
-                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
-            ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
-    new Chart(ctx2, {
-        type: 'bar',
-       data: {
-            labels: [
-                'Sem Sistema Solar', 
-                'Com Sistema Solar (Bifásico)', 
-                'Com Sistema Solar (Trifásico)'
-            ],
-            datasets: [{
-                label: 'Custo Mensal (R$)',
-                data: [tc, nc_bi, nc_tri], // Injeta as três variáveis de custo calculadas
-                backgroundColor: [
-                    '#DC3545', // Vermelho para destacar o custo alto sem sistema
-                    '#28A745', // Verde para o custo mínimo do Bifásico
-                    '#17A2B8'  // Ciano/Azul para o custo mínimo do Trifásico
+          </a>
+          <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
+          <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio , para confirmar os dados e valores é necessário o estudo técnico in loco . Não espere mais entre em contato agora mesmo.
+      `;
+  
+      divResultado.style.display = "block";
+  
+      // 4. RENDERIZAR GRÁFICOS na tela do cliente
+      const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
+      new Chart(ctx1, {
+          type: 'bar',
+          data: {
+              labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+              datasets: [
+                  { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
+                  { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+              ]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+      });
+  
+      const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+      new Chart(ctx2, {
+          type: 'bar',
+          data: {
+              labels: [
+                  'Sem Sistema Solar', 
+                  'Com Sistema Solar (Bifásico)', 
+                  'Com Sistema Solar (Trifásico)'
               ],
-       borderWidth: 1
-    }]
-},
-options: {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: { display: true }
-    }
+              datasets: [{
+                  label: 'Custo Mensal (R$)',
+                  data: [tc, nc_bi, nc_tri], 
+                  backgroundColor: [
+                      '#DC3545', 
+                      '#28A745', 
+                      '#17A2B8'  
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              indexAxis: 'y',
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: true }
+              }
+          }
+      });
 }
-});
-}
+
+// ==========================================================
+// 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
+// ==========================================================
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
@@ -775,8 +779,6 @@ async function gerarPDF() {
     const tc = dadosPDF.tc;
     const nc_bi = dadosPDF.nc_bi;
     const nc_tri = dadosPDF.nc_tri;
-    const e_bi = dadosPDF.e_bi;
-    const e_tri = dadosPDF.e_tri;
 
     if (!p) {
         alert("Por favor, clique em SIMULAR primeiro.");
@@ -802,7 +804,7 @@ async function gerarPDF() {
     doc.setLineWidth(1);
     doc.line(10, 46, 200, 46);
 
-    // Nota: O logótipo ZNSOLAR em texto estilizado no topo esquerdo (ou imagem se configurado)
+    // O logótipo ZNSOLAR estilizado no topo esquerdo
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
     doc.setTextColor(21, 101, 192); // Azul principal
@@ -876,24 +878,26 @@ async function gerarPDF() {
     // ==========================================
     // 3. SECÇÃO DE GRÁFICOS (Alinhamento Vertical)
     // ==========================================
-    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(34, 34, 34);
-    doc.text("Análise de Viabilidade Económica", 105, 114, { align: "center" });
+    doc.text("Análise de Viabilidade Econômica", 105, 114, { align: "center" });
 
-    // Captura o Gráfico 1: Comparativo de Consumo vs Geração
-    const canvas1 = document.getElementById('chartConsumo'); // Verifique se o id do seu primeiro canvas é este
+    // Captura o Gráfico 1 da tela
+    const canvas1 = document.getElementById('graficoConsumoMensal'); 
     if (canvas1) {
         doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
         doc.text("Comparativo de Consumo vs Geração:", 10, 124);
         const imgData1 = canvas1.toDataURL('image/png', 1.0);
         doc.addImage(imgData1, 'PNG', 10, 127, 190, 65);
     }
 
-    // Captura o Gráfico 2: Economia Financeira Estimada
-    const canvas2 = document.getElementById('chartEconomia'); // Verifique se o id do seu segundo canvas é este
+    // Captura o Gráfico 2 da tela
+    const canvas2 = document.getElementById('graficoCustoFinanceiro'); 
     if (canvas2) {
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
         doc.text("Economia Financeira Estimada:", 10, 202);
         const imgData2 = canvas2.toDataURL('image/png', 1.0);
         doc.addImage(imgData2, 'PNG', 15, 206, 180, 68);
@@ -908,3 +912,6 @@ async function gerarPDF() {
     // Salva o documento diretamente para download do cliente
     doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
 }
+</script>
+</body>
+</html>
