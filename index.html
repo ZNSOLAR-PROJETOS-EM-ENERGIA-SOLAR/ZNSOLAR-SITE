@@ -1001,7 +1001,7 @@ const pEco = [
     { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
 ];
 
-let maxEcoPDF = dadosPDF.economia_25_anos || 46012.23;
+let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
 
 yDinamico += 5;
 pEco.forEach((p) => {
@@ -1039,7 +1039,7 @@ const pRen = [
     { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
 ];
 
-  let maxRenPDF = dadosPDF.rendimento_25_anos || 214723.74;
+ let maxRenPDF = Math.max(...pRen.map(p => p.valor));
 
 yDinamico += 5;
 pRen.forEach((p) => {
