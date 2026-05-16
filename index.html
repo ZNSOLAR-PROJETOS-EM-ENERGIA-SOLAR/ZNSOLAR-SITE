@@ -1,6 +1,6 @@
 <!DOCTYPE html>
   <html lang="pt-BR">
-  <head>
+  <head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -740,20 +740,19 @@ Desejo mais informações sobre esta simulação e orçamento._`;
                     '#DC3545', // Vermelho para destacar o custo alto sem sistema
                     '#28A745', // Verde para o custo mínimo do Bifásico
                     '#17A2B8'  // Ciano/Azul para o custo mínimo do Trifásico
-                ],
-                borderWidth: 1
-            }]
-        },
-        },
-        options: { 
-            indexAxis: 'y', 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: true }
-            }
-        }
-    });
+              ],
+       borderWidth: 1
+    }]
+},
+options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: true }
+    }
+}
+});
 }
 async function gerarPDF() {
     if (!window.jspdf) {
@@ -798,23 +797,22 @@ async function gerarPDF() {
         doc.setLineWidth(0.5);
         doc.line(20, 59, 190, 59);
 
-        // CARD DE INVESTIMENTO (Retângulo destacado com fundo cinza bem claro)
-        doc.setFillColor(245, 247, 250); 
-        doc.setDrawColor(220, 130, 0);    // Borda combinando com o laranja do cabeçalho
+        // CARD DE INVESTIMENTO (Retângulo destacado com borda na cor ZNSOLAR)
+        doc.setFillColor(245, 247, 250); // Fundo cinza bem claro
+        doc.setDrawColor(255, 152, 0);    // Laranja idêntico ao seu cabeçalho
         doc.setLineWidth(0.8);
-        doc.roundedRect(20, 65, 170, 16, 2, 2, 'FD'); // Retângulo com cantos levemente arredondados
+        doc.roundedRect(20, 65, 170, 15, 2, 2, 'FD'); // Cantos arredondados
 
         // Texto em destaque dentro do Card de Investimento
         doc.setTextColor(0, 0, 0);
-        doc.setFontSize(12);
+        doc.setFontSize(11.5);
         doc.setFont("helvetica", "bold");
-        doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 75);
-
+        doc.text(`INVESTIMENTO TOTAL ESTIMADO: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 75);
 
         // ==========================================
         // BLOCO DE METRICAS (TEXTO CORRIDO E ORGANIZADO)
         // ==========================================
-        doc.setTextColor(50, 50, 50); // Grafite escuro para uma leitura mais elegante
+        doc.setTextColor(50, 50, 50); // Grafite escuro para leitura confortável
         doc.setFontSize(11);
 
         // Indicadores com marcadores (•) e negrito apenas nos títulos
@@ -837,24 +835,46 @@ async function gerarPDF() {
         doc.text("• Área Necessária para Instalação:", 20, 116);
         doc.setFont("helvetica", "normal");
         doc.text(`${a.toFixed(1)} m²`, 82, 116);
-// Detalhamento das contas sem e com sistema para os dois padrões
-doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 107);
-doc.text(`- Conta Com Sistema Solar (Mínimo Bifásico): R$ ${nc_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
-doc.text(`- Conta Com Sistema Solar (Mínimo Trifásico): R$ ${nc_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 123);
-    try {
-        const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
-        const imgData1 = canvas1.toDataURL('image/png');
-        doc.setFont("helvetica", "bold");
-        doc.text("Comparativo de Consumo vs Geração:", 20, 130);
-        doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
 
-        const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
-        const imgData2 = canvas2.toDataURL('image/png');
-        doc.text("Economia Financeira Estimada:", 20, 210);
-        doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
-    } catch (e) {
-        console.log("Erro nos gráficos.");
-    }
+        // ==========================================
+        // CARD COMPARATIVO DE CONTAS (ANTES vs DEPOIS)
+        // ==========================================
+        // Uma caixa cinza claro para envelopar o comparativo de tarifas
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(220, 224, 230);
+        doc.setLineWidth(0.5);
+        doc.roundedRect(20, 124, 170, 31, 2, 2, 'FD');
+
+        doc.setFontSize(10.5);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(220, 53, 69); // Vermelho para alertar o custo sem o sistema
+        doc.text(`Conta Atual (Sem Sistema Solar): R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 131);
+
+        doc.setTextColor(40, 167, 69); // Verde para economia no Bifásico
+        doc.text(`Nova Conta Estimada (Padrão Bifásico): R$ ${nc_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 140);
+
+        doc.setTextColor(23, 162, 184); // Azul/Ciano técnico para o Trifásico
+        doc.text(`Nova Conta Estimada (Padrão Trifásico): R$ ${nc_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 25, 149);
+    try {
+            const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
+            const imgData1 = canvas1.toDataURL('image/png');
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            
+            // Reajusta para a posição vertical Y = 163 para dar respiro ao texto
+            doc.text("Comparativo de Consumo vs Geração:", 20, 163);
+            doc.addImage(imgData1, 'PNG', 20, 168, 170, 52);
+
+            const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
+            const imgData2 = canvas2.toDataURL('image/png');
+            
+            // Empurra o gráfico financeiro para Y = 227 na base da folha
+            doc.text("Economia Financeira Estimada:", 20, 227);
+            doc.addImage(imgData2, 'PNG', 20, 232, 170, 45); 
+        } catch (e) {
+            console.log("Erro nos gráficos.");
+        }
 
     // RODAPÉ
     doc.setFontSize(9);
