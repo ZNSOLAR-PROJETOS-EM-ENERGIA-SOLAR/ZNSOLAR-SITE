@@ -782,6 +782,11 @@ Desejo mais informações sobre esta simulação e orçamento._`;
 // ==========================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
 // ==========================================================
+// Criamos a variável aqui fora para o navegador não se perder se ela for chamada antes
+if (typeof dadosPDF === 'undefined') {
+    var dadosPDF = {};
+}
+
 function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -814,17 +819,17 @@ function gerarPDF() {
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.text(`• Consumo Médio Mensal: ${Math.round(dadosPDF.consumo_medio)} kWh`, 20, 60);
-    doc.text(`• Potência do Sistema: ${dadosPDF.potencia_sistema.toFixed(2)} kWp`, 20, 67);
-    doc.text(`• Área Necessária Estimada: ${dadosPDF.area_estimada.toFixed(1)} m²`, 20, 74);
-    doc.text(`• Número de Painéis: ${dadosPDF.numero_paineis} módulos (575Wp)`, 20, 81);
+    doc.text(`• Consumo Médio Mensal: ${Math.round(dadosPDF.consumo_medio || 0)} kWh`, 20, 60);
+    doc.text(`• Potência do Sistema: ${(dadosPDF.potencia_sistema || 0).toFixed(2)} kWp`, 20, 67);
+    doc.text(`• Área Necessária Estimada: ${(dadosPDF.area_estimada || 0).toFixed(1)} m²`, 20, 74);
+    doc.text(`• Número de Painéis: ${dadosPDF.numero_paineis || 0} módulos (575Wp)`, 20, 81);
 
     // Coluna Direita - Valores Comerciais
     doc.setFont("helvetica", "bold");
-    doc.text(`Investimento Total: R$ ${dadosPDF.investimento.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 110, 60);
+    doc.text(`Investimento Total: R$ ${(dadosPDF.investimento || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 110, 60);
     doc.setFont("helvetica", "normal");
-    doc.text(`• Payback (Bifásico): ${dadosPDF.payback_bifasico} anos`, 110, 67);
-    doc.text(`• Payback (Trifásico): ${dadosPDF.payback_trifasico} anos`, 110, 74);
+    doc.text(`• Payback (Bifásico): ${dadosPDF.payback_bifasico || 0} anos`, 110, 67);
+    doc.text(`• Payback (Trifásico): ${dadosPDF.payback_trifasico || 0} anos`, 110, 74);
 
     // Linha divisória antes dos gráficos
     doc.setDrawColor(220, 220, 220);
@@ -924,7 +929,6 @@ function gerarPDF() {
     doc.setFontSize(6.8);
     doc.setTextColor(60, 60, 60);
 
-    // Correção: Criando a variável textoAviso que o console reclamou!
     const textoAviso = "Os calculos apresentados sao estimativas baseadas no historico de consumo informado, taxas vigentes da Enel SP e regras da Lei 14.300 (Fio B). Os valores reais podem variar de acordo com as condicoes climaticas, orientacao do telhado e alteracoes tarifarias da concessionaria. Este documento nao garante proposta comercial final e serve como demonstrativo de viabilidade tecnica.";
     
     const linhasSplit = doc.splitTextToSize(textoAviso, 180);
@@ -944,4 +948,4 @@ function gerarPDF() {
 
     // Salva o PDF
     doc.save("ZN_Solar_Orcamento_Simulacao.pdf");
-} // <- Correção: Fechando a função gerarPDF com chave perfeita aqui!
+}
