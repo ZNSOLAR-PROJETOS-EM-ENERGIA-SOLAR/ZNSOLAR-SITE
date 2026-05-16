@@ -1001,12 +1001,11 @@ const pEco = [
     { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
 ];
 
-maxEco = dadosPDF.economia_25_anos || 46012.23;
+let maxEcoPDF = dadosPDF.economia_25_anos || 46012.23;
 
 yDinamico += 5;
 pEco.forEach((p) => {
-    const larg = maxEco > 0 ? (p.valor / maxEco) * 110 : 0; // Escala máxima de 110mm
-    
+    const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm    
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.setTextColor(100, 100, 100);
@@ -1040,11 +1039,11 @@ const pRen = [
     { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
 ];
 
-  maxRen = dadosPDF.rendimento_25_anos || 214723.74;
+  let maxRenPDF = dadosPDF.rendimento_25_anos || 214723.74;
 
 yDinamico += 5;
 pRen.forEach((p) => {
-    const larg = maxRen > 0 ? (p.valor / maxRen) * 110 : 0; // Escala máxima de 110mm
+  const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
     
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
