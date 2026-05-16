@@ -845,12 +845,12 @@ async function gerarPDF() {
     doc.setFont("helvetica", "normal");
     doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
     doc.setFont("helvetica", "bold");
-    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 50, 79);
+    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 63, 79);
     
-    doc.setFont("helvetica", "normal");
-    doc.text(`Área de Telhado Estimada: `, 15, 87);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${a.toFixed(1)} m²`, 59, 87);
+  doc.setFont("helvetica", "normal");
+doc.text(`Área de Telhado Estimada: `, 15, 87);
+doc.setFont("helvetica", "bold");
+doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
 
     // Bloco Direito: Investimento e Retorno (Verde)
     doc.setFillColor(240, 248, 240);
