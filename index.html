@@ -751,8 +751,8 @@ function _calcZN() {
         }
     });
 
- // =========================================================================
-    // 5. INJEÇÃO DINÂMICA DOS GRÁFICOS EM ESCADA (ECONOMIA ATUALIZADA COM INFLAÇÃO)
+// =========================================================================
+    // 5. INJEÇÃO DINÂMICA DOS GRÁFICOS EM ESCADA (LOGICA E SINTAXE CORRIGIDAS)
     // =========================================================================
     const divWebEconomia = document.getElementById('web-bar-economia');
     const divWebValorizacao = document.getElementById('web-bar-valorizacao');
@@ -770,7 +770,6 @@ function _calcZN() {
         const taxaMinimaMensalBase = (50 * tarifaKwhBase) + cosipBase;
 
         // Para manter a proporcionalidade perfeita das barras, recalculamos o teto real aos 25 anos com juros de 1% a.m.
-        // Considerando que o aporte mensal (economia) também cresce 4% a cada 12 meses
         let valorMaximoRendimento = 0;
         let economiaMensalAnoAtual = economiaMensalBiBase;
         for (let ano = 1; ano <= 25; ano++) {
@@ -854,7 +853,7 @@ function _calcZN() {
             
             for (let i = 1; i <= ano; i++) {
                 economyPuraAcumulada += economiaAnoAtual * 12;
-                economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual); // Economia cresce junto com a inflação da energia
+                economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
             }
             
             economyPuraAcumulada = Math.round(economyPuraAcumulada);
@@ -909,11 +908,6 @@ function _calcZN() {
         
         divWebValorizacao.innerHTML = htmlRendimento;
     }
-}
-        
-        divWebValorizacao.innerHTML = htmlRendimento;
-    }
-}
 // ==========================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
 // ==========================================================
