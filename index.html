@@ -751,8 +751,8 @@ function _calcZN() {
         }
     });
 
-// =========================================================================
-    // 5. INJEÇÃO DINÂMICA DOS 3 GRÁFICOS EM ESCADA (MÓDULO BIFÁSICO)
+  // =========================================================================
+    // 5. INJEÇÃO DINÂMICA DOS GRÁFICOS EM ESCADA (COM COMPARATIVO DE TAXA MÍNIMA)
     // =========================================================================
     const divWebEconomia = document.getElementById('web-bar-economia');
     const divWebValorizacao = document.getElementById('web-bar-valorizacao');
@@ -760,26 +760,31 @@ function _calcZN() {
     if (divWebEconomia && divWebValorizacao) {
         const anosProjecao = [1, 5, 10, 15, 20, 25];
         
-        // Uso da economia bifásica calculada pelo sistema e taxa conservadora de reajuste
+        // Uso da economia bifásica e taxa conservadora de reajuste
         const economiaMensalBi = typeof e_bi !== 'undefined' ? e_bi : 118.41; 
-        const taxaReajusteAnual = 0.04; // Taxa conservadora de reajuste anual da conta (4.0% ao ano)
+        const taxaReajusteAnual = 0.04; // 4.0% ao ano
+
+        // Cálculo exato da Taxa Mínima Base (50 kWh * Tarifa + COSIP) para o reajuste
+        const tarifaKwhBase = typeof TARIFA_ENEL !== 'undefined' ? TARIFA_ENEL : 0.929;
+        const cosipBase = typeof COSIP_BIFASICO !== 'undefined' ? COSIP_BIFASICO : 9.39;
+        const taxaMinimaMensalBase = (50 * tarifaKwhBase) + cosipBase;
 
         // Cálculo do teto máximo baseado no maior valor possível (Gráfico 3 aos 25 anos)
         const mesesMax = 25 * 12;
         const valorMaximoRendimento = Math.round(economiaMensalBi * ((Math.pow(1 + 0.01, mesesMax) - 1) / 0.01));
         const tetoEscala = valorMaximoRendimento;
 
-        // TEXTO DA OBSERVAÇÃO TÉCNICA OBRIGATÓRIA
+        // NOTA TÉCNICA DO SIMULADOR (Formatada exatamente conforme seu pedido)
         let htmlGeral = `
-            <div style="margin-bottom: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #0284c7; font-size: 13px; color: #334155; font-family: Arial, sans-serif; text-align: left; border-radius: 0 4px 4px 0;">
-                <strong>📊 Nota Técnica do Simulador:</strong> Projeções baseadas no <strong>Modelo de Conta Bifásico</strong>, considerando uma demanda mínima obrigatória de <strong>50 kWh/mês</strong>.
+            <div style="margin-bottom: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #0284c7; font-size: 13px; color: #334155; font-family: Arial, sans-serif; text-align: left; border-radius: 0 4px 4px 0; line-height: 1.4;">
+                <strong>📊 Nota Técnica do Simulador:</strong> Projeções baseadas no <strong>Modelo de Conta Bifásico</strong>, considerando inflação mínima de <strong>4 % ao ano</strong> e uma demanda mínima obrigatória de <strong>50 kWh/mês</strong>.
             </div>
         `;
 
         // ---------------------------------------------------------------------
         // GRÁFICO 1: CONTA DE LUZ ACUMULADA (Sem Solar - Reajuste de 4% ao ano)
         // ---------------------------------------------------------------------
-        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #b91c1c; font-family: Arial;">🔴 Custo da Conta de Luz Acumulada (Sem Solar)</h4>`;
+        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #b91c1c; font-family: Arial;">🔴 Custo da Conta de Luz Acumulada (Sem Solar - Reajuste de 4% ao ano)</h4>`;
         anosProjecao.forEach(ano => {
             let custoAcumulado = 0;
             let contaAnoAtual = tc;
@@ -805,12 +810,40 @@ function _calcZN() {
         htmlGeral += `</div>`;
 
         // ---------------------------------------------------------------------
-        // GRÁFICO 2: ECONOMIA REAL ACUMULADA (Soma Pura - Azul)
+        // GRÁFICO 1B: CUSTO ACUMULADO PAGANDO APENAS A TAXA MÍNIMA (Com Solar)
         // ---------------------------------------------------------------------
-        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #1565C0; font-family: Arial;">🔵 Economia Real Acumulada (Soma Direta Sem Juros)</h4>`;
+        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #4b5563; font-family: Arial;">⚫ Custo Fixo Acumulado com Solar (Apenas Taxa Mínima + Inflação 4% ao ano)</h4>`;
         anosProjecao.forEach(ano => {
-            const economiaPura = Math.round(economiaMensalBi * 12 * ano);
-            const percentualBarra = tetoEscala > 0 ? Math.min((economiaPura / tetoEscala) * 100, 100) : 0;
+            let minimoAcumulado = 0;
+            let minimoAnoAtual = taxaMinimaMensalBase;
+            for (let i = 1; i <= ano; i++) {
+                minimoAcumulado += minimoAnoAtual * 12;
+                minimoAnoAtual = minimoAnoAtual * (1 + taxaReajusteAnual);
+            }
+            minimoAcumulado = Math.round(minimoAcumulado);
+            const percentualBarra = tetoEscala > 0 ? Math.min((minimoAcumulado / tetoEscala) * 100, 100) : 0;
+            
+            htmlGeral += `
+                <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
+                    <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                    <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                        <div style="background: #4b5563; width: ${percentualBarra}%; height: 100%;"></div>
+                    </div>
+                    <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
+                        R$ ${minimoAcumulado.toLocaleString('pt-BR')}
+                    </div>
+                </div>
+            `;
+        });
+        htmlGeral += `</div>`;
+
+        // ---------------------------------------------------------------------
+        // GRÁFICO 2: ECONOMIA REAL ACUMULADA (Soma Direta Sem Juros- continua pagando taxa mínima)
+        // ---------------------------------------------------------------------
+        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #1565C0; font-family: Arial;">🔵 Economia Real Acumulada (Soma Direta Sem Juros- continua pagando taxa mínima)</h4>`;
+        anosProjecao.forEach(ano => {
+            const economyPura = Math.round(economiaMensalBi * 12 * ano);
+            const percentualBarra = tetoEscala > 0 ? Math.min((economyPura / tetoEscala) * 100, 100) : 0;
             
             htmlGeral += `
                 <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
@@ -819,7 +852,7 @@ function _calcZN() {
                         <div style="background: #1565C0; width: ${percentualBarra}%; height: 100%;"></div>
                     </div>
                     <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
-                        R$ ${economiaPura.toLocaleString('pt-BR')}
+                        R$ ${economyPura.toLocaleString('pt-BR')}
                     </div>
                 </div>
             `;
@@ -829,7 +862,7 @@ function _calcZN() {
         divWebEconomia.innerHTML = htmlGeral;
 
         // ---------------------------------------------------------------------
-        // GRÁFICO 3: DINHEIRO APLICADO RENDENDO 1% AO MÊS (Verde)
+        // GRÁFICO 3: VALORIZAÇÃO DO CAPITAL (Mantido igual)
         // ---------------------------------------------------------------------
         let htmlRendimento = `<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #2E7D32; font-family: Arial;">🟢 Valorização Real do Capital Aplicado (Rendimento 1% a.m.)</h4>`;
         anosProjecao.forEach(ano => {
