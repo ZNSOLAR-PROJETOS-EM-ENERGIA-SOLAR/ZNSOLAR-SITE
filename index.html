@@ -1030,6 +1030,11 @@ doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
     doc.text(`Payback (Retorno Trifásico): `, 111, 89);
     doc.setFont("helvetica", "bold");
     doc.text(`${payback_tri} anos`, 162, 89);
+  <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Nova Conta (Padrão Bifásico):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Nova Conta (Padrão Trifásico):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Economia Mensal (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
+        <strong>Economia Mensal (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
 
       // ==========================================
     // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
