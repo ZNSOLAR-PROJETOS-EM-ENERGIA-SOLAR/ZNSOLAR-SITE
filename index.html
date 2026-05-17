@@ -1,298 +1,295 @@
 <!DOCTYPE html>
-  <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ZNSOLAR | Energia Solar Fotovoltáica em São Paulo</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
+  <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo">
+  <meta name="author" content="ZNSOLAR">
+  <meta name="robots" content="index, follow">
+  
+  <style>
+    /* Estilos base e proteção máxima contra cópia */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
+    body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; }
+    a { text-decoration:none; color:inherit; }
     
-    <title>ZNSOLAR | Energia Solar Fotovoltáica em São Paulo</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
-    <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo">
-    <meta name="author" content="ZNSOLAR">
-    <meta name="robots" content="index, follow">
-    
-    <style>
-      /* Estilos base e proteção máxima contra cópia */
-      * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
-      body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; }
-      a { text-decoration:none; color:inherit; }
-      
-      input { -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto; user-select:auto; }
-  
-      /* Cabeçalho Limpo e Profissional */
-      header {
-        background:#ffffff;
-        color:#333;
-        padding:25px 10%;
-        text-align:center;
-        position:sticky;
-        top:0;
-        z-index:1000;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        box-shadow:0 4px 6px rgba(0,0,0,0.05);
-        border-bottom: 1px solid #eee;
-      }
-  
-      .logo-site {
-        max-width:300px;
-        height:auto;
-        display:block;
-        margin-bottom:8px;
-      }
-  
-      header p { 
-        font-size:1rem; 
-        margin-top:2px; 
-        font-weight:500; 
-        color:#666;
-      }
-  
-      main { max-width:1200px; margin:0 auto; padding:40px 10%; }
-  
-      h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; text-align:center; }
-  
-      /* Cards de Serviços */
-      .instalacoes {
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-        gap:25px;
-        margin-bottom:50px;
-      }
-  
-      .item {
-        background:white;
-        padding:25px;
-        border-radius:10px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        border:1px solid #eee;
-        display:flex;
-        flex-direction:column;
-        transition:transform 0.3s, box-shadow 0.3s;
-      }
-  
-      .item:hover { 
-        transform:translateY(-5px); 
-        box-shadow:0 8px 20px rgba(0,0,0,0.1);
-      }
-  
-      .item img {
-        width:100%;
-        border-radius:10px;
-        margin-bottom:15px;
-      }
-  
-      .info h3 { color:#333; margin-bottom:15px; text-align:center; }
-  
-      .info ul {
-        list-style:disc;
-        padding-left:20px;
-        margin-bottom:15px;
-        text-align:left;
-      }
-  
-      .btn-whatsapp {
-        margin-top:auto;
-        background:#25d366;
-        color:white;
-        padding:12px;
-        border-radius:5px;
-        text-align:center;
-        font-weight:bold;
-        width:100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
-  
-      /* Seção de Credibilidade e Engenharia */
-      .autoridade-container {
-        background:white;
-        padding:40px 30px;
-        border-radius:10px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        border:1px solid #eee;
-        margin: 50px 0;
-        display:flex;
-        flex-direction:row;
-        align-items:center;
-        gap:35px;
-        text-align:left;
-      }
-  
-      .autoridade-texto { flex:1; }
-      .autoridade-texto h2 { text-align:left; margin-bottom:15px; }
-      .autoridade-texto p { color:#555; margin-bottom:15px; }
-      .autoridade-texto ul { list-style:none; margin-bottom:15px; }
-      .autoridade-texto ul li { margin-bottom:10px; color:#444; }
-      .autoridade-texto ul li strong { color:#ff9800; }
-      
-      .autoridade-imagem {
-        flex:1;
-        max-width:450px;
-        border-radius:10px;
-        border:1px solid #ddd;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-      }
-  
-      /* Passo a Passo da Instalação */
-      .passos-container {
-        margin:50px 0;
-        background:white;
-        padding:40px 30px;
-        border-radius:10px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        border:1px solid #eee;
-      }
-  
-      .passos-grid {
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-        gap:25px;
-        margin-top:30px;
-      }
-  
-      .passo-card {
-        background:#fdfdfd;
-        padding:25px;
-        border-radius:8px;
-        border:1px solid #eef2f5;
-        border-top:4px solid #ff9800;
-        text-align:left;
-        box-shadow:0 2px 6px rgba(0,0,0,0.02);
-      }
-  
-      .passo-card h3 { color:#333; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
-      .passo-numero { background:#ff9800; color:white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:bold; }
-  
-      /* Seção do Diagrama */
-      .diagrama-container {
-        margin:50px 0;
-        text-align:center;
-        background:white;
-        padding:40px 30px;
-        border-radius:10px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        border:1px solid #eee;
-      }
-  
-      .diagrama-container p {
-        max-width: 700px;
-        margin: 0 auto 25px auto;
-        color: #666;
-      }
-  
-      .diagrama-imagem {
-        max-width:100%;
-        height:auto;
-        border-radius:10px;
-        border:1px solid #ddd;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        margin-top:20px;
-      }
-  
-      /* Seção FAQ */
-      .faq-container {
-        margin:50px 0;
-        background:white;
-        padding:40px 30px;
-        border-radius:10px;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        border:1px solid #eee;
-        text-align:left;
-      }
-  
-      .faq-item { margin-bottom:20px; border-bottom:1px solid #edf2f7; padding-bottom:15px; }
-      .faq-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
-      .faq-item h3 { color:#333; font-size:1.1rem; margin-bottom:8px; }
-      .faq-item p { color:#555; font-size:1rem; }
-  
-      /* Seção de Vídeos */
-      .videos-container { margin:50px 0; }
-  
-      .videos-grid {
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
-        gap:25px;
-        max-width:900px;
-        margin:0 auto;
-      }
-  
-      .video-box iframe {
-        width:100%;
-        height:280px;
-        border-radius:10px;
-        border:1px solid #ddd;
-        box-shadow:0 4px 10px rgba(0,0,0,0.05);
-      }
-  
-      /* Contato */
-      .contato {
-        background:#f4f6f8;
-        padding:30px;
-        border-radius:10px;
-        margin-top:50px;
-        border:1px solid #e2e8f0;
-        max-width:600px;
-        margin:0 auto;
-      }
-  
-      footer { background:#333; color:white; text-align:center; padding:20px; margin-top:40px; }
-  
-      /* WhatsApp flutuante */
-      .whatsapp {
-        position:fixed;
-        bottom:20px;
-        right:20px;
-        background:#25d366;
-        color:white;
-        font-size:2rem;
-        width: 60px;
-        height: 60px;
-        border-radius:50%;
-        z-index:1000;
-        box-shadow:0 4px 15px rgba(0,0,0,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s;
-      }
-      .whatsapp:hover {
-        transform: scale(1.1);
-      }
-  
-      /* Regra para manter as imagens lado a lado e responsivas */
-      @media (max-width:768px) {
-        .autoridade-container { flex-direction:column; text-align:center; }
-        .autoridade-texto h2 { text-align:center; }
-        .video-box iframe { height:200px; }
-        .videos-grid { grid-template-columns: 1fr; }
-        .diagramas-grid { grid-template-columns: 1fr !important; }
-      }
-    </style>
+    input { -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto; user-select:auto; }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    /* Cabeçalho Limpo e Profissional */
+    header {
+      background:#ffffff;
+      color:#333;
+      padding:25px 10%;
+      text-align:center;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 4px 6px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #eee;
+    }
 
-  </head> ```
- 
-  </head>
-  
-  <body>
-  
+    .logo-site {
+      max-width:300px;
+      height:auto;
+      display:block;
+      margin-bottom:8px;
+    }
+
+    header p { 
+      font-size:1rem; 
+      margin-top:2px; 
+      font-weight:500; 
+      color:#666;
+    }
+
+    main { max-width:1200px; margin:0 auto; padding:40px 10%; }
+
+    h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; text-align:center; }
+
+    /* Cards de Serviços */
+    .instalacoes {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:25px;
+      margin-bottom:50px;
+    }
+
+    .item {
+      background:white;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+      display:flex;
+      flex-direction:column;
+      transition:transform 0.3s, box-shadow 0.3s;
+    }
+
+    .item:hover { 
+      transform:translateY(-5px); 
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .item img {
+      width:100%;
+      border-radius:10px;
+      margin-bottom:15px;
+    }
+
+    .info h3 { color:#333; margin-bottom:15px; text-align:center; }
+
+    .info ul {
+      list-style:disc;
+      padding-left:20px;
+      margin-bottom:15px;
+      text-align:left;
+    }
+
+    .btn-whatsapp {
+      margin-top:auto;
+      background:#25d366;
+      color:white;
+      padding:12px;
+      border-radius:5px;
+      text-align:center;
+      font-weight:bold;
+      width:100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Seção de Credibilidade e Engenharia */
+    .autoridade-container {
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+      margin: 50px 0;
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      gap:35px;
+      text-align:left;
+    }
+
+    .autoridade-texto { flex:1; }
+    .autoridade-texto h2 { text-align:left; margin-bottom:15px; }
+    .autoridade-texto p { color:#555; margin-bottom:15px; }
+    .autoridade-texto ul { list-style:none; margin-bottom:15px; }
+    .autoridade-texto ul li { margin-bottom:10px; color:#444; }
+    .autoridade-texto ul li strong { color:#ff9800; }
+    
+    .autoridade-imagem {
+      flex:1;
+      max-width:450px;
+      border-radius:10px;
+      border:1px solid #ddd;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    /* Passo a Passo da Instalação */
+    .passos-container {
+      margin:50px 0;
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+    }
+
+    .passos-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+      margin-top:30px;
+    }
+
+    .passo-card {
+      background:#fdfdfd;
+      padding:25px;
+      border-radius:8px;
+      border:1px solid #eef2f5;
+      border-top:4px solid #ff9800;
+      text-align:left;
+      box-shadow:0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .passo-card h3 { color:#333; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+    .passo-numero { background:#ff9800; color:white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:bold; }
+
+    /* Seção do Diagrama */
+    .diagrama-container {
+      margin:50px 0;
+      text-align:center;
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+    }
+
+    .diagrama-container p {
+      max-width: 700px;
+      margin: 0 auto 25px auto;
+      color: #666;
+    }
+
+    .diagrama-imagem {
+      max-width:100%;
+      height:auto;
+      border-radius:10px;
+      border:1px solid #ddd;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      margin-top:20px;
+    }
+
+    /* Seção FAQ */
+    .faq-container {
+      margin:50px 0;
+      background:white;
+      padding:40px 30px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+      border:1px solid #eee;
+      text-align:left;
+    }
+
+    .faq-item { margin-bottom:20px; border-bottom:1px solid #edf2f7; padding-bottom:15px; }
+    .faq-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .faq-item h3 { color:#333; font-size:1.1rem; margin-bottom:8px; }
+    .faq-item p { color:#555; font-size:1rem; }
+
+    /* Seção de Vídeos */
+    .videos-container { margin:50px 0; }
+
+    .videos-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
+      gap:25px;
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .video-box iframe {
+      width:100%;
+      height:280px;
+      border-radius:10px;
+      border:1px solid #ddd;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    /* Contato */
+    .contato {
+      background:#f4f6f8;
+      padding:30px;
+      border-radius:10px;
+      margin-top:50px;
+      border:1px solid #e2e8f0;
+      max-width:600px;
+      margin:0 auto;
+    }
+
+    footer { background:#333; color:white; text-align:center; padding:20px; margin-top:40px; }
+
+    /* WhatsApp flutuante */
+    .whatsapp {
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:#25d366;
+      color:white;
+      font-size:2rem;
+      width: 60px;
+      height: 60px;
+      border-radius:50%;
+      z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+    .whatsapp:hover {
+      transform: scale(1.1);
+    }
+
+    /* Regra para manter as imagens lado a lado e responsivas */
+    @media (max-width:768px) {
+      .autoridade-container { flex-direction:column; text-align:center; }
+      .autoridade-texto h2 { text-align:center; }
+      .video-box iframe { height:200px; }
+      .videos-grid { grid-template-columns: 1fr; }
+      .diagramas-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+
   <header>
     <img src="img/marca dagua.png" alt="Logotipo ZNSOLAR" class="logo-site">
     <p>Projetos em Energia Solar Fotovoltáica • Economia • Sustentabilidade</p>
   </header>
-  
+
   <main>
-  
+
     <h2>Tipos de Instalações</h2>
     <section class="instalacoes">
       <div class="item">
@@ -309,7 +306,7 @@
           </a>
         </div>
       </div>
-  
+
       <div class="item">
         <img src="img/Comercial.jpeg" alt="Energia Solar Comercial">
         <div class="info">
@@ -324,7 +321,7 @@
           </a>
         </div>
       </div>
-  
+
       <div class="item">
         <img src="img/images.jpeg" alt="Energia Solar Industrial">
         <div class="info">
@@ -340,8 +337,8 @@
         </div>
       </div>
     </section>
-  
-  <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
+
+    <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
       <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
       <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o consumo em kWh dos últimos 12 meses da sua conta para um cálculo exato.</p>
       
@@ -354,12 +351,12 @@
         }
         .campo-mes label { font-weight:bold; font-size:0.9rem; display:block; margin-bottom:5px; }
         .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
-  
+
         @media (max-width: 600px) {
           .grid-consumo { grid-template-columns: repeat(2, 1fr); } /* 2 colunas no celular */
         }
       </style>
-  
+
       <div class="grid-consumo">
         <div class="campo-mes"><label>Mês Atual (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
         <div class="campo-mes"><label> 2 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
@@ -374,11 +371,11 @@
         <div class="campo-mes"><label> 11 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
         <div class="campo-mes"><label> 12 mes   (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
       </div>
-  
+
       <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
-  
+
       <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
-  </section>
+    </section>
   
     <section class="diagrama-container">
       <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
@@ -389,18 +386,18 @@
               <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema On-Grid</h3>
               <img src="img/DIAGRAMA SITE.jpeg" alt="Diagrama Técnico de Sistema Solar On-Grid" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
           </div>
-  
+
           <div class="diagrama-item" style="text-align: center;">
               <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema Off-Grid</h3>
               <img src="img/fotovoltaico off grid.jpeg" alt="Diagrama Técnico de Sistema Solar Off-Grid" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
           </div>
-  
+
           <div class="diagrama-item" style="text-align: center;">
               <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema Híbrido</h3>
               <img src="img/hibrdo fotovoltaco.jpeg" alt="Diagrama Técnico de Sistema Solar Híbrido" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
           </div>
       </div>
-  
+
       <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; padding: 0 10px;">
           <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
               <strong style="color: #333; display: block; margin-bottom: 5px;">On-Grid (Conectado à Rede)</strong>
@@ -411,14 +408,14 @@
               <strong style="color: #333; display: block; margin-bottom: 5px;">Off-Grid (Isolado por Baterias)</strong>
               <p style="color: #666; font-size: 0.95rem; margin: 0;">Totalmente independente da rede elétrica. A energia gerada é armazenada em baterias para ser usada à noite ou em locais isolados onde não há energia da concessionária.</p>
           </div>
-  
+
           <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
               <strong style="color: #333; display: block; margin-bottom: 5px;">Híbrido (O Melhor dos Dois Mundos)</strong>
               <p style="color: #666; font-size: 0.95rem; margin: 0;">Trabalha conectado à rede da concessionária para gerar créditos, mas também possui baterias de emergência (backup) caso falte energia na rede da rua.</p>
           </div>
       </div>
     </section>
-  
+
     <section class="passos-container">
       <h2>Como Funciona a Instalação</h2>
       <p style="color:#666; margin-bottom:20px;">Entenda o processo passo a passo do seu projeto até o início da economia real:</p>
@@ -437,7 +434,7 @@
         </div>
       </div>
     </section>
-  
+
     <section class="autoridade-container">
       <div class="autoridade-texto">
         <p>Na <strong>ZN Solar</strong>, cada projeto é desenvolvido com total segurança, transparência e rigor técnico.</p>
@@ -450,7 +447,7 @@
       </div>
       <img src="img/Simulação Profissional .jpeg" alt="Profissional realizando testes e simulações solares" class="autoridade-imagem">
     </section>
-  
+
     <section class="faq-container">
       <h2>Dúvidas Frequentes (FAQ)</h2>
       <div class="faq-item" style="margin-top:20px;">
@@ -463,10 +460,10 @@
       </div>
       <div class="faq-item">
         <h3>Os meus créditos de energia expiram?</h3>
-        <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futuras em até 60 meses.</p>
+        <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futuras in até 60 meses.</p>
       </div>
     </section>
-  
+
     <section class="videos-container">
       <h2>Conheça o Nosso Trabalho</h2>
       <div class="videos-grid">
@@ -478,26 +475,26 @@
         </div>
       </div>
     </section>
-  
+
     <section class="contato">
       <h2>Atendimento ZNSOLAR</h2>
       <p><strong>WhatsApp:</strong> <a href="https://wa.me/5511983185337" target="_blank">(11) 98318-5337</a></p>
       <p><strong>Região de atendimento:</strong> São Paulo Capital e região metropolitana</p>
     </section>
-  
+
   </main>
-  
+
   <footer>
     <p>&copy; <span id="ano"></span> ZNSOLAR — Energia Solar Fotovoltaica</p>
   </footer>
-  
+
   <a href="https://wa.me/5511983185337" class="whatsapp" aria-label="Falar com a ZNSOLAR no WhatsApp" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
-  
+
   <script>
     document.getElementById('ano').textContent = new Date().getFullYear();
-  
+
     // TABELA DE PREÇOS ATUALIZADA
     const _0xtp = {
       2.0: 9568.00, 2.5: 11365.00, 3.0: 12870.00, 3.5: 14119.00, 4.0: 15184.00,
@@ -532,216 +529,244 @@
       74.5: 230801.00, 75.0: 233100.00
     };
   
- // Variável para o PDF funcionar (fora da função)
-  let dadosPDF = {};
+    // Variável para o PDF funcionar (fora da função)
+    let dadosPDF = {};
 
- function _calcZN() {
-    // 1. Pegar os inputs
-    const campos = document.querySelectorAll('.mes-consumo');
-    let totalKwh = 0;
-    let mesesComValor = 0;
-    const listaValores = [];
+    function _calcZN() {
+        // 1. Pegar os inputs
+        const campos = document.querySelectorAll('.mes-consumo');
+        let totalKwh = 0;
+        let mesesComValor = 0;
+        const listaValores = [];
 
-    campos.forEach(campo => {
-        const valor = parseFloat(campo.value);
-        if (!isNaN(valor) && valor >= 0) {
-            totalKwh += valor;
-            mesesComValor++;
-            listaValores.push(valor);
-        } else {
-            listaValores.push(0);
+        campos.forEach(campo => {
+            const valor = parseFloat(campo.value);
+            if (!isNaN(valor) && valor >= 0) {
+                totalKwh += valor;
+                mesesComValor++;
+                listaValores.push(valor);
+            } else {
+                listaValores.push(0);
+            }
+        });
+
+        const divResultado = document.getElementById('resultado-simulacao');
+
+        // ==========================================
+        // NOVAS REGRAS DE VALIDAÇÃO EXIGIDAS
+        // ==========================================
+        
+        // Regra 1: Obriga o preenchimento de todos os 12 meses
+        if (mesesComValor < 12) {
+            alert("Por favor, preencha o consumo de todos os 12 meses para continuar.");
+            return;
         }
-    });
 
-    const divResultado = document.getElementById('resultado-simulacao');
+        // Regra 2: Limite máximo anual de 75.000 kWh
+        if (totalKwh > 75000) {
+            alert("Seu consumo anual é superior ao convencional. Por favor, entre em contato diretamente conosco pelo WhatsApp para realizarmos um estudo técnico e projeto especial personalizado para o seu caso!");
+            
+            const msgAltaDemanda = encodeURIComponent("Olá ZNSolar! Meu consumo anual passou de 75.000 kWh e gostaria de um projeto especial personalizado.");
+            window.open(`https://wa.me/5511983185337?text=${msgAltaDemanda}`, '_blank');
+            return;
+        }
 
-    // Validação
-    if (mesesComValor === 0) {
-        alert("Por favor, preencha o consumo de pelo menos um mês.");
-        return;
-    }
-
-    // 2. Cálculos exatos (Regra dos 18% e taxas)
-    const c = totalKwh / mesesComValor;
-    const n = Math.ceil((c * 1.22) / 55.42); 
-    const pr = n * 0.575;
-    
-    let pf;
-    if (pr < 2.5) { pf = 2.0; } 
-    else if (pr === 2.5) { pf = 2.5; } 
-    else if (pr > 2.5 && pr <= 3.0) { pf = 3.0; } 
-    else { pf = Math.round(pr * 2) / 2; }
-
-    if (pf < 2.0) pf = 2.0;
-    if (pf > 75.0) pf = 75.0;
-
-    const a = (n * 2.58) * 1.15;
-    const tc = c * 0.92954;
-    const nc = 55.87;
-    const e = tc - nc;
-    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
-    const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
-
-    // Guardar para o PDF
-    dadosPDF = { p, payback, a, c, tc, nc, e, n };
-
-    // 3. Gerar o HTML
-    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
-
-    divResultado.innerHTML = `
-        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
-        <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
-        <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
-        <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
+        // 3. Cálculos base (Média e potências iniciais)
+        const c = totalKwh / mesesComValor;
+        const n = Math.ceil((c * 1.22) / 55.42); 
+        const pr = n * 0.575;
         
-        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
-        <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Conta Com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-        <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
-        
-        <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
-        <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+        // ==========================================
+        // NOVA REGRA DE ARREDONDAMENTO POR PROXIMIDADE
+        // ==========================================
+        let pf;
+        if (pr < 2.0) { 
+            pf = 2.0; // Regra 3: Menos que 2.0 kWp vai automaticamente para 2.0 kWp
+        } else {
+            // Regra 4: Isola a parte decimal para decidir a aproximação correta de 0.5 em 0.5
+            let parteInteira = Math.floor(pr);
+            let decimal = pr - parteInteira;
 
-        <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
-        <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
-       
-        <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
-            <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
-        </button>
-
-        <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
-          Falar no WhatsApp Agora  
-        </a>
-        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações especificas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
-    `;
-
-    divResultado.style.display = "block";
-
-    // 4. Renderizar Gráficos
-    const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
-    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
-    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
-    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
-
-    new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
-            datasets: [
-                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
-                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
-            ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
-    new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: ['Sem Sistema Solar', 'Com Sistema Solar'],
-            datasets: [{
-                label: 'Custo Mensal (R$)',
-                data: [tc, nc], 
-                backgroundColor: ['#e53935', '#2e7d32'] 
-            }]
-        },
-        options: { 
-            indexAxis: 'y', 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: true }
+            if (decimal > 0 && decimal <= 0.4) {
+                pf = parteInteira;       // Ex: 2.4 vira 2.0
+            } else if (decimal > 0.4 && decimal <= 0.5) {
+                pf = parteInteira + 0.5; // Ex: 2.5 vira 2.5
+            } else {
+                pf = parteInteira + 1.0; // Ex: 2.51 vira 3.0 | 2.6 vira 3.0
             }
         }
-    });
-} // <--- AQUI FECHA A FUNÇÃO _calcZN CORRETAMENTE
 
-async function gerarPDF() {
-    if (!window.jspdf) {
-        alert("Erro: Biblioteca PDF não carregada.");
-        return;
+        // Dupla checagem de limites permitidos na tabela de preços
+        if (pf < 2.0) pf = 2.0;
+        if (pf > 75.0) pf = 75.0;
+
+        const a = (n * 2.58) * 1.15;
+        const tc = c * 0.92954;
+        const nc = 55.87;
+        const e = tc - nc;
+        const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+        const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
+
+        // Guardar para o PDF
+        dadosPDF = { p, payback, a, c, tc, nc, e, n };
+
+        // 4. Gerar o HTML do resultado
+        const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
+
+        divResultado.innerHTML = `
+            <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
+            <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
+            <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
+            <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
+            
+            <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
+            <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+            <strong>Conta Com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+            <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+            
+            <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
+            <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+
+            <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
+            <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
+            <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
+           
+            <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
+                <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
+            </button>
+
+            <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
+              Falar no WhatsApp Agora  
+            </a>
+            <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
+            <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
+        `;
+
+        divResultado.style.display = "block";
+
+        // 5. Renderizar Gráficos
+        const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
+        const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+        const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
+        const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
+
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+                datasets: [
+                    { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
+                    { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Sem Sistema Solar', 'Com Sistema Solar'],
+                datasets: [{
+                    label: 'Custo Mensal (R$)',
+                    data: [tc, nc], 
+                    backgroundColor: ['#e53935', '#2e7d32'] 
+                }]
+            },
+            options: { 
+                indexAxis: 'y', 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true }
+                }
+            }
+        });
     }
-    
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
 
-    const p = dadosPDF.p;
-    const payback = dadosPDF.payback;
-    const a = dadosPDF.a;
-    const c = dadosPDF.c;
-    const tc = dadosPDF.tc;
-    const nc = dadosPDF.nc;
+    async function gerarPDF() {
+        if (!window.jspdf) {
+            alert("Erro: Biblioteca PDF não carregada.");
+            return;
+        }
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    if (!p) {
-        alert("Por favor, clique em SIMULAR primeiro.");
-        return;
-    }
+        const p = dadosPDF.p;
+        const payback = dadosPDF.payback;
+        const a = dadosPDF.a;
+        const c = dadosPDF.c;
+        const tc = dadosPDF.tc;
+        const nc = dadosPDF.nc;
 
-    // CABEÇALHO
-    doc.setFillColor(255, 152, 0); 
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255);
-    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
-    
-    // CORPO
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(16);
-    doc.text("Resumo da Proposta", 20, 55);
-    
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
-    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
-    doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
-    doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
-    doc.text(`- Conta Com Sistema Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
+        if (!p) {
+            alert("Por favor, clique em SIMULAR primeiro.");
+            return;
+        }
 
-    try {
-        const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
-        const imgData1 = canvas1.toDataURL('image/png');
+        // CABEÇALHO DO PDF
+        doc.setFillColor(255, 152, 0); 
+        doc.rect(0, 0, 210, 40, 'F');
         doc.setFont("helvetica", "bold");
-        doc.text("Comparativo de Consumo vs Geração:", 20, 130);
-        doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
+        
+        // CORPO DO PDF
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(16);
+        doc.text("Resumo da Proposta", 20, 55);
+        
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
+        
+        doc.setFont("helvetica", "normal");
+        doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
+        doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
+        doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
+        doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
+        doc.text(`- Conta Com Sistema Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
 
-        const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
-        const imgData2 = canvas2.toDataURL('image/png');
-        doc.text("Economia Financeira Estimada:", 20, 210);
-        doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
-    } catch (e) {
-        console.log("Erro nos gráficos.");
+        try {
+            const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
+            const imgData1 = canvas1.toDataURL('image/png');
+            doc.setFont("helvetica", "bold");
+            doc.text("Comparativo de Consumo vs Geração:", 20, 130);
+            doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
+
+            const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
+            const imgData2 = canvas2.toDataURL('image/png');
+            doc.text("Economia Financeira Estimada:", 20, 210);
+            doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
+        } catch (e) {
+            console.log("Erro nos gráficos.");
+        }
+
+        // RODAPÉ DO PDF
+        doc.setFontSize(9);
+        doc.setTextColor(150);
+        doc.text("Proposta elaborada por: ZNSOLAR", 20, 285);
+        doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 291);
+
+        doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
     }
-
-    // RODAPÉ
-    doc.setFontSize(9);
-    doc.setTextColor(150);
-    doc.text("Proposta elaborada por: ZNSOLAR", 20, 285);
-    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 291);
-
-    doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
-}
-</script>
+  </script>
     
-<script>
-  // Script de Proteção
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('selectstart', e => e.preventDefault());
-  document.onkeydown = function(e) {
-    if(e.keyCode == 123) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-    if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
-  }
-</script>
+  <script>
+    // Script de Proteção Máxima Contra Cópia
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.onkeydown = function(e) {
+      if(e.keyCode == 123) return false;
+      if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+      if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+      if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+      if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+      if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
+    }
+  </script>
 
 </body>
 </html>
