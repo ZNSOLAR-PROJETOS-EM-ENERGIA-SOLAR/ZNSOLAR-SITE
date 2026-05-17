@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.\">
-    <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo\">
+    <meta name="description" content="ZNSOLAR - Instalação de energia solar fotovoltáica residencial, comercial e industrial em São Paulo. Economia na conta de luz com energia limpa.">
+    <meta name="keywords" content="energia solar, energia fotovoltáica, instalação solar, placas solares, energia solar São Paulo">
     <meta name="author" content="ZNSOLAR">
     <meta name="robots" content="index, follow">
     
@@ -307,7 +307,7 @@
         const eco25anos = ecoMensal * 12 * 25;
   
         // Armazenamento do Projeto Técnico Ativo para Exportação
-        p = { nome, cidade, c_meses, g_meses, c_medio, pf: potenciaRealKwp, geracaoMedia, qtdModulos, preco: precoFinal, ecoMensal, payback, eco25anos };
+        p = { nome, city: cidade, c_meses, g_meses, c_medio, pf: potenciaRealKwp, geracaoMedia, qtdModulos, valor: precoFinal, ecoMensal, payback, eco25anos };
   
         // Atualização da Interface Visual na Tela
         document.getElementById('resPreco').innerText = `R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
@@ -394,7 +394,7 @@
         doc.setFont("helvetica", "normal");
         doc.setTextColor(51, 65, 85);
         doc.text(`CLIENTE INTERESSADO: ${p.nome}`, 19, 62);
-        doc.text(`CIDADE / UF DO LOCAL: ${p.cidade}`, 19, 67);
+        doc.text(`CIDADE / UF DO LOCAL: ${p.city}`, 19, 67);
         doc.text(`DATA DO DIMENSIONAMENTO: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`, 19, 72);
         
         doc.setFont("helvetica", "bold");
@@ -414,7 +414,7 @@
           { l: "Tarifa Base Utilizada no Cálculo de Retorno", v: `R$ ${TARIFA.toFixed(2)} / kWh` },
           { l: "Economia Financeira Estimada Mensal", v: `R$ ${p.ecoMensal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}` },
           { l: "Prazo Estimado de Retorno do Capital (Payback Comercial)", v: `${p.payback.toFixed(1)} anos` },
-          { l: "PREÇO DO PROJETO COMPLETO CHAVE NA MÃO (INSTALADO E ATIVO)", v: `R$ ${p.preco.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}`, destaque: true }
+          { l: "PREÇO DO PROJETO COMPLETO CHAVE NA MÃO (INSTALADO E ATIVO)", v: `R$ ${p.valor.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}`, destaque: true }
         ];
         
         dadosLinhas.forEach((item, index) => {
@@ -489,7 +489,7 @@
         yDinamico += 5;
         doc.setFontSize(8);
         
-        // Loop Inteligente de Impressão em 2 Colunas para otimizar espaço
+        // Loop de Impressão em 2 Colunas para as metas mensais de geração
         for(let i=0; i<6; i++) {
           doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
           doc.rect(15, yDinamico, colLarg*2, 5.5, "F");
@@ -517,7 +517,7 @@
         }
         
         // -------------------------------------------------------------------------
-        // SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
+        // SEÇÃO DE AVISOS FINAIS
         // -------------------------------------------------------------------------
         yDinamico += 8; 
         
@@ -533,7 +533,7 @@
         const linhasSplit = doc.splitTextToSize(textoAviso, 180);
         doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
         
-        // Rodapé Geral e Comando de Salvar
+        // Rodapé Geral da Página 2
         doc.setFont("helvetica", "normal");
         doc.setFontSize(8);
         doc.setTextColor(148, 163, 184);
