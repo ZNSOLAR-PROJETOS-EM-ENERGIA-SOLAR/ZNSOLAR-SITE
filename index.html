@@ -1059,26 +1059,7 @@ doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
         doc.addImage(imgData2, 'PNG', 15, 177, 180, 40); // <--- Altura reduzida para 40
     }
 
-    // ==========================================
-    // 5. AVISO IMPORTANTE E JURÍDICO (Y Ajustado com Folga)
-    // ==========================================
-    // Agora começando em Y=226, logo após o segundo gráfico terminar
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(183, 28, 28); 
-    doc.text("Este orçamento e simulação são válidos para São Paulo Capital. 
-  Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. 
-      Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo,
-      pois exigem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios,
-      e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. 
-      Esse orçamento é prévio , para confirmar os dados e valores é necessário o estudo técnico in loco . Não espere mais entre em contato agora mesmo.", 10, 226); 
-    
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(90, 90, 90);
-    doc.setFontSize(7.5); 
-    
-    const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
- // =========================================================================
+   // =========================================================================
 // 5. Rodapé Geral e Comando de Salvar (Fecha a função gerarPDF)
 doc.setFont("helvetica", "italic");
 doc.setFontSize(6.5);
