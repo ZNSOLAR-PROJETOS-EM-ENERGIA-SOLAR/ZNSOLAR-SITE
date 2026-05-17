@@ -375,7 +375,7 @@
         <div class="campo-mes"><label> 12 mes   (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
       </div>
   
-      <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
+      <button onclick="" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
   
       <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
   </section>
@@ -777,7 +777,75 @@ Desejo mais informações sobre esta simulação e orçamento._`;
               }
           }
       });
-}
+// =========================================================================
+      // IMPLEMENTAÇÃO DAS BARRAS DE PROJEÇÃO DE 25 ANOS (ZNSOLAR)
+      // =========================================================================
+      const divWebEconomia = document.getElementById('web-bar-economia');
+      const divWebValorizacao = document.getElementById('web-bar-valorizacao');
+
+      if (divWebEconomia && divWebValorizacao) {
+          // Cálculos financeiros reais baseados na sua simulação
+          const custoConcessionaria25Anos = Math.round(tc * 12 * 25 * 1.4); // Projeção com reajuste inflacionário energético
+          const economiaBifasica25Anos = Math.round(e_bi * 12 * 25);
+          const economiaTrifasica25Anos = Math.round(e_tri * 12 * 25);
+
+          // Renderização das barras de Economia Acumulada
+          divWebEconomia.innerHTML = `
+              <div style="margin-bottom: 8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                      <span>Gasto Potencial com Concessionária (Sem Solar)</span>
+                      <strong>R$ ${custoConcessionaria25Anos.toLocaleString('pt-BR')}</strong>
+                  </div>
+                  <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                      <div style="background:#dc3545; width:100%; height:100%;"></div>
+                  </div>
+              </div>
+              <div style="margin-bottom: 8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                      <span>Economia com Padrão Bifásico</span>
+                      <strong style="color:#28a745;">R$ ${economiaBifasica25Anos.toLocaleString('pt-BR')}</strong>
+                  </div>
+                  <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                      <div style="background:#28a745; width:${Math.min((economiaBifasica25Anos / custoConcessionaria25Anos) * 100, 100)}%; height:100%;"></div>
+                  </div>
+              </div>
+              <div>
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                      <span>Economia com Padrão Trifásico</span>
+                      <strong style="color:#17a2b8;">R$ ${economiaTrifasica25Anos.toLocaleString('pt-BR')}</strong>
+                  </div>
+                  <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                      <div style="background:#17a2b8; width:${Math.min((economiaTrifasica25Anos / custoConcessionaria25Anos) * 100, 100)}%; height:100%;"></div>
+                  </div>
+              </div>
+          `;
+
+          // Renderização da Valorização do Capital (Comparativo do investimento rendendo 1% a.m.)
+          const valorizacaoRendaFixa = Math.round(p * Math.pow(1 + 0.01, 12 * 25)); 
+          const ganhoRealSolarTotal = economiaTrifasica25Anos; 
+
+          divWebValorizacao.innerHTML = `
+              <div style="margin-bottom: 8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                      <span>Seu Capital Aplicado na Renda Fixa (1% a.m.)</span>
+                      <strong>R$ ${valorizacaoRendaFixa.toLocaleString('pt-BR')}</strong>
+                  </div>
+                  <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                      <div style="background:#ffa000; width:${Math.min((p / valorizacaoRendaFixa) * 100, 100)}%; height:100%;"></div>
+                  </div>
+              </div>
+              <div>
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                      <span>Retorno em Economia Real com o Sistema Solar</span>
+                      <strong style="color:#2e7d32;">R$ ${ganhoRealSolarTotal.toLocaleString('pt-BR')}</strong>
+                  </div>
+                  <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                      <div style="background:#2e7d32; width:100%; height:100%;"></div>
+                  </div>
+              </div>
+          `;
+      }
+ }
 
 // ==========================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
