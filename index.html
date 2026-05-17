@@ -909,11 +909,8 @@ if (divWebEconomia && divWebValorizacao) {
     divWebValorizacao.innerHTML = htmlRendimento;
 }
 }
-// =========================================================================
-// 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
-// =========================================================================
  function gerarPDF() {
-    // 1. Inicializa o jsPDF (Configurado para tamanho A4)
+    // 1. Inicializa o jsPDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
 
@@ -931,6 +928,15 @@ if (divWebEconomia && divWebValorizacao) {
     // --- TEXTOS DOS AVISOS FINAIS ---
     const textoCondicoes = "Condições Comerciais: O prazo estimado para entrega dos equipamentos é de até 30 dias úteis após o parecer de acesso da concessionária. A instalação completa será realizada em até 10 dias úteis após a chegada dos materiais. Parcelamentos e condições de financiamento solar estão sujeitos a análise de crédito pelas instituições bancárias parceiras.";
     const textoAviso = "Aviso Importante: Esta é uma simulação baseada em estimativas médias de radiação solar regional e no histórico de consumo fornecido. O desempenho real do sistema pode sofrer variações devido a fatores como sombreamento local, inclinação/orientação dos módulos e condições meteorológicas. O orçamento e dimensionamento definitivos serão validados após a vistoria técnica presencial.";
+
+    // --- PEGA OS DADOS TÉCNICOS DIRETO DA TELA (IGUAL À IMAGEM 3) ---
+    const textoPotencia = document.getElementById('lbl_potencia')?.innerText || "0.00 kWp";
+    const textoModulos  = document.getElementById('lbl_modulos')?.innerText || "0 Pçs";
+    const textoGeracao  = document.getElementById('lbl_geracao')?.innerText || "0 kWh";
+    const textoArea     = document.getElementById('lbl_area')?.innerText || "0 m²";
+    
+    const textoArvores  = document.getElementById('lbl_arvores')?.innerText || "0 Árvores";
+    const textoCO2      = document.getElementById('lbl_co2')?.innerText || "0 Toneladas";
 
     // =========================================================================
     // PAGINA 1: CABEÇALHO, DADOS DO CLIENTE, MÉTRICAS E GRÁFICO DE CONSUMO
@@ -996,17 +1002,17 @@ if (divWebEconomia && divWebValorizacao) {
     let gap = 4;
 
     let metricas = [
-        { t: "Potência Sistema", v: `${pf.toFixed(2)} kWp` },
-        { t: "Qtd. Módulos", v: `${n} Pçs` },
-        { t: "Geração Mensal", v: `${Math.round(geracao_mensal)} kWh` },
-        { t: "Área Mínima", v: `${Math.round(area)} m²` }
+        { t: "Potência Sistema", v: textoPotencia },
+        { t: "Qtd. Módulos", v: textoModulos },
+        { t: "Geração Mensal", v: textoGeracao },
+        { t: "Área Mínima", v: textoArea }
     ];
 
     metricas.forEach((m, idx) => {
         let x = startX + (idx * (cardWidth + gap));
-        doc.setFillColor(254, 244, 238); // Laranja bem clarinho de fundo
+        doc.setFillColor(254, 244, 238); 
         doc.rect(x, 86, cardWidth, cardHeight, "F");
-        doc.setDrawColor(242, 103, 34); // Borda laranja
+        doc.setDrawColor(242, 103, 34); 
         doc.rect(x, 86, cardWidth, cardHeight, "S");
 
         doc.setFontSize(7.5);
@@ -1022,15 +1028,15 @@ if (divWebEconomia && divWebValorizacao) {
 
     // Blocos Verdes de Benefícios Ambientais
     let metricasAmbientais = [
-        { t: "Árvores Salvas / Ano", v: `${Math.round(arvores)} Árvores` },
-        { t: "CO₂ Evitado / Ano", v: `${co2.toFixed(2)} Toneladas` }
+        { t: "Árvores Salvas / Ano", v: textoArvores },
+        { t: "CO₂ Evitado / Ano", v: textoCO2 }
     ];
 
     metricasAmbientais.forEach((m, idx) => {
         let x = startX + (idx * (88 + gap * 2));
-        doc.setFillColor(240, 249, 241); // Verde claro de fundo
+        doc.setFillColor(240, 249, 241); 
         doc.rect(x, 113, 88, 14, "F");
-        doc.setDrawColor(40, 167, 69); // Borda verde
+        doc.setDrawColor(40, 167, 69); 
         doc.rect(x, 113, 88, 14, "S");
 
         doc.setFontSize(8.5);
@@ -1061,7 +1067,7 @@ if (divWebEconomia && divWebValorizacao) {
     doc.text("Página 1 de 2", 180, 285);
 
     // =========================================================================
-    // PAGINA 2: GRÁFICO FINANCEIRO, GRÁFICO PAYBACK, TABELA DE PREÇOS E AVISOS
+    // PAGINA 2: GRÁFICOS FINANCEIROS E PREÇOS DIRETO DOS ELEMENTOS DA TELA
     // =========================================================================
     doc.addPage();
 
@@ -1088,19 +1094,29 @@ if (divWebEconomia && divWebValorizacao) {
         doc.addImage(imgEconomia, 'PNG', 15, 101, 180, 60);
     }
 
-    // Tabela Gráfica de Investimento Comercial (Opções de Preço)
+    // Tabela Gráfica de Investimento Comercial (Opções de Preço coletadas do HTML)
     doc.setFont("helvetica", "bold");
     doc.text("5. Opções de Investimento Comercial", 15, 172);
 
     let yDinamico = 179;
+    
+    // Tenta capturar os valores numéricos limpos do HTML que o site exibe
+    const precoWegText = document.getElementById('lbl_preco_weg')?.innerText || "0";
+    const precoRenovigiText = document.getElementById('lbl_preco_renovigi')?.innerText || "0";
+    const precoGrowattText = document.getElementById('lbl_preco_growatt')?.innerText || "0";
+
+    const p_weg = parseFloat(precoWegText.replace(/[^\d]/g, '')) / 100 || 0;
+    const p_renovigi = parseFloat(precoRenovigiText.replace(/[^\d]/g, '')) / 100 || 0;
+    const p_growatt = parseFloat(precoGrowattText.replace(/[^\d]/g, '')) / 100 || 0;
+
     const opcoesPrecos = [
-        { nome: "OPÇÃO 1: INVERSOR WEG / PAINÉIS ZNSOLAR", valor: typeof p_weg !== 'undefined' ? p_weg : 0 },
-        { nome: "OPÇÃO 2: INVERSOR RENOVIGI / PAINÉIS CANADIAN", valor: typeof p_renovigi !== 'undefined' ? p_renovigi : 0 },
-        { nome: "OPÇÃO 3: INVERSOR GROWATT / PAINÉIS LONGI", valor: typeof p_growatt !== 'undefined' ? p_growatt : 0 }
+        { nome: "OPÇÃO 1: INVERSOR WEG / PAINÉIS ZNSOLAR", valor: p_weg },
+        { nome: "OPÇÃO 2: INVERSOR RENOVIGI / PAINÉIS CANADIAN", valor: p_renovigi },
+        { nome: "OPÇÃO 3: INVERSOR GROWATT / PAINÉIS LONGI", valor: p_growatt }
     ];
 
     opcoesPrecos.forEach((p) => {
-        if (p.valor <= 0) return; // Ignora se não estiver calculado ou ativo
+        if (p.valor <= 0) return; 
 
         // Cabeçalho cinza da opção
         doc.setFillColor(245, 245, 245);
@@ -1118,7 +1134,7 @@ if (divWebEconomia && divWebValorizacao) {
         // Desenha a barra laranja proporcional
         let largMax = 110;
         let larg = Math.min(largMax, (p.valor / 80000) * largMax);
-        if (larg < 25) larg = 30; // Proteção visual de tamanho mínimo
+        if (larg < 25) larg = 30; 
         
         doc.setFillColor(242, 103, 34);
         doc.rect(17, yDinamico + 1, larg, 4.5, "F");
@@ -1128,7 +1144,7 @@ if (divWebEconomia && divWebValorizacao) {
         doc.setFont("helvetica", "bold");
         doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 23 + larg, yDinamico + 4.5);
         
-        yDinamico += 9; // Espaçamento para a próxima linha de preço
+        yDinamico += 9; 
     });
 
     // Seção de Termos e Avisos Importantes
@@ -1170,6 +1186,7 @@ if (divWebEconomia && divWebValorizacao) {
 
     // 6. Comando para baixar o PDF completo automaticamente
     doc.save(`Proposta_ZNSolar_${nomeCliente.replace(/\s+/g, '_')}.pdf`);
-}</script>
+}
+  </script>
 </body>
 </html>
