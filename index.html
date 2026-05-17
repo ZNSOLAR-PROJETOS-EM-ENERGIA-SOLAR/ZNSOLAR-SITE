@@ -904,11 +904,7 @@ doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
       // ==========================================
     // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
     // ==========================================
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(34, 34, 34);
-    doc.text("Análise de Viabilidade Econômica", 105, 107, { align: "center" });
-
+  
     // Gráfico 1: Consumo vs Geração
     const canvas1 = document.getElementById('graficoConsumoMensal'); 
     if (canvas1) {
@@ -943,121 +939,7 @@ doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
     doc.setFontSize(7.5); 
     
     const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
-  // =========================================================================
-// NOVA PÁGINA: PROJEÇÃO VISUAL EM FORMATO HORIZONTAL (PÁGINA 2)
-// =========================================================================
-doc.addPage();
 
-// 1. Cabeçalho da Página 2
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("ANÁLISE DE VIABILIDADE ECONÔMICA E RETORNO", 15, 20);
-
-doc.setDrawColor(210, 210, 210);
-doc.setLineWidth(0.3);
-doc.line(15, 24, 195, 24);
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(11);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, 35, { align: "center" });
-
-// 2. Gráfico 1: Barras Horizontais de Economia (Azul)
-const g1X = 45;
-let g1Y = 50;
-const maxEco = dadosPDF.economia_25_anos || 46012.23;
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192);
-doc.text("Economia Acumulada no Período (R$)", 15, 44);
-
-// =========================================================================
-// SUBSTITUA A PARTIR DA LINHA 975 (A PARTIR DE CONST PECO) POR ESTE BLOCO:
-// =========================================================================
-
-// 1. Definição inicial da posição Y (Abaixo do comparativo de contas da página 1)
-let yDinamico = 175; 
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
-
-// -------------------------------------------------------------------------
-// GRÁFICO 1: ECONOMIA ACUMULADA (AZUL)
-// -------------------------------------------------------------------------
-yDinamico += 10;
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192); // Azul institucional
-doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
-
-const pEco = [
-    { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
-    { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
-    { ano: "10 Anos", valor: dadosPDF.economia_10_anos || 15337.41 },
-    { ano: "15 Anos", valor: dadosPDF.economia_15_anos || 23006.12 },
-    { ano: "20 Anos", valor: dadosPDF.economia_20_anos || 30674.82 },
-    { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
-];
-
-let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
-
-yDinamico += 5;
-pEco.forEach((p) => {
-    const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
-    
-    doc.setFillColor(21, 101, 192); // Cor Azul
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
-});
-
-// -------------------------------------------------------------------------
-// GRÁFICO 2: VALORIZAÇÃO DO CAPITAL (VERDE)
-// -------------------------------------------------------------------------
-yDinamico += 5;
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(46, 125, 50); // Verde institucional
-doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
-
-const pRen = [
-    { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
-    { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
-    { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
-    { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
-    { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
-    { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
-];
-
- let maxRenPDF = Math.max(...pRen.map(p => p.valor));
-
-yDinamico += 5;
-pRen.forEach((p) => {
-  const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
-    
-    doc.setFillColor(46, 125, 50); // Cor Verde
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
 });
 
 // -------------------------------------------------------------------------
