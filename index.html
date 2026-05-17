@@ -535,7 +535,7 @@
  // Variável para o PDF funcionar (fora da função)
   let dadosPDF = {};
 
- function _calcZN() {
+function _calcZN() {
     // 1. Pegar os inputs dos 12 meses
     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
@@ -594,7 +594,7 @@
     const c = totalKwh / 12; 
     const pr = ((c * 1.22) / 55.42) * 0.575;
     
-    // REGRA DE EXATIDÃO COMERCIAL (SÓ MANTÉM SE FOR EXATO)
+    // REGRA DE EXATIDÃO COMERCIAL
     let pf;
     const ehExato = (pr % 1 === 0) || (Math.abs(pr % 1 - 0.5) < 0.0001);
 
@@ -618,25 +618,26 @@
     // Sincronização comercial das variáveis
     const n = Math.ceil(pf / 0.575);
     const a = (n * 2.58) * 1.15;
-  const tc = c * 0.92954;
+    const tc = c * 0.92954;
 
-// Definição dos dois custos mínimos da sua tabela
-const nc_bi = 55.87;    // Bifásico (50 kWh + COSIP)
-const nc_tri = 102.34;  // Trifásico (100 kWh + COSIP)
+    // Definição dos dois custos mínimos da sua tabela
+    const nc_bi = 55.87;    // Bifásico
+    const nc_tri = 102.34;  // Trifásico
 
-// Cálculo das duas economias separadas
-const e_bi = tc - nc_bi;
-const e_tri = tc - nc_tri;
+    // Cálculo das duas economias separadas
+    const e_bi = tc - nc_bi;
+    const e_tri = tc - nc_tri;
 
-// Buscar preço correto na tabela _0xtp
-const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+    // Buscar preço correto na tabela _0xtp
+    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
 
-// Gerar as duas referências de payback
-const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
-const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
+    // Gerar as duas referências de payback
+    const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
+    const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
 
-// Passando os dois paybacks novos para o objeto do PDF puxar sem travar
-dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
+    // Passando os dois paybacks novos para o objeto do PDF puxar sem travar
+    dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
+    
     // Geração mensal baseada no HSP de São Paulo
     const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
     const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
@@ -654,25 +655,7 @@ dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
     }
     tabelaMesesWhats += `----------------------------------`;
 
-    // TEXTO COMERCIAL DO WHATSAPP (Totalmente sem potência kWp e sem número de placas)
-    const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar:
-----------------------------------
-💰 *INVESTIMENTO E RETORNO:*
-• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
-• Retorno Padrão Bifásico: ${payback_bi} anos
-• Retorno Padrão Trifásico: ${payback_tri} anos
-• Economia Mensal (Bifásico): R$ ${e_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-• Economia Mensal (Trifásico): R$ ${e_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-
-📊 *MÉDIAS DO SISTEMA:*
-• Consumo Médio: ${c.toFixed(1)} kWh/mês
-• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês
-• Área Necessária: ${a.toFixed(1)} m²
-----------------------------------
-${tabelaMesesWhats}
-
-Desejo mais informações sobre esta simulação e orçamento._`;
-
+    const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar:\n----------------------------------\n💰 *INVESTIMENTO E RETORNO:*\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Retorno Padrão Bifásico: ${payback_bi} anos\n• Retorno Padrão Trifásico: ${payback_tri} anos\n• Economia Mensal (Bifásico): R$ ${e_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n• Economia Mensal (Trifásico): R$ ${e_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n📊 *MÉDIAS DO SISTEMA:*\n• Consumo Médio: ${c.toFixed(1)} kWh/mês\n• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês\n• Área Necessária: ${a.toFixed(1)} m²\n----------------------------------\n${tabelaMesesWhats}\n\nDesejo mais informações sobre esta simulação e orçamento._`;
     const msgWhatsapp = encodeURIComponent(textoWhatsappCliente);
 
     // Limpa estilizações residuais
@@ -680,7 +663,7 @@ Desejo mais informações sobre esta simulação e orçamento._`;
     divResultado.style.borderLeft = "none";
     divResultado.style.padding = "0";
 
-    // HTML DO CLIENTE (O que aparece na tela do site - Sem placas e sem potência)
+    // HTML DO CLIENTE (O que aparece na tela do site)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
@@ -688,95 +671,152 @@ Desejo mais informações sobre esta simulação e orçamento._`;
         <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
         
         <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Nova Conta (Padrão Bifásico):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Nova Conta (Padrão Trifásico):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Economia Mensal (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
-<strong>Economia Mensal (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+        <strong>Nova Conta (Padrão Bifásico):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Nova Conta (Padrão Trifásico):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Economia Mensal (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
+        <strong>Economia Mensal (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
         
         <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
         <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-<p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi} anos</p>
-<p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri} anos</p>
+        <p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi} anos</p>
+        <p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri} anos</p>
 
-  <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
-    <h3 style="text-align: center; color: #2c3e50; font-size: 18px; margin-top: 0; margin-bottom: 25px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia e Valorização sobre 25 Anos</h3>
-    
-    <div style="margin-bottom: 30px;">
-        <h4 style="color: #1565C0; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
-            <span style="display: inline-block; width: 12px; height: 12px; background: #1565C0; margin-right: 8px; border-radius: 2px;"></span>
-            Economia Acumulada no Período (R$)
-        </h4>
-        <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    </div>
+        <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
+            <h3 style="text-align: center; color: #2c3e50; font-size: 18px; margin-top: 0; margin-bottom: 25px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia e Valorização sobre 25 Anos</h3>
+            
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: #1565C0; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
+                    <span style="display: inline-block; width: 12px; height: 12px; background: #1565C0; margin-right: 8px; border-radius: 2px;"></span>
+                    Economia Acumulada no Período (R$)
+                </h4>
+                <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
 
-    <div>
-        <h4 style="color: #2E7D32; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
-            <span style="display: inline-block; width: 12px; height: 12px; background: #2E7D32; margin-right: 8px; border-radius: 2px;"></span>
-            Valorização do Capital Próprio Aplicado (1% a.m.)
-        </h4>
-        <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    </div>
-</div>
-       
+            <div>
+                <h4 style="color: #2E7D32; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
+                    <span style="display: inline-block; width: 12px; height: 12px; background: #2E7D32; margin-right: 8px; border-radius: 2px;"></span>
+                    Valorização do Capital Próprio Aplicado (1% a.m.)
+                </h4>
+                <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+        </div>
+               
         <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
         </button>
 
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
-          Falar no WhatsApp Agora  
-          </a>
-          <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-          <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio , para confirmar os dados e valores é necessário o estudo técnico in loco . Não espere mais entre em contato agora mesmo.
-      `;
-  
-      divResultado.style.display = "block";
-  
-      // 4. RENDERIZAR GRÁFICOS na tela do cliente
-      const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
-      new Chart(ctx1, {
-          type: 'bar',
-          data: {
-              labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
-              datasets: [
-                  { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
-                  { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
-              ]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-      });
-  
-      const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
-      new Chart(ctx2, {
-          type: 'bar',
-          data: {
-              labels: [
-                  'Sem Sistema Solar', 
-                  'Com Sistema Solar (Bifásico)', 
-                  'Com Sistema Solar (Trifásico)'
-              ],
-              datasets: [{
-                  label: 'Custo Mensal (R$)',
-                  data: [tc, nc_bi, nc_tri], 
-                  backgroundColor: [
-                      '#DC3545', 
-                      '#28A745', 
-                      '#17A2B8'  
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              indexAxis: 'y',
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: { display: true }
-              }
-          }
-      });
+            Falar no WhatsApp Agora  
+        </a>
+        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio , para confirmar os dados e valores é necessário o estudo técnico in loco . Não espere mais entre em contato agora mesmo.
+    `;
+
+    divResultado.style.display = "block";
+
+    // 4. RENDERIZAR GRÁFICOS na tela do cliente
+    const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+            datasets: [
+                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
+                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Sem Sistema Solar', 'Com Sistema Solar (Bifásico)', 'Com Sistema Solar (Trifásico)'],
+            datasets: [{
+                label: 'Custo Mensal (R$)',
+                data: [tc, nc_bi, nc_tri], 
+                backgroundColor: ['#DC3545', '#28A745', '#17A2B8'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: true } }
+        }
+    });
+
+    // =========================================================================
+    // 5. INJEÇÃO DINÂMICA DAS BARRAS HORIZONTAIS DE 25 ANOS (ZNSOLAR)
+    // =========================================================================
+    const divWebEconomia = document.getElementById('web-bar-economia');
+    const divWebValorizacao = document.getElementById('web-bar-valorizacao');
+
+    if (divWebEconomia && divWebValorizacao) {
+        const custoConcessionaria25Anos = Math.round(tc * 12 * 25 * 1.4); 
+        const economiaBifasica25Anos = Math.round(e_bi * 12 * 25);
+        const economiaTrifasica25Anos = Math.round(e_tri * 12 * 25);
+
+        divWebEconomia.innerHTML = `
+            <div style="margin-bottom: 8px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                    <span>Gasto Potencial com Concessionária (Sem Solar)</span>
+                    <strong>R$ ${custoConcessionaria25Anos.toLocaleString('pt-BR')}</strong>
+                </div>
+                <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                    <div style="background:#dc3545; width:100%; height:100%;"></div>
+                </div>
+            </div>
+            <div style="margin-bottom: 8px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                    <span>Economia com Padrão Bifásico</span>
+                    <strong style="color:#28a745;">R$ ${economiaBifasica25Anos.toLocaleString('pt-BR')}</strong>
+                </div>
+                <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                    <div style="background:#28a745; width:${Math.min((economiaBifasica25Anos / custoConcessionaria25Anos) * 100, 100)}%; height:100%;"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                    <span>Economia com Padrão Trifásico</span>
+                    <strong style="color:#17a2b8;">R$ ${economiaTrifasica25Anos.toLocaleString('pt-BR')}</strong>
+                </div>
+                <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                    <div style="background:#17a2b8; width:${Math.min((economiaTrifasica25Anos / custoConcessionaria25Anos) * 100, 100)}%; height:100%;"></div>
+                </div>
+            </div>
+        `;
+
+        const valorizacaoRendaFixa = Math.round(p * Math.pow(1 + 0.01, 12 * 25)); 
+        const ganhoRealSolarTotal = economiaTrifasica25Anos; 
+
+        divWebValorizacao.innerHTML = `
+            <div style="margin-bottom: 8px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                    <span>Seu Capital Aplicado na Renda Fixa (1% a.m.)</span>
+                    <strong>R$ ${valorizacaoRendaFixa.toLocaleString('pt-BR')}</strong>
+                </div>
+                <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                    <div style="background:#ffa000; width:${Math.min((p / valorizacaoRendaFixa) * 100, 100)}%; height:100%;"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; color:#555; font-family:Arial, sans-serif;">
+                    <span>Retorno em Economia Real com o Sistema Solar</span>
+                    <strong style="color:#2e7d32;">R$ ${ganhoRealSolarTotal.toLocaleString('pt-BR')}</strong>
+                </div>
+                <div style="background:#e1e8ed; width:100%; height:12px; border-radius:3px; overflow:hidden;">
+                    <div style="background:#2e7d32; width:100%; height:100%;"></div>
+                </div>
+            </div>
+        `;
+    }
+}
 // =========================================================================
       // IMPLEMENTAÇÃO DAS BARRAS DE PROJEÇÃO DE 25 ANOS (ZNSOLAR)
       // =========================================================================
