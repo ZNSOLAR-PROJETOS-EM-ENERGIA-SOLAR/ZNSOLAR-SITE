@@ -907,286 +907,317 @@ if (divWebEconomia && divWebValorizacao) {
     });
     
     divWebValorizacao.innerHTML = htmlRendimento;
-  }
 }
- function gerarPDF() {
-    // 1. Inicializa o jsPDF
+}
+// ==========================================================
+// 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
+// ==========================================================
+async function gerarPDF() {
+    if (!window.jspdf) {
+        alert("Erro: Biblioteca PDF não carregada.");
+        return;
+    }
+
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
 
-    // --- CAPTURA DE DADOS DO FORMULÁRIO ---
-    const nomeCliente = document.getElementById("nome")?.value || "Não informado";
-    const cidadeUF = document.getElementById("cidade")?.value || "Não informada";
-    const emailCliente = document.getElementById("email")?.value || "Não informado";
-    const telCliente = document.getElementById("telefone")?.value || "Não informado";
-    
-    // Data de Validade automática (Data de hoje + 10 dias)
-    const dataAtual = new Date();
-    dataAtual.setDate(dataAtual.getDate() + 10);
-    const dataValidade = dataAtual.toLocaleDateString('pt-BR');
+    let p = dadosPDF.p;
+    const payback_bi = dadosPDF.payback_bi;
+    const payback_tri = dadosPDF.payback_tri;
+    const a = dadosPDF.a;
+    const c = dadosPDF.c;
+    const tc = dadosPDF.tc;
+    const nc_bi = dadosPDF.nc_bi;
+    const nc_tri = dadosPDF.nc_tri;
 
-    // --- TEXTOS DOS AVISOS FINAIS ---
-    const textoCondicoes = "Condições Comerciais: O prazo estimado para entrega dos equipamentos é de até 30 dias úteis após o parecer de acesso da concessionária. A instalação completa será realizada em até 10 dias úteis após a chegada dos materiais. Parcelamentos e condições de financiamento solar estão sujeitos a análise de crédito pelas instituições bancárias parceiras.";
-    const textoAviso = "Aviso Importante: Esta é uma simulação baseada em estimativas médias de radiação solar regional e no histórico de consumo fornecido. O desempenho real do sistema pode sofrer variações devido a fatores como sombreamento local, inclinação/orientação dos módulos e condições meteorológicas. O orçamento e dimensionamento definitivos serão validados após a vistoria técnica presencial.";
+    if (!p) {
+        alert("Por favor, clique em SIMULAR primeiro.");
+        return;
+    }
 
-    // --- PEGA OS DADOS TÉCNICOS DIRETO DA TELA (IGUAL À IMAGEM 3) ---
-    const textoPotencia = document.getElementById('lbl_potencia')?.innerText || "0.00 kWp";
-    const textoModulos  = document.getElementById('lbl_modulos')?.innerText || "0 Pçs";
-    const textoGeracao  = document.getElementById('lbl_geracao')?.innerText || "0 kWh";
-    const textoArea     = document.getElementById('lbl_area')?.innerText || "0 m²";
-    
-    const textoArvores  = document.getElementById('lbl_arvores')?.innerText || "0 Árvores";
-    const textoCO2      = document.getElementById('lbl_co2')?.innerText || "0 Toneladas";
-
-    // =========================================================================
-    // PAGINA 1: CABEÇALHO, DADOS DO CLIENTE, MÉTRICAS E GRÁFICO DE CONSUMO
-    // =========================================================================
-    
-    // Logotipo e Slogan (ZNSOLAR)
-    doc.setFillColor(242, 103, 34); // Laranja ZNSOLAR
-    doc.rect(15, 12, 5, 12, "F"); 
-    
+    // ==========================================
+    // 1. CABEÇALHO (Logo Oficial, Título e Contato)
+    // ==========================================
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
+    doc.setFontSize(20);
     doc.setTextColor(34, 34, 34);
-    doc.text("ZNSOLAR", 24, 21);
+    doc.text("PROPOSTA COMERCIAL PRELIMINAR", 200, 25, { align: "right" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Consultor Técnico", 200, 33, { align: "right" }); // Removido o nome Rafael
+    doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
+
+    // Desenha a linha horizontal laranja decorativa abaixo do cabeçalho
+    doc.setDrawColor(255, 152, 0);
+    doc.setLineWidth(1);
+    doc.line(10, 46, 200, 46);
+
+    // Inserção do Logotipo Oficial ZNSOLAR do Repositório do GitHub
+    try {
+        // Altere para o nome exato da imagem que usa no repositório
+       doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26);
+    } catch (e) {
+        // Fallback elegante caso a imagem falhe ou demore para carregar
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(21, 101, 192); // Azul principal
+        doc.text("ZN ", 12, 32);
+        doc.setTextColor(255, 152, 0); // Laranja principal
+        doc.text("SOLAR", 26, 32);
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(100, 100, 100);
+        doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
+    }
+
+    // ==========================================
+    // 2. BLOCOS LADO A LADO (Dados vs Retorno) - SEM PORCENTAGENS
+    // ==========================================
     
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(9);
-    doc.setTextColor(120, 120, 120);
-    doc.text("A energia do futuro, hoje", 152, 20);
-
-    // Linha divisória cinza no topo
-    doc.setDrawColor(220, 220, 220);
-    doc.line(15, 27, 195, 27);
-
-    // Título Principal da Proposta
+    // Bloco Esquerdo: Dados do Sistema (Cinza)
+    doc.setFillColor(245, 245, 245);
+    doc.roundedRect(10, 54, 92, 48, 3, 3, 'F');
+    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(242, 103, 34);
-    doc.text("PROPOSTA COMERCIAL - SISTEMA FOTOVOLTAICO", 15, 37);
-
-    // Quadro de Informações do Cliente (Caixa Cinza)
-    doc.setFillColor(248, 248, 248);
-    doc.rect(15, 42, 180, 28, "F");
-    doc.setDrawColor(230, 230, 230);
-    doc.rect(15, 42, 180, 28, "S");
-
-    doc.setFontSize(9.5);
-    doc.setTextColor(60, 60, 60);
-    doc.setFont("helvetica", "bold"); doc.text("Cliente:", 20, 49);
-    doc.setFont("helvetica", "normal"); doc.text(nomeCliente, 35, 49);
-
-    doc.setFont("helvetica", "bold"); doc.text("Cidade/UF:", 20, 56);
-    doc.setFont("helvetica", "normal"); doc.text(cidadeUF, 42, 56);
-
-    doc.setFont("helvetica", "bold"); doc.text("E-mail:", 20, 63);
-    doc.setFont("helvetica", "normal"); doc.text(emailCliente, 35, 63);
-
-    doc.setFont("helvetica", "bold"); doc.text("Telefone:", 120, 49);
-    doc.setFont("helvetica", "normal"); doc.text(telCliente, 138, 49);
-
-    doc.setFont("helvetica", "bold"); doc.text("Validade:", 120, 56);
-    doc.setFont("helvetica", "normal"); doc.text(dataValidade, 138, 56);
-
-    // Título: Dimensionamento
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(34, 34, 34);
-    doc.text("1. Resumo do Sistema Dimensionado", 15, 81);
-
-    // Blocos Laranja de Métricas Técnicas
-    let cardWidth = 42;
-    let cardHeight = 22;
-    let startX = 15;
-    let gap = 4;
-
-    let metricas = [
-        { t: "Potência Sistema", v: textoPotencia },
-        { t: "Qtd. Módulos", v: textoModulos },
-        { t: "Geração Mensal", v: textoGeracao },
-        { t: "Área Mínima", v: textoArea }
-    ];
-
-    metricas.forEach((m, idx) => {
-        let x = startX + (idx * (cardWidth + gap));
-        doc.setFillColor(254, 244, 238); 
-        doc.rect(x, 86, cardWidth, cardHeight, "F");
-        doc.setDrawColor(242, 103, 34); 
-        doc.rect(x, 86, cardWidth, cardHeight, "S");
-
-        doc.setFontSize(7.5);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(120, 50, 10);
-        doc.text(m.t, x + 3, 92);
-
-        doc.setFontSize(11);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(242, 103, 34);
-        doc.text(m.v, x + 3, 102);
-    });
-
-    // Blocos Verdes de Benefícios Ambientais
-    let metricasAmbientais = [
-        { t: "Árvores Salvas / Ano", v: textoArvores },
-        { t: "CO₂ Evitado / Ano", v: textoCO2 }
-    ];
-
-    metricasAmbientais.forEach((m, idx) => {
-        let x = startX + (idx * (88 + gap * 2));
-        doc.setFillColor(240, 249, 241); 
-        doc.rect(x, 113, 88, 14, "F");
-        doc.setDrawColor(40, 167, 69); 
-        doc.rect(x, 113, 88, 14, "S");
-
-        doc.setFontSize(8.5);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(25, 105, 44);
-        doc.text(`${m.t}:`, x + 5, 122);
-        doc.setFont("helvetica", "bold");
-        doc.text(m.v, x + 50, 122);
-    });
-
-    // Captura Gráfico 1: Consumo vs Geração (Barras)
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(34, 34, 34);
-    doc.text("2. Comparativo de Consumo Atual vs Geração Estimada", 15, 139);
-
-    const canvasGrafico1 = document.getElementById("meuGrafico");
-    if (canvasGrafico1) {
-        const imgGrafico1 = canvasGrafico1.toDataURL("image/png", 1.0);
-        doc.addImage(imgGrafico1, 'PNG', 15, 144, 180, 75);
-    }
-
-    // Rodapé da Página 1
+    doc.setTextColor(255, 152, 0); // Título Laranja
+    doc.text("Dados do Sistema", 15, 62);
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(150, 150, 150);
-    doc.text("ZNSOLAR - Inteligência em Energia Solar", 15, 285);
-    doc.text("Página 1 de 2", 180, 285);
-
-    // =========================================================================
-    // PAGINA 2: GRÁFICOS FINANCEIROS E PREÇOS DIRETO DOS ELEMENTOS DA TELA
-    // =========================================================================
-    doc.addPage();
-
-    // Título da Seção Financeira
+    doc.setFontSize(10.5);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Consumo Médio: `, 15, 71);
     doc.setFont("helvetica", "bold");
+    doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
+    doc.setFont("helvetica", "bold");
+    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 48  , 79);
+    
+  doc.setFont("helvetica", "normal");
+doc.text(`Área de Telhado Estimada: `, 15, 87);
+doc.setFont("helvetica", "bold");
+doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
+
+    // Bloco Direito: Investimento e Retorno (Verde)
+    doc.setFillColor(240, 248, 240);
+    doc.setDrawColor(76, 175, 80);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(106, 54, 94, 48, 3, 3, 'FD');
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(46, 125, 50); // Título Verde
+    doc.text("Investimento e Retorno", 111, 62);
+    
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Valor Total: `, 111, 72);
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 132, 72);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(46, 125, 50);
+    doc.text(`Payback (Retorno Bifásico): `, 111, 81);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${payback_bi} anos`, 161, 81);
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Payback (Retorno Trifásico): `, 111, 89);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${payback_tri} anos`, 162, 89);
+
+      // ==========================================
+    // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
+    // ==========================================
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
     doc.setTextColor(34, 34, 34);
-    doc.text("3. Análise de Retorno e Viabilidade Financeira", 15, 22);
+    doc.text("Análise de Viabilidade Econômica", 105, 107, { align: "center" });
 
-    // Captura Gráfico 2: Payback (Linha)
-    const canvasPayback = document.getElementById("graficoPayback");
-    if (canvasPayback) {
-        const imgPayback = canvasPayback.toDataURL("image/png", 1.0);
-        doc.addImage(imgPayback, 'PNG', 15, 27, 180, 60);
+    // Gráfico 1: Consumo vs Geração
+    const canvas1 = document.getElementById('graficoConsumoMensal'); 
+    if (canvas1) {
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("Comparativo de Consumo vs Geração:", 10, 115);
+        const imgData1 = canvas1.toDataURL('image/png', 1.0);
+        doc.addImage(imgData1, 'PNG', 10, 118, 190, 48); // <--- Altura reduzida para 48
     }
 
-    // Captura Gráfico 3: Economia Acumulada (Barras Financeiro)
-    doc.setFont("helvetica", "bold");
-    doc.text("4. Projeção de Economia Acumulada em 25 anos", 15, 96);
-    
-    const canvasEconomia = document.getElementById("graficoEconomia");
-    if (canvasEconomia) {
-        const imgEconomia = canvasEconomia.toDataURL("image/png", 1.0);
-        doc.addImage(imgEconomia, 'PNG', 15, 101, 180, 60);
+    // Gráfico 2: Custos Financeiros (Subiu para Y=174)
+    const canvas2 = document.getElementById('graficoCustoFinanceiro'); 
+    if (canvas2) {
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("Economia Financeira Estimada:", 10, 174); // <--- Ajustado Y para 174
+        const imgData2 = canvas2.toDataURL('image/png', 1.0);
+        doc.addImage(imgData2, 'PNG', 15, 177, 180, 40); // <--- Altura reduzida para 40
     }
 
-    // Tabela Gráfica de Investimento Comercial (Opções de Preço coletadas do HTML)
-    doc.setFont("helvetica", "bold");
-    doc.text("5. Opções de Investimento Comercial", 15, 172);
-
-    let yDinamico = 179;
-    
-    // Tenta capturar os valores numéricos limpos do HTML que o site exibe
-    const precoWegText = document.getElementById('lbl_preco_weg')?.innerText || "0";
-    const precoRenovigiText = document.getElementById('lbl_preco_renovigi')?.innerText || "0";
-    const precoGrowattText = document.getElementById('lbl_preco_growatt')?.innerText || "0";
-
-    const p_weg = parseFloat(precoWegText.replace(/[^\d]/g, '')) / 100 || 0;
-    const p_renovigi = parseFloat(precoRenovigiText.replace(/[^\d]/g, '')) / 100 || 0;
-    const p_growatt = parseFloat(precoGrowattText.replace(/[^\d]/g, '')) / 100 || 0;
-
-    const opcoesPrecos = [
-        { nome: "OPÇÃO 1: INVERSOR WEG / PAINÉIS ZNSOLAR", valor: p_weg },
-        { nome: "OPÇÃO 2: INVERSOR RENOVIGI / PAINÉIS CANADIAN", valor: p_renovigi },
-        { nome: "OPÇÃO 3: INVERSOR GROWATT / PAINÉIS LONGI", valor: p_growatt }
-    ];
-
-    opcoesPrecos.forEach((p) => {
-        if (p.valor <= 0) return; 
-
-        // Cabeçalho cinza da opção
-        doc.setFillColor(245, 245, 245);
-        doc.rect(15, yDinamico, 180, 5.5, "F");
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(8.5);
-        doc.setTextColor(50, 50, 50);
-        doc.text(p.nome, 18, yDinamico + 4);
-
-        // Fundo da barra
-        yDinamico += 5.5;
-        doc.setFillColor(254, 244, 238);
-        doc.rect(15, yDinamico, 180, 6.5, "F");
-
-        // Desenha a barra laranja proporcional
-        let largMax = 110;
-        let larg = Math.min(largMax, (p.valor / 80000) * largMax);
-        if (larg < 25) larg = 30; 
-        
-        doc.setFillColor(242, 103, 34);
-        doc.rect(17, yDinamico + 1, larg, 4.5, "F");
-        
-        // Exibe o preço formatado em Reais (R$)
-        doc.setTextColor(34, 34, 34);
-        doc.setFont("helvetica", "bold");
-        doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 23 + larg, yDinamico + 4.5);
-        
-        yDinamico += 9; 
-    });
-
-    // Seção de Termos e Avisos Importantes
-    yDinamico += 2; 
-
-    // Bloco 1: Condições Comerciais (Laranja)
+    // ==========================================
+    // 5. AVISO IMPORTANTE E JURÍDICO (Y Ajustado com Folga)
+    // ==========================================
+    // Agora começando em Y=226, logo após o segundo gráfico terminar
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.setTextColor(242, 103, 34);
-    doc.text("Condições Comerciais e Prazos:", 15, yDinamico);
-
+    doc.setTextColor(183, 28, 28); 
+    doc.text("Aviso Importante:", 10, 226); 
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.2);
-    doc.setTextColor(70, 70, 70);
-    const linhasCondicoesSplit = doc.splitTextToSize(textoCondicoes, 180);
-    doc.text(linhasCondicoesSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
+    doc.setTextColor(90, 90, 90);
+    doc.setFontSize(7.5); 
+    
+    const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
+  // =========================================================================
+// NOVA PÁGINA: PROJEÇÃO VISUAL EM FORMATO HORIZONTAL (PÁGINA 2)
+// =========================================================================
+doc.addPage();
 
-    // Move o ponteiro para o próximo aviso sem sobreposição
-    yDinamico += (linhasCondicoesSplit.length * 3.5) + 6;
+// 1. Cabeçalho da Página 2
+doc.setFont("helvetica", "bold");
+doc.setFontSize(10);
+doc.setTextColor(34, 34, 34);
+doc.text("ANÁLISE DE VIABILIDADE ECONÔMICA E RETORNO", 15, 20);
 
-    // Bloco 2: Aviso Técnico Importante (Vermelho)
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(180, 0, 0);
-    doc.text("Aviso Importante:", 15, yDinamico);
+doc.setDrawColor(210, 210, 210);
+doc.setLineWidth(0.3);
+doc.line(15, 24, 195, 24);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.2);
-    doc.setTextColor(70, 70, 70);
-    const linhasAvisoSplit = doc.splitTextToSize(textoAviso, 180);
-    doc.text(linhasAvisoSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
+doc.setFont("helvetica", "bold");
+doc.setFontSize(11);
+doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, 35, { align: "center" });
 
-    // Rodapé da Página 2
+// 2. Gráfico 1: Barras Horizontais de Economia (Azul)
+const g1X = 45;
+let g1Y = 50;
+const maxEco = dadosPDF.economia_25_anos || 46012.23;
+
+doc.setFont("helvetica", "bold");
+doc.setFontSize(8.5);
+doc.setTextColor(21, 101, 192);
+doc.text("Economia Acumulada no Período (R$)", 15, 44);
+
+// =========================================================================
+// SUBSTITUA A PARTIR DA LINHA 975 (A PARTIR DE CONST PECO) POR ESTE BLOCO:
+// =========================================================================
+
+// 1. Definição inicial da posição Y (Abaixo do comparativo de contas da página 1)
+let yDinamico = 175; 
+
+doc.setFont("helvetica", "bold");
+doc.setFontSize(10);
+doc.setTextColor(34, 34, 34);
+doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
+
+// -------------------------------------------------------------------------
+// GRÁFICO 1: ECONOMIA ACUMULADA (AZUL)
+// -------------------------------------------------------------------------
+yDinamico += 10;
+doc.setFontSize(8.5);
+doc.setTextColor(21, 101, 192); // Azul institucional
+doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
+
+const pEco = [
+    { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
+    { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
+    { ano: "10 Anos", valor: dadosPDF.economia_10_anos || 15337.41 },
+    { ano: "15 Anos", valor: dadosPDF.economia_15_anos || 23006.12 },
+    { ano: "20 Anos", valor: dadosPDF.economia_20_anos || 30674.82 },
+    { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
+];
+
+let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
+
+yDinamico += 5;
+pEco.forEach((p) => {
+    const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm    
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
-    doc.setTextColor(150, 150, 150);
-    doc.text("ZNSOLAR - Inteligência em Energia Solar", 15, 285);
-    doc.text("Página 2 de 2", 180, 285);
+    doc.setTextColor(100, 100, 100);
+    doc.text(p.ano, 15, yDinamico + 3.5);
+    
+    doc.setFillColor(21, 101, 192); // Cor Azul
+    doc.rect(32, yDinamico, larg, 4.5, "F");
+    
+    doc.setTextColor(34, 34, 34);
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+    
+    yDinamico += 6.5; // Espaçamento entre as barras
+});
 
-    // 6. Comando para baixar o PDF completo automaticamente
-    doc.save(`Proposta_ZNSolar_${nomeCliente.replace(/\s+/g, '_')}.pdf`);
+// -------------------------------------------------------------------------
+// GRÁFICO 2: VALORIZAÇÃO DO CAPITAL (VERDE)
+// -------------------------------------------------------------------------
+yDinamico += 5;
+doc.setFont("helvetica", "bold");
+doc.setFontSize(8.5);
+doc.setTextColor(46, 125, 50); // Verde institucional
+doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
+
+const pRen = [
+    { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
+    { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
+    { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
+    { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
+    { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
+    { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
+];
+
+ let maxRenPDF = Math.max(...pRen.map(p => p.valor));
+
+yDinamico += 5;
+pRen.forEach((p) => {
+  const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(100, 100, 100);
+    doc.text(p.ano, 15, yDinamico + 3.5);
+    
+    doc.setFillColor(46, 125, 50); // Cor Verde
+    doc.rect(32, yDinamico, larg, 4.5, "F");
+    
+    doc.setTextColor(34, 34, 34);
+    doc.setFont("helvetica", "bold");
+    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+    
+    yDinamico += 6.5; // Espaçamento entre as barras
+});
+
+// -------------------------------------------------------------------------
+// SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
+// -------------------------------------------------------------------------
+yDinamico += 8; 
+
+doc.setFont("helvetica", "bold");
+doc.setFontSize(9);
+doc.setTextColor(180, 0, 0); // Vermelho para o título do Aviso
+doc.text("Aviso Importante:", 15, yDinamico);
+
+doc.setFont("helvetica", "normal");
+doc.setFontSize(6.8);
+doc.setTextColor(60, 60, 60);
+
+const linhasSplit = doc.splitTextToSize(textoAviso, 180);
+doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
+
+// O código abaixo continua igual ao seu rodapé padrão (linhas 930-936 das suas imagens)
+// =========================================================================
+// 5. Rodapé Geral e Comando de Salvar (Fecha a função gerarPDF)
+doc.setFont("helvetica", "italic");
+doc.setFontSize(6.5);
+doc.setTextColor(130, 130, 130);
+doc.text("Proposta preliminar gerada por ZNSOLAR via Sistema de Dimensionamento Fotovoltaico.", 15, 288);
+
+doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
 }
-  </script>
+// =========================================================================
+</script>
 </body>
 </html>
