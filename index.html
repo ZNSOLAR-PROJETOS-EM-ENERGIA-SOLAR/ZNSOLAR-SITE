@@ -758,13 +758,11 @@ function _calcZN() {
     const divWebValorizacao = document.getElementById('web-bar-valorizacao');
 
     if (divWebEconomia && divWebValorizacao) {
-        // Prazos da escada de projeção
-        const anos Projecao = [1, 5, 10, 15, 20, 25];
+        // Prazos da escada de projeção (Corrigido: sem espaço no nome)
+        const anosProjecao = [1, 5, 10, 15, 20, 25];
         
         // O teto máximo para que todas as barras fiquem perfeitamente proporcionais entre si
         const valorMaximoCusto = tc * 12 * 25;
-        const valorMaximoEconomia = e_tri * 12 * 25 * Math.pow(1 + 0.01, 25);
-        const tetoEscala = Math.max(valorMaximoCusto, valorMaximoEconomia);
 
         // 1. Geração do Bloco 1: Custo Acumulado Concessionária (Sem Solar)
         let htmlEconomia = '';
