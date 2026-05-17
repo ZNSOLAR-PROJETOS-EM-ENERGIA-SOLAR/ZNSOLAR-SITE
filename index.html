@@ -758,10 +758,9 @@ function _calcZN() {
     const divWebValorizacao = document.getElementById('web-bar-valorizacao');
 
     if (divWebEconomia && divWebValorizacao) {
-        // Prazos da escada de projeção
         const anosProjecao = [1, 5, 10, 15, 20, 25];
         
-        // Definição clara do teto máximo para que todas as barras fiquem proporcionais
+        // Definição clara do teto máximo para manter o gráfico proporcional
         const valorMaximoCusto = tc * 12 * 25;
         const valorMaximoEconomia = e_tri * 12 * 25 * Math.pow(1 + 0.01, 25);
         const tetoEscala = Math.max(valorMaximoCusto, valorMaximoEconomia);
@@ -805,15 +804,15 @@ function _calcZN() {
             `;
         });
         
-        // Adiciona o aviso técnico comercial customizado
+        // Adiciona o aviso técnico comercial customizado no rodapé
         htmlValorizacao += `
-            <div style="margin-top: 15px; padding: 10px; background: #fffde7; border-left: 4px solid #fdd835; font-size: 11px; color: #555; line-height: 1.4; font-family: Arial, sans-serif;">
+            <div style="margin-top: 15px; padding: 10px; background: #fffde7; border-left: 4px solid #fdd835; font-size: 11px; color: #555; line-height: 1.4; font-family: Arial, sans-serif; text-align: left;">
                 <strong>⚠️ Nota de Projeção Financeira:</strong> Trata-se de uma simulação baseada no histórico de consumo atual informado. O acúmulo financeiro demonstra a valorização de 1% ao mês aplicada diretamente sobre o valor economizado que deixa de ser pago à concessionária. Os valores e condições podem sofrer alterações sem prévio aviso.
             </div>
         `;
         divWebValorizacao.innerHTML = htmlValorizacao;
     }
-
+}
 // ==========================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
 // ==========================================================
