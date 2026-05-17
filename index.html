@@ -758,17 +758,19 @@ function _calcZN() {
     const divWebValorizacao = document.getElementById('web-bar-valorizacao');
 
     if (divWebEconomia && divWebValorizacao) {
-        // Prazos da escada de projeção (Corrigido: sem espaço no nome)
+        // Prazos da escada de projeção
         const anosProjecao = [1, 5, 10, 15, 20, 25];
         
-        // O teto máximo para que todas as barras fiquem perfeitamente proporcionais entre si
+        // Definição clara do teto máximo para que todas as barras fiquem proporcionais
         const valorMaximoCusto = tc * 12 * 25;
+        const valorMaximoEconomia = e_tri * 12 * 25 * Math.pow(1 + 0.01, 25);
+        const tetoEscala = Math.max(valorMaximoCusto, valorMaximoEconomia);
 
         // 1. Geração do Bloco 1: Custo Acumulado Concessionária (Sem Solar)
         let htmlEconomia = '';
         anosProjecao.forEach(ano => {
             const custoAcumulado = Math.round(tc * 12 * ano);
-            const percentualBarra = Math.min((custoAcumulado / tetoEscala) * 100, 100);
+            const percentualBarra = tetoEscala > 0 ? Math.min((custoAcumulado / tetoEscala) * 100, 100) : 0;
             
             htmlEconomia += `
                 <div style="display: flex; align-items: center; margin-bottom: 8px; font-family: Arial, sans-serif;">
@@ -784,12 +786,11 @@ function _calcZN() {
         });
         divWebEconomia.innerHTML = htmlEconomia;
 
-        // 2. Geração do Bloco 2: Valorização do Capital Economizado (Rendendo 1% a.m. simples por ano)
+        // 2. Geração do Bloco 2: Valorização do Capital Economizado (Rendendo 1% a.m.)
         let htmlValorizacao = '';
         anosProjecao.forEach(ano => {
-            // Acúmulo simplificado baseado no rendimento da economia que sobrou no bolso do cliente
             const economiaAcumuladaComRendimento = Math.round((e_tri * 12 * ano) * Math.pow(1 + 0.01, ano));
-            const percentualBarra = Math.min((economiaAcumuladaComRendimento / tetoEscala) * 100, 100);
+            const percentualBarra = tetoEscala > 0 ? Math.min((economiaAcumuladaComRendimento / tetoEscala) * 100, 100) : 0;
             
             htmlValorizacao += `
                 <div style="display: flex; align-items: center; margin-bottom: 8px; font-family: Arial, sans-serif;">
@@ -804,7 +805,7 @@ function _calcZN() {
             `;
         });
         
-        // Adiciona o aviso técnico comercial customizado logo no final do bloco
+        // Adiciona o aviso técnico comercial customizado
         htmlValorizacao += `
             <div style="margin-top: 15px; padding: 10px; background: #fffde7; border-left: 4px solid #fdd835; font-size: 11px; color: #555; line-height: 1.4; font-family: Arial, sans-serif;">
                 <strong>⚠️ Nota de Projeção Financeira:</strong> Trata-se de uma simulação baseada no histórico de consumo atual informado. O acúmulo financeiro demonstra a valorização de 1% ao mês aplicada diretamente sobre o valor economizado que deixa de ser pago à concessionária. Os valores e condições podem sofrer alterações sem prévio aviso.
@@ -812,7 +813,6 @@ function _calcZN() {
         `;
         divWebValorizacao.innerHTML = htmlValorizacao;
     }
-}
 
 // ==========================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
