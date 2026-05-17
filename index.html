@@ -1,6 +1,6 @@
 <!DOCTYPE html>
   <html lang="pt-BR">
-  <head>  
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -280,7 +280,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  </head> 
+  </head> ```
  
   </head>
   
@@ -536,12 +536,11 @@
   let dadosPDF = {};
 
  function _calcZN() {
-    // 1. Pegar os inputs dos 12 meses
+    // 1. Pegar os inputs
     const campos = document.querySelectorAll('.mes-consumo');
     let totalKwh = 0;
     let mesesComValor = 0;
     const listaValores = [];
-    const nomesMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
     campos.forEach(campo => {
         const valor = parseFloat(campo.value);
@@ -556,170 +555,56 @@
 
     const divResultado = document.getElementById('resultado-simulacao');
 
-    // REGRA OBRIGATÓRIA: Precisa preencher EXATAMENTE os 12 meses
-    if (mesesComValor < 12) {
-        alert("Por favor, preencha o consumo de todos os 12 meses para realizar a simulação.");
-        return; 
+    // Validação
+    if (mesesComValor === 0) {
+        alert("Por favor, preencha o consumo de pelo menos um mês.");
+        return;
     }
 
-    // REGRA DE BLOQUEIO MÁXIMO (75.000 kWh/ano ou média de 6.250 kWh)
-    const consumoMedioValidacao = totalKwh / 12;
-
-    if (totalKwh > 75000 || consumoMedioValidacao > 6250) {
-        divResultado.style.display = "block";
-        divResultado.style.borderLeft = "4px solid #e53935";
-        divResultado.style.background = "#ffebee";
-        divResultado.style.padding = "20px";
-        divResultado.style.borderRadius = "8px";
-        
-        divResultado.innerHTML = `
-            <div style="font-size:1.2rem; font-weight:bold; color:#c62828; margin-bottom:10px;">
-                <i class="fas fa-exclamation-triangle"></i> Potência acima do limite da categoria
-            </div>
-            <p style="color:#333; line-height:1.5;">
-                O consumo informado indica que o seu sistema precisa de um dimensionamento com mais detalhes técnicos.
-            </p>
-            <p style="font-weight:bold; color:#c62828;">
-                Por favor, entre em contato diretamente conosco para realizarmos um estudo personalizado!
-            </p>
-            <a href="https://wa.me/5511983185337?text=Olá! Meu consumo mensal passou de 6.250 kWh e preciso de uma simulação detalhada para o meu sistema solar." 
-               target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center;">
-               Falar no WhatsApp com Engenheiro
-            </a>
-        `;
-        return; 
-    }
-
-    // 2. CÁLCULOS EXATOS (Com margem de 1.22 do Fio B)
-    const c = totalKwh / 12; 
-    const pr = ((c * 1.22) / 55.42) * 0.575;
+    // 2. Cálculos exatos (Regra dos 18% e taxas)
+    const c = totalKwh / mesesComValor;
+    const n = Math.ceil((c * 1.18) / 55.42); 
+    const pr = n * 0.575;
     
-    // REGRA DE EXATIDÃO COMERCIAL (SÓ MANTÉM SE FOR EXATO)
     let pf;
-    const ehExato = (pr % 1 === 0) || (Math.abs(pr % 1 - 0.5) < 0.0001);
+    if (pr < 2.5) { pf = 2.0; } 
+    else if (pr === 2.5) { pf = 2.5; } 
+    else if (pr > 2.5 && pr <= 3.0) { pf = 3.0; } 
+    else { pf = Math.round(pr * 2) / 2; }
 
-    if (ehExato) {
-        pf = pr; 
-    } else {
-        const baseInteira = Math.floor(pr); 
-        const restoDecimal = pr - baseInteira; 
-
-        if (restoDecimal < 0.5) {
-            pf = baseInteira; 
-        } else {
-            pf = baseInteira + 1.0; 
-        }
-    }
-
-    // Travas físicas de segurança da tabela de preços
-    if (totalKwh < 2 || pf < 2.0) pf = 2.0;
+    if (pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
 
-    // Sincronização comercial das variáveis
-    const n = Math.ceil(pf / 0.575);
     const a = (n * 2.58) * 1.15;
-  const tc = c * 0.92954;
+    const tc = c * 0.92954;
+    const nc = 55.87;
+    const e = tc - nc;
+    const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+    const payback = (e > 0) ? (p / (e * 12)).toFixed(1) : 0;
 
-// Definição dos dois custos mínimos da sua tabela
-const nc_bi = 55.87;    // Bifásico (50 kWh + COSIP)
-const nc_tri = 102.34;  // Trifásico (100 kWh + COSIP)
+    // Guardar para o PDF
+    dadosPDF = { p, payback, a, c, tc, nc, e, n };
 
-// Cálculo das duas economias separadas
-const e_bi = tc - nc_bi;
-const e_tri = tc - nc_tri;
+    // 3. Gerar o HTML
+    const msgWhatsapp = encodeURIComponent(`Olá ZNSolar! Simulação: Consumo ${c.toFixed(1)} kWh, Investimento R$ ${p.toLocaleString('pt-BR')}`);
 
-// Buscar preço correto na tabela _0xtp
-const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
-
-// Gerar as duas referências de payback
-const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
-const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
-
-// Passando os dois paybacks novos para o objeto do PDF puxar sem travar
-dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
-    // Geração mensal baseada no HSP de São Paulo
-    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
-    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
-    const mediaGeracao = dadosGeracao.reduce((x, y) => x + y, 0) / 12;
-
-    // =========================================================================
-    // 3. MONTAGEM DA TABELA TEXTUAL DE MESES PARA O WHATSAPP
-    // =========================================================================
-    let tabelaMesesWhats = `📅 *HISTÓRICO DE CONSUMO vs GERAÇÃO:*\n`;
-    tabelaMesesWhats += `_Mês | Consumo | Geração Estimada_\n`;
-    tabelaMesesWhats += `----------------------------------\n`;
-    
-    for (let i = 0; i < 12; i++) {
-        tabelaMesesWhats += `• ${nomesMeses[i]}: ${listaValores[i].toFixed(0)} kWh  ➔  ${dadosGeracao[i].toFixed(0)} kWh\n`;
-    }
-    tabelaMesesWhats += `----------------------------------`;
-
-    // TEXTO COMERCIAL DO WHATSAPP (Totalmente sem potência kWp e sem número de placas)
-    const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar:
-----------------------------------
-💰 *INVESTIMENTO E RETORNO:*
-• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
-• Retorno Padrão Bifásico: ${payback_bi} anos
-• Retorno Padrão Trifásico: ${payback_tri} anos
-• Economia Mensal (Bifásico): R$ ${e_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-• Economia Mensal (Trifásico): R$ ${e_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-
-📊 *MÉDIAS DO SISTEMA:*
-• Consumo Médio: ${c.toFixed(1)} kWh/mês
-• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês
-• Área Necessária: ${a.toFixed(1)} m²
-----------------------------------
-${tabelaMesesWhats}
-
-Desejo mais informações sobre esta simulação e orçamento._`;
-
-    const msgWhatsapp = encodeURIComponent(textoWhatsappCliente);
-
-    // Limpa estilizações residuais
-    divResultado.style.background = "transparent";
-    divResultado.style.borderLeft = "none";
-    divResultado.style.padding = "0";
-
-    // HTML DO CLIENTE (O que aparece na tela do site - Sem placas e sem potência)
     divResultado.innerHTML = `
         <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar:</div>
         <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
         <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
         <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
         
+        <div style="font-size:1.1rem;font-weight:bold;margin-bottom:5px;">Economia na Conta de Luz:</div>
         <strong>Conta Sem Sistema Solar:</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Nova Conta (Padrão Bifásico):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Nova Conta (Padrão Trifásico):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-<strong>Economia Mensal (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
-<strong>Economia Mensal (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+        <strong>Conta Com Energia Solar:</strong> R$ ${nc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+        <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
         
         <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
         <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
         <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
         <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-<p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi} anos</p>
-<p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri} anos</p>
-
-  <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
-    <h3 style="text-align: center; color: #2c3e50; font-size: 18px; margin-top: 0; margin-bottom: 25px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia e Valorização sobre 25 Anos</h3>
-    
-    <div style="margin-bottom: 30px;">
-        <h4 style="color: #1565C0; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
-            <span style="display: inline-block; width: 12px; height: 12px; background: #1565C0; margin-right: 8px; border-radius: 2px;"></span>
-            Economia Acumulada no Período (R$)
-        </h4>
-        <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    </div>
-
-    <div>
-        <h4 style="color: #2E7D32; font-size: 14px; margin-bottom: 12px; margin-top: 0; font-weight: bold; display: flex; align-items: center;">
-            <span style="display: inline-block; width: 12px; height: 12px; background: #2E7D32; margin-right: 8px; border-radius: 2px;"></span>
-            Valorização do Capital Próprio Aplicado (1% a.m.)
-        </h4>
-        <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    </div>
-</div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.05rem; color:#1b5e20;">Tempo de Retorno Estimado: ${payback} anos.</div>
        
         <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
             <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
@@ -727,249 +612,136 @@ Desejo mais informações sobre esta simulação e orçamento._`;
 
         <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
           Falar no WhatsApp Agora  
-          </a>
-          <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
-          <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem, simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio , para confirmar os dados e valores é necessário o estudo técnico in loco . Não espere mais entre em contato agora mesmo.
-      `;
-  
-      divResultado.style.display = "block";
-  
-      // 4. RENDERIZAR GRÁFICOS na tela do cliente
-      const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
-      new Chart(ctx1, {
-          type: 'bar',
-          data: {
-              labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
-              datasets: [
-                  { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
-                  { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
-              ]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-      });
-  
-      const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
-      new Chart(ctx2, {
-          type: 'bar',
-          data: {
-              labels: [
-                  'Sem Sistema Solar', 
-                  'Com Sistema Solar (Bifásico)', 
-                  'Com Sistema Solar (Trifásico)'
-              ],
-              datasets: [{
-                  label: 'Custo Mensal (R$)',
-                  data: [tc, nc_bi, nc_tri], 
-                  backgroundColor: [
-                      '#DC3545', 
-                      '#28A745', 
-                      '#17A2B8'  
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              indexAxis: 'y',
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: { display: true }
-              }
-          }
-      });
-}
+        </a>
+        <br>* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mes Maio de 2026. Valores sujeitos a alteração sem prévio aviso.<br><br>
+        <strong>Aviso Importante:</strong> Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efeivar o orçamento e condições do local da instalção. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exijem, simulações especificas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quatos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é préveo , para confirmar os dados e valores é necessário o estudo técnico. Não espere mais entre em contato agora mesmo.
+    `;
 
-// ==========================================================
-// 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
-// ==========================================================
+    divResultado.style.display = "block";
+
+    // 4. Renderizar Gráficos
+    const ctx1 = document.getElementById('graficoConsumoMensal').getContext('2d');
+    const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
+    const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
+    const mediaGeracao = dadosGeracao.reduce((a, b) => a + b, 0) / 12;
+
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+            datasets: [
+                { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
+                { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx2 = document.getElementById('graficoCustoFinanceiro').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Sem Sistema Solar', 'Com Sistema Solar'],
+            datasets: [{
+                label: 'Custo Mensal (R$)',
+                data: [tc, nc], 
+                backgroundColor: ['#e53935', '#2e7d32'] 
+            }]
+        },
+        options: { 
+            indexAxis: 'y', 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true }
+            }
+        }
+    });
+} // <--- AQUI FECHA A FUNÇÃO _calcZN CORRETAMENTE
+
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
         return;
     }
-
+    
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
+    const doc = new jsPDF();
 
-    let p = dadosPDF.p;
-    const payback_bi = dadosPDF.payback_bi;
-    const payback_tri = dadosPDF.payback_tri;
+    const p = dadosPDF.p;
+    const payback = dadosPDF.payback;
     const a = dadosPDF.a;
     const c = dadosPDF.c;
     const tc = dadosPDF.tc;
-    const nc_bi = dadosPDF.nc_bi;
-    const nc_tri = dadosPDF.nc_tri;
+    const nc = dadosPDF.nc;
 
     if (!p) {
         alert("Por favor, clique em SIMULAR primeiro.");
         return;
     }
 
-    // ==========================================
-    // 1. CABEÇALHO (Logo Oficial, Título e Contato)
-    // ==========================================
+    // CABEÇALHO
+    doc.setFillColor(255, 152, 0); 
+    doc.rect(0, 0, 210, 40, 'F');
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(34, 34, 34);
-    doc.text("PROPOSTA COMERCIAL PRELIMINAR", 200, 25, { align: "right" });
-
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text("ZNSOLAR - PROPOSTA TÉCNICA", 20, 25);
+    
+    // CORPO
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(16);
+    doc.text("Resumo da Proposta", 20, 55);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text(`INVESTIMENTO TOTAL: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 65);
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(100, 100, 100);
-    doc.text("Consultor Técnico", 200, 33, { align: "right" }); // Removido o nome Rafael
-    doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
+    doc.text(`- Payback (Retorno): ${payback} anos`, 20, 75);
+    doc.text(`- Consumo Médio Mensal: ${c.toFixed(1)} kWh/mês`, 20, 85);
+    doc.text(`- Área Necessária: ${a.toFixed(1)} m²`, 20, 95);
+    doc.text(`- Conta Sem Sistema Solar: R$ ${tc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 105);
+    doc.text(`- Conta Com Sistema Solar: R$ ${nc.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 115);
 
-    // Desenha a linha horizontal laranja decorativa abaixo do cabeçalho
-    doc.setDrawColor(255, 152, 0);
-    doc.setLineWidth(1);
-    doc.line(10, 46, 200, 46);
-
-    // Inserção do Logotipo Oficial ZNSOLAR do Repositório do GitHub
     try {
-        // Altere para o nome exato da imagem que usa no repositório
-       doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26);
+        const canvas1 = await html2canvas(document.getElementById('graficoConsumoMensal'));
+        const imgData1 = canvas1.toDataURL('image/png');
+        doc.setFont("helvetica", "bold");
+        doc.text("Comparativo de Consumo vs Geração:", 20, 130);
+        doc.addImage(imgData1, 'PNG', 20, 135, 170, 65);
+
+        const canvas2 = await html2canvas(document.getElementById('graficoCustoFinanceiro'));
+        const imgData2 = canvas2.toDataURL('image/png');
+        doc.text("Economia Financeira Estimada:", 20, 210);
+        doc.addImage(imgData2, 'PNG', 40, 215, 130, 45);
     } catch (e) {
-        // Fallback elegante caso a imagem falhe ou demore para carregar
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(24);
-        doc.setTextColor(21, 101, 192); // Azul principal
-        doc.text("ZN ", 12, 32);
-        doc.setTextColor(255, 152, 0); // Laranja principal
-        doc.text("SOLAR", 26, 32);
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "italic");
-        doc.setTextColor(100, 100, 100);
-        doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
+        console.log("Erro nos gráficos.");
     }
 
-    // ==========================================
-    // 2. BLOCOS LADO A LADO (Dados vs Retorno) - SEM PORCENTAGENS
-    // ==========================================
-    
-    // Bloco Esquerdo: Dados do Sistema (Cinza)
-    doc.setFillColor(245, 245, 245);
-    doc.roundedRect(10, 54, 92, 48, 3, 3, 'F');
-    
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(255, 152, 0); // Título Laranja
-    doc.text("Dados do Sistema", 15, 62);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10.5);
-    doc.setTextColor(51, 51, 51);
-    doc.text(`Consumo Médio: `, 15, 71);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
-    doc.setFont("helvetica", "bold");
-    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 48  , 79);
-    
-  doc.setFont("helvetica", "normal");
-doc.text(`Área de Telhado Estimada: `, 15, 87);
-doc.setFont("helvetica", "bold");
-doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
+    // RODAPÉ
+    doc.setFontSize(9);
+    doc.setTextColor(150);
+    doc.text("Proposta elaborada por: ZNSOLAR", 20, 285);
+    doc.text("Este documento é uma estimativa preliminar baseada em normas técnicas vigentes.", 20, 291);
 
-    // Bloco Direito: Investimento e Retorno (Verde)
-    doc.setFillColor(240, 248, 240);
-    doc.setDrawColor(76, 175, 80);
-    doc.setLineWidth(0.4);
-    doc.roundedRect(106, 54, 94, 48, 3, 3, 'FD');
-    
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(46, 125, 50); // Título Verde
-    doc.text("Investimento e Retorno", 111, 62);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(51, 51, 51);
-    doc.text(`Valor Total: `, 111, 72);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 132, 72);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(46, 125, 50);
-    doc.text(`Payback (Retorno Bifásico): `, 111, 81);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${payback_bi} anos`, 161, 81);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`Payback (Retorno Trifásico): `, 111, 89);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${payback_tri} anos`, 162, 89);
-
-      // ==========================================
-    // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
-    // ==========================================
-  
-    // Gráfico 1: Consumo vs Geração
-    const canvas1 = document.getElementById('graficoConsumoMensal'); 
-    if (canvas1) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("Comparativo de Consumo vs Geração:", 10, 115);
-        const imgData1 = canvas1.toDataURL('image/png', 1.0);
-        doc.addImage(imgData1, 'PNG', 10, 118, 190, 48); // <--- Altura reduzida para 48
-    }
-
-    // Gráfico 2: Custos Financeiros (Subiu para Y=174)
-    const canvas2 = document.getElementById('graficoCustoFinanceiro'); 
-    if (canvas2) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("Economia Financeira Estimada:", 10, 174); // <--- Ajustado Y para 174
-        const imgData2 = canvas2.toDataURL('image/png', 1.0);
-        doc.addImage(imgData2, 'PNG', 15, 177, 180, 40); // <--- Altura reduzida para 40
-    }
-
-    // ==========================================
-    // 5. AVISO IMPORTANTE E JURÍDICO (Y Ajustado com Folga)
-    // ==========================================
-    // Agora começando em Y=226, logo após o segundo gráfico terminar
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(183, 28, 28); 
-    doc.text("Aviso Importante:", 10, 226); 
-    
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(90, 90, 90);
-    doc.setFontSize(7.5); 
-    
-    const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
-
-});
-
-// -------------------------------------------------------------------------
-// SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
-// -------------------------------------------------------------------------
-yDinamico += 8; 
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(9);
-doc.setTextColor(180, 0, 0); // Vermelho para o título do Aviso
-doc.text("Aviso Importante:", 15, yDinamico);
-
-doc.setFont("helvetica", "normal");
-doc.setFontSize(6.8);
-doc.setTextColor(60, 60, 60);
-
-const linhasSplit = doc.splitTextToSize(textoAviso, 180);
-doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
-
-// O código abaixo continua igual ao seu rodapé padrão (linhas 930-936 das suas imagens)
-// =========================================================================
-// 5. Rodapé Geral e Comando de Salvar (Fecha a função gerarPDF)
-doc.setFont("helvetica", "italic");
-doc.setFontSize(6.5);
-doc.setTextColor(130, 130, 130);
-doc.text("Proposta preliminar gerada por ZNSOLAR via Sistema de Dimensionamento Fotovoltaico.", 15, 288);
-
-doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
+    doc.save(`Proposta_ZNSolar_${c.toFixed(0)}kWh.pdf`);
 }
-// =========================================================================
 </script>
+    
+<script>
+  // Script de Proteção
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('selectstart', e => e.preventDefault());
+  document.onkeydown = function(e) {
+    if(e.keyCode == 123) return false;
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+    if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
+  }
+</script>
+
 </body>
 </html>
