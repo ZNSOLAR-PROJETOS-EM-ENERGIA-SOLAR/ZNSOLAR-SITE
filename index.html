@@ -909,9 +909,9 @@ if (divWebEconomia && divWebValorizacao) {
     divWebValorizacao.innerHTML = htmlRendimento;
 }
 }
-// ==========================================================
+// =========================================================================
 // 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
-// ==========================================================
+// =========================================================================
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
@@ -946,7 +946,7 @@ async function gerarPDF() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     doc.setTextColor(100, 100, 100);
-    doc.text("Consultor Técnico", 200, 33, { align: "right" }); // Removido o nome Rafael
+    doc.text("Consultor Técnico", 200, 33, { align: "right" });
     doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
 
     // Desenha a linha horizontal laranja decorativa abaixo do cabeçalho
@@ -956,10 +956,8 @@ async function gerarPDF() {
 
     // Inserção do Logotipo Oficial ZNSOLAR do Repositório do GitHub
     try {
-        // Altere para o nome exato da imagem que usa no repositório
-       doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26);
+        doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26);
     } catch (e) {
-        // Fallback elegante caso a imagem falhe ou demore para carregar
         doc.setFont("helvetica", "bold");
         doc.setFontSize(24);
         doc.setTextColor(21, 101, 192); // Azul principal
@@ -973,7 +971,7 @@ async function gerarPDF() {
     }
 
     // ==========================================
-    // 2. BLOCOS LADO A LADO (Dados vs Retorno) - SEM PORCENTAGENS
+    // 2. BLOCOS LADO A LADO (Dados vs Retorno)
     // ==========================================
     
     // Bloco Esquerdo: Dados do Sistema (Cinza)
@@ -993,14 +991,14 @@ async function gerarPDF() {
     doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
     
     doc.setFont("helvetica", "normal");
-    doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
+    doc.text(`Geração Estimada: `, 15, 79);
     doc.setFont("helvetica", "bold");
-    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 48  , 79);
+    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 48, 79);
     
-  doc.setFont("helvetica", "normal");
-doc.text(`Área de Telhado Estimada: `, 15, 87);
-doc.setFont("helvetica", "bold");
-doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
+    doc.setFont("helvetica", "normal");
+    doc.text(`Área de Telhado Estimada: `, 15, 87);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${a.toFixed(1)} m²`, 63, 87);
 
     // Bloco Direito: Investimento e Retorno (Verde)
     doc.setFillColor(240, 248, 240);
@@ -1031,193 +1029,197 @@ doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
     doc.setFont("helvetica", "bold");
     doc.text(`${payback_tri} anos`, 162, 89);
 
-      // ==========================================
-    // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
     // ==========================================
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(34, 34, 34);
-    doc.text("Análise de Viabilidade Econômica", 105, 107, { align: "center" });
+    // 3. DETALHAMENTO FINANCEIRO MENSAL ESTIMADO (PÁGINA 1)
+    // ==========================================
+    let yFaturamento = 112;
 
-    // Gráfico 1: Consumo vs Geração
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(21, 101, 192); // Azul institucional
+    doc.text("Detalhamento Financeiro Mensal Estimado", 15, yFaturamento);
+    
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.3);
+    doc.line(15, yFaturamento + 2, 195, yFaturamento + 2);
+
+    yFaturamento += 8;
+
+    // Resgate seguro para a exibição dos valores mensais
+    const contaSemSolarStr = typeof tc !== 'undefined' ? `R$ ${tc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+    const contaBiStr = typeof nc_bi !== 'undefined' ? `R$ ${nc_bi.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+    const contaTriStr = typeof nc_tri !== 'undefined' ? `R$ ${nc_tri.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+    
+    const ecoBiStr = (typeof tc !== 'undefined' && typeof nc_bi !== 'undefined') ? `R$ ${(tc - nc_bi).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+    const ecoTriStr = (typeof tc !== 'undefined' && typeof nc_tri !== 'undefined') ? `R$ ${(tc - nc_tri).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.text("Conta Mensal Atual (Sem Sistema Solar):", 15, yFaturamento);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${contaSemSolarStr} /mês`, 110, yFaturamento);
+
+    yFaturamento += 6;
+    doc.setFont("helvetica", "normal");
+    doc.text("Nova Conta Estimada (Padrão Bifásico):", 15, yFaturamento);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${contaBiStr} /mês`, 110, yFaturamento);
+
+    yFaturamento += 6;
+    doc.setFont("helvetica", "normal");
+    doc.text("Nova Conta Estimada (Padrão Trifásico):", 15, yFaturamento);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${contaTriStr} /mês`, 110, yFaturamento);
+
+    yFaturamento += 6;
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(46, 125, 50); // Verde para economias
+    doc.text("Economia Mensal Estimada (Bifásico):", 15, yFaturamento);
+    doc.text(`${ecoBiStr} /mês`, 110, yFaturamento);
+
+    yFaturamento += 6;
+    doc.text("Economia Mensal Estimada (Trifásico):", 15, yFaturamento);
+    doc.text(`${ecoTriStr} /mês`, 110, yFaturamento);
+
+    // ==========================================
+    // 4. GRÁFICO 1: CONSUMO VS GERAÇÃO (FUNDO DA PÁGINA 1)
+    // ==========================================
+    let yGrafico1 = yFaturamento + 12;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(34, 34, 34);
+    doc.text("Análise de Viabilidade Econômica", 105, yGrafico1, { align: "center" });
+
     const canvas1 = document.getElementById('graficoConsumoMensal'); 
     if (canvas1) {
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
-        doc.text("Comparativo de Consumo vs Geração:", 10, 115);
+        doc.text("Comparativo de Consumo vs Geração:", 10, yGrafico1 + 8);
         const imgData1 = canvas1.toDataURL('image/png', 1.0);
-        doc.addImage(imgData1, 'PNG', 10, 118, 190, 48); // <--- Altura reduzida para 48
+        doc.addImage(imgData1, 'PNG', 10, yGrafico1 + 11, 190, 48);
     }
 
-    // Gráfico 2: Custos Financeiros (Subiu para Y=174)
-    const canvas2 = document.getElementById('graficoCustoFinanceiro'); 
-    if (canvas2) {
-        doc.setFontSize(10);
+    // =========================================================================
+    // 5. NOVA PÁGINA: PROJEÇÕES DE LONGO PRAZO E VALORIZAÇÃO (PÁGINA 2)
+    // =========================================================================
+    doc.addPage();
+
+    // Cabeçalho da Página 2
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(34, 34, 34);
+    doc.text("ANÁLISE DE VIABILIDADE ECONÔMICA AND RETORNO", 15, 20);
+
+    doc.setDrawColor(210, 210, 210);
+    doc.setLineWidth(0.3);
+    doc.line(15, 24, 195, 24);
+
+    let yDinamico = 35;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
+
+    // -------------------------------------------------------------------------
+    // GRÁFICO HORIZONTAL 1: ECONOMIA ACUMULADA (AZUL)
+    // -------------------------------------------------------------------------
+    yDinamico += 12;
+    doc.setFontSize(9);
+    doc.setTextColor(21, 101, 192); // Azul institucional
+    doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
+
+    const pEco = [
+        { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
+        { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
+        { ano: "10 Anos", valor: dadosPDF.economia_10_anos || 15337.41 },
+        { ano: "15 Anos", valor: dadosPDF.economia_15_anos || 23006.12 },
+        { ano: "20 Anos", valor: dadosPDF.economia_20_anos || 30674.82 },
+        { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
+    ];
+
+    let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
+
+    yDinamico += 5;
+    pEco.forEach((p) => {
+        const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; 
+        
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 100, 100);
+        doc.text(p.ano, 15, yDinamico + 3.5);
+        
+        doc.setFillColor(21, 101, 192); // Azul
+        doc.rect(32, yDinamico, larg, 4.5, "F");
+        
+        doc.setTextColor(34, 34, 34);
         doc.setFont("helvetica", "bold");
-        doc.text("Economia Financeira Estimada:", 10, 174); // <--- Ajustado Y para 174
-        const imgData2 = canvas2.toDataURL('image/png', 1.0);
-        doc.addImage(imgData2, 'PNG', 15, 177, 180, 40); // <--- Altura reduzida para 40
-    }
+        doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+        
+        yDinamico += 6.5;
+    });
+
+    // -------------------------------------------------------------------------
+    // GRÁFICO HORIZONTAL 2: VALORIZAÇÃO DO CAPITAL (VERDE)
+    // -------------------------------------------------------------------------
+    yDinamico += 8;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(46, 125, 50); // Verde institucional
+    doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
+
+    const pRen = [
+        { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
+        { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
+        { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
+        { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
+        { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
+        { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
+    ];
+
+    let maxRenPDF = Math.max(...pRen.map(p => p.valor));
+
+    yDinamico += 5;
+    pRen.forEach((p) => {
+        const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0;
+        
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 100, 100);
+        doc.text(p.ano, 15, yDinamico + 3.5);
+        
+        doc.setFillColor(46, 125, 50); // Verde
+        doc.rect(32, yDinamico, larg, 4.5, "F");
+        
+        doc.setTextColor(34, 34, 34);
+        doc.setFont("helvetica", "bold");
+        doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
+        
+        yDinamico += 6.5;
+    });
 
     // ==========================================
-    // 5. AVISO IMPORTANTE E JURÍDICO (Y Ajustado com Folga)
+    // 6. AVISO IMPORTANTE E JURÍDICO (POSICIONADO COM FOLGA NO FINAL)
     // ==========================================
-    // Agora começando em Y=226, logo após o segundo gráfico terminar
+    yDinamico += 12; // Espaço confortável após o último gráfico verde
+    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.setTextColor(183, 28, 28); 
-    doc.text("Aviso Importante:", 10, 226); 
+    doc.setTextColor(183, 28, 28); // Vermelho de aviso
+    doc.text("Aviso Importante:", 15, yDinamico); 
     
     doc.setFont("helvetica", "normal");
     doc.setTextColor(90, 90, 90);
     doc.setFontSize(7.5); 
     
     const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
-  // =========================================================================
-// NOVA PÁGINA: PROJEÇÃO VISUAL EM FORMATO HORIZONTAL (PÁGINA 2)
-// =========================================================================
-doc.addPage();
-
-// 1. Cabeçalho da Página 2
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("ANÁLISE DE VIABILIDADE ECONÔMICA E RETORNO", 15, 20);
-
-doc.setDrawColor(210, 210, 210);
-doc.setLineWidth(0.3);
-doc.line(15, 24, 195, 24);
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(11);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, 35, { align: "center" });
-
-// 2. Gráfico 1: Barras Horizontais de Economia (Azul)
-const g1X = 45;
-let g1Y = 50;
-const maxEco = dadosPDF.economia_25_anos || 46012.23;
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192);
-doc.text("Economia Acumulada no Período (R$)", 15, 44);
-
-// =========================================================================
-// SUBSTITUA A PARTIR DA LINHA 975 (A PARTIR DE CONST PECO) POR ESTE BLOCO:
-// =========================================================================
-
-// 1. Definição inicial da posição Y (Abaixo do comparativo de contas da página 1)
-let yDinamico = 175; 
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
-
-// -------------------------------------------------------------------------
-// GRÁFICO 1: ECONOMIA ACUMULADA (AZUL)
-// -------------------------------------------------------------------------
-yDinamico += 10;
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192); // Azul institucional
-doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
-
-const pEco = [
-    { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
-    { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
-    { ano: "10 Anos", valor: dadosPDF.economia_10_anos || 15337.41 },
-    { ano: "15 Anos", valor: dadosPDF.economia_15_anos || 23006.12 },
-    { ano: "20 Anos", valor: dadosPDF.economia_20_anos || 30674.82 },
-    { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
-];
-
-let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
-
-yDinamico += 5;
-pEco.forEach((p) => {
-    const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
     
-    doc.setFillColor(21, 101, 192); // Cor Azul
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
-});
+    // Divide o texto automaticamente para caber nas margens do PDF perfeitamente
+    const linhasAviso = doc.splitTextToSize(textoAviso, 180);
+    doc.text(linhasAviso, 15, yDinamico + 5);
 
-// -------------------------------------------------------------------------
-// GRÁFICO 2: VALORIZAÇÃO DO CAPITAL (VERDE)
-// -------------------------------------------------------------------------
-yDinamico += 5;
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(46, 125, 50); // Verde institucional
-doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
-
-const pRen = [
-    { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
-    { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
-    { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
-    { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
-    { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
-    { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
-];
-
- let maxRenPDF = Math.max(...pRen.map(p => p.valor));
-
-yDinamico += 5;
-pRen.forEach((p) => {
-  const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
-    
-    doc.setFillColor(46, 125, 50); // Cor Verde
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
-});
-
-// -------------------------------------------------------------------------
-// SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
-// -------------------------------------------------------------------------
-yDinamico += 8; 
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(9);
-doc.setTextColor(180, 0, 0); // Vermelho para o título do Aviso
-doc.text("Aviso Importante:", 15, yDinamico);
-
-doc.setFont("helvetica", "normal");
-doc.setFontSize(6.8);
-doc.setTextColor(60, 60, 60);
-
-const linhasSplit = doc.splitTextToSize(textoAviso, 180);
-doc.text(linhasSplit, 15, yDinamico + 4, { lineHeight: 3.5 });
-
-// O código abaixo continua igual ao seu rodapé padrão (linhas 930-936 das suas imagens)
-// =========================================================================
-// 5. Rodapé Geral e Comando de Salvar (Fecha a função gerarPDF)
-doc.setFont("helvetica", "italic");
-doc.setFontSize(6.5);
-doc.setTextColor(130, 130, 130);
-doc.text("Proposta preliminar gerada por ZNSOLAR via Sistema de Dimensionamento Fotovoltaico.", 15, 288);
-
-doc.save(`Proposta_Solar_ZNSOLAR_${Date.now()}.pdf`);
+    // Salva o PDF com o nome institucional
+    doc.save("Proposta_ZNSolar.pdf");
 }
-// =========================================================================
 </script>
 </body>
 </html>
