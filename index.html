@@ -760,7 +760,7 @@ const divWebValorizacao = document.getElementById('web-bar-valorizacao');
 if (divWebEconomia && divWebValorizacao) {
     const anosProjecaao = [1, 5, 10, 15, 20, 25];
     
-    // Puxando os valores reais diretamente do escopo do seu simulador
+    // Resgate seguro das variáveis do simulador
     const ecoBase = typeof e_bi !== 'undefined' ? e_bi : 118.41;
     const investimentoTotal = typeof p !== 'undefined' ? p : 5000;
     
@@ -820,6 +820,12 @@ if (divWebEconomia && divWebValorizacao) {
     htmlRendimento += `</div>`;
     divWebValorizacao.innerHTML = htmlRendimento;
 }
+
+} // <--- ESTA CHAVE FECHA A FUNÇÃO PRINCIPAL _calcZN DO SEU SIMULADOR COMPLETO!
+
+// ==========================================================================
+// 6. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
+// ==========================================================================
 
 // ==========================================================================
 // 6. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
