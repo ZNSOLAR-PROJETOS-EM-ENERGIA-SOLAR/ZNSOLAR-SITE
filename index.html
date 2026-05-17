@@ -752,166 +752,175 @@ function _calcZN() {
     });
 
 // =========================================================================
-// 5. INJEÇÃO DINÂMICA DOS GRÁFICOS EM ESCADA (LOGICA E CHAVES ALINHADAS)
+// 5. INJEÇÃO DINÂMICA DOS GRÁFICOS EM ESCADA (MÓDULO WEB)
 // =========================================================================
 const divWebEconomia = document.getElementById('web-bar-economia');
 const divWebValorizacao = document.getElementById('web-bar-valorizacao');
 
 if (divWebEconomia && divWebValorizacao) {
-    const anosProjecao = [1, 5, 10, 15, 20, 25];
+    const anosProjecaao = [1, 5, 10, 15, 20, 25];
     
-    // Uso da economia bifásica e taxa de reajuste anual de 4%
-    const economiaMensalBiBase = typeof e_bi !== 'undefined' ? e_bi : 118.41; 
-    const taxaReajusteAnual = 0.04; // 4.0% ao ano
-
-    // Cálculo exato da Taxa Mínima Base (50 kWh * Tarifa + COSIP) para o reajuste
-    const tarifaKwhBase = typeof TARIFA_ENEL !== 'undefined' ? TARIFA_ENEL : 0.929;
-    const cosipBase = typeof COSIP_BIFASICO !== 'undefined' ? COSIP_BIFASICO : 9.39;
-    const taxaMinimaMensalBase = (50 * tarifaKwhBase) + cosipBase;
-
-    // Para manter a proporcionalidade perfeita das barras, recalculamos o teto real aos 25 anos com juros de 1% a.m.
-    let valorMaximoRendimento = 0;
-    let economiaMensalAnoAtual = economiaMensalBiBase;
-    for (let ano = 1; ano <= 25; ano++) {
-        for (let mes = 1; mes <= 12; mes++) {
-            valorMaximoRendimento = (valorMaximoRendimento + economiaMensalAnoAtual) * (1 + 0.01);
-        }
-        economiaMensalAnoAtual = economiaMensalAnoAtual * (1 + taxaReajusteAnual);
-    }
-    const tetoEscala = Math.round(valorMaximoRendimento);
-
-    // NOTA TÉCNICA DO SIMULADOR
-    let htmlGeral = `
-        <div style="margin-bottom: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #0284c7; font-size: 13px; color: #334155; font-family: Arial, sans-serif; text-align: left; border-radius: 0 4px 4px 0; line-height: 1.4;">
-            <strong>📊 Nota Técnica do Simulador:</strong> Projeções baseadas no <strong>Modelo de Conta Bifásico</strong>, considerando inflação mínima de <strong>4 % ao ano</strong> e uma demanda mínima obrigatória de <strong>50 kWh/mês</strong>.
-        </div>
+    // Ajuste de segurança para puxar as variáveis corretas do seu simulador
+    const ecoBase = typeof e_bi !== 'undefined' ? e_bi : 118.41;
+    const investimentoTotal = typeof p !== 'undefined' ? p : 5000;
+    
+    // 1. Gráfico de Economia Real Acumulada (Web)
+    let htmlEconomia = `
+        <div style="font-family: sans-serif; width: 100%; max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="width: 18px; height: 18px; background-color: #0066cc; border-radius: 50%; margin-right: 10px;"></div>
+                <strong style="color: #0066cc; font-size: 16px;">Economia Real Acumulada (Soma Direta Sem Juros)</strong>
+            </div>
     `;
-
-    // ---------------------------------------------------------------------
-    // GRÁFICO 1: CONTA DE LUZ ACUMULADA (Sem Solar - Reajuste de 4% ao ano)
-    // ---------------------------------------------------------------------
-    htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #b91c1c; font-family: Arial;">🔴 Custo da Conta de Luz Acumulada (Sem Solar - Reajuste de 4% ao ano)</h4>`;
-    anosProjecao.forEach(ano => {
-        let custoAcumulado = 0;
-        let contaAnoAtual = tc;
-        for (let i = 1; i <= ano; i++) {
-            custoAcumulado += contaAnoAtual * 12;
-            contaAnoAtual = contaAnoAtual * (1 + taxaReajusteAnual);
-        }
-        custoAcumulado = Math.round(custoAcumulado);
-        const percentualBarra = tetoEscala > 0 ? Math.min((custoAcumulado / tetoEscala) * 100, 100) : 0;
+    
+    anosProjecaao.forEach(ano => {
+        // Multiplica a economia mensal pelo número de meses correspondente
+        const valorEco = ecoBase * (ano * 12);
+        // Calcula a largura proporcional da barra
+        const largPct = Math.min((valorEco / 46000) * 100, 100);
         
-        htmlGeral += `
-            <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
-                <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
-                    <div style="background: #ef4444; width: ${percentualBarra}%; height: 100%;"></div>
+        htmlEconomia += `
+            <div style="display: flex; align-items: center; margin-bottom: 8px; font-size: 13px;">
+                <div style="width: 60px; color: #333; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                <div style="flex: 1; background-color: #e9ecef; border-radius: 4px; height: 16px; margin: 0 12px; position: relative; overflow: hidden; display: flex; align-items: center;">
+                    <div style="width: ${largPct}%; background-color: #0066cc; height: 100%; border-radius: 4px;"></div>
                 </div>
-                <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
-                    R$ ${custoAcumulado.toLocaleString('pt-BR')}
+                <div style="width: 95px; text-align: right; font-weight: bold; color: #333;">
+                    R$ ${Math.round(valorEco).toLocaleString('pt-BR')}
                 </div>
             </div>
         `;
     });
-    htmlGeral += `</div>`;
+    htmlEconomia += `</div>`;
+    divWebEconomia.innerHTML = htmlEconomia;
 
-    // ---------------------------------------------------------------------
-    // GRÁFICO 1B: CUSTO ACUMULADO PAGANDO APENAS A TAXA MÍNIMA (Com Solar)
-    // ---------------------------------------------------------------------
-    htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #4b5563; font-family: Arial;">⚫ Custo Fixo Acumulado com Solar (Apenas Taxa Mínima + Inflação de 4% ao ano)</h4>`;
-    anosProjecao.forEach(ano => {
-        let minimoAcumulado = 0;
-        let minimoAnoAtual = taxaMinimaMensalBase;
-        for (let i = 1; i <= ano; i++) {
-            minimoAcumulado += minimoAnoAtual * 12;
-            minimoAnoAtual = minimoAnoAtual * (1 + taxaReajusteAnual);
-        }
-        minimoAcumulado = Math.round(minimoAcumulado);
-        const percentualBarra = tetoEscala > 0 ? Math.min((minimoAcumulado / tetoEscala) * 100, 100) : 0;
-        
-        htmlGeral += `
-            <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
-                <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
-                    <div style="background: #4b5563; width: ${percentualBarra}%; height: 100%;"></div>
-                </div>
-                <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
-                    R$ ${minimoAcumulado.toLocaleString('pt-BR')}
-                </div>
+    // 2. Gráfico de Valorização do Capital Próprio Aplicado (Web)
+    let htmlRendimento = `
+        <div style="font-family: sans-serif; width: 100%; max-width: 600px; margin: 30px auto 0 auto;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="width: 18px; height: 18px; background-color: #28a745; border-radius: 50%; margin-right: 10px;"></div>
+                <strong style="color: #28a745; font-size: 16px;">Valorização do Capital Próprio Aplicado (1% a.m.)</strong>
             </div>
-        `;
-    });
-    htmlGeral += `</div>`;
-
-    // ---------------------------------------------------------------------
-    // GRÁFICO 2: ECONOMIA REAL ACUMULADA (Soma Direta Corrigida pela Inflação)
-    // ---------------------------------------------------------------------
-    htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #1565C0; font-family: Arial;">🔵 Economia Real Acumulada (Soma Direta - Reajustada com Inflação de 4% ao ano)</h4>`;
-    anosProjecao.forEach(ano => {
-        let economyPuraAcumulada = 0;
-        let economiaAnoAtual = economiaMensalBiBase;
-        
-        for (let i = 1; i <= ano; i++) {
-            economyPuraAcumulada += economiaAnoAtual * 12;
-            economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
-        }
-        
-        economyPuraAcumulada = Math.round(economyPuraAcumulada);
-        const percentualBarra = tetoEscala > 0 ? Math.min((economyPuraAcumulada / tetoEscala) * 100, 100) : 0;
-        
-        htmlGeral += `
-            <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
-                <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
-                    <div style="background: #1565C0; width: ${percentualBarra}%; height: 100%;"></div>
-                </div>
-                <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
-                    R$ ${economyPuraAcumulada.toLocaleString('pt-BR')}
-                </div>
-            </div>
-        `;
-    });
-    htmlGeral += `</div>`;
-
-    divWebEconomia.innerHTML = htmlGeral;
-
-    // ---------------------------------------------------------------------
-    // GRÁFICO 3: VALORIZAÇÃO DO CAPITAL (Com aportes crescentes pela inflação)
-    // ---------------------------------------------------------------------
-    let htmlRendimento = `<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #2E7D32; font-family: Arial;">🟢 Valorização Real do Capital Aplicado (Rendimento 1% a.m.)</h4>`;
-    anosProjecao.forEach(ano => {
-        let capitalAcumuladoComJuros = 0;
-        let economiaAnoAtual = economiaMensalBiBase;
-        
-        for (let i = 1; i <= ano; i++) {
-            for (let m = 1; m <= 12; m++) {
-                capitalAcumuladoComJuros = (capitalAcumuladoComJuros + economiaAnoAtual) * (1 + 0.01);
-            }
-            economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
-        }
-        
-        capitalAcumuladoComJuros = Math.round(capitalAcumuladoComJuros);
-        const percentualBarra = tetoEscala > 0 ? Math.min((capitalAcumuladoComJuros / tetoEscala) * 100, 100) : 0;
+    `;
+    
+    anosProjecaao.forEach(ano => {
+        // Aplica a fórmula de juros compostos baseada no investimento real 'p'
+        const capitalAcumuladoComJuros = investimentoTotal * Math.pow((1 + 0.01), (ano * 12));
+        const largPctRend = Math.min((capitalAcumuladoComJuros / 215000) * 100, 100);
         
         htmlRendimento += `
-            <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
-                <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
-                    <div style="background: #2E7D32; width: ${percentualBarra}%; height: 100%;"></div>
+            <div style="display: flex; align-items: center; margin-bottom: 8px; font-size: 13px;">
+                <div style="width: 60px; color: #333; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                <div style="flex: 1; background-color: #e9ecef; border-radius: 4px; height: 16px; margin: 0 12px; position: relative; overflow: hidden; display: flex; align-items: center;">
+                    <div style="width: ${largPctRend}%; background-color: #28a745; height: 100%; border-radius: 4px;"></div>
                 </div>
-                <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
-                    R$ ${capitalAcumuladoComJuros.toLocaleString('pt-BR')}
+                <div style="width: 95px; text-align: right; font-weight: bold; color: #333;">
+                    R$ ${Math.round(capitalAcumuladoComJuros).toLocaleString('pt-BR')}
                 </div>
             </div>
         `;
     });
-    
+    htmlRendimento += `</div>`;
     divWebValorizacao.innerHTML = htmlRendimento;
 }
+        // ---------------------------------------------------------------------
+        // GRÁFICO 1B: CUSTO ACUMULADO PAGANDO APENAS A TAXA MÍNIMA (Com Solar)
+        // ---------------------------------------------------------------------
+        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #4b5563; font-family: Arial;">⚫ Custo Fixo Acumulado com Solar (Apenas Taxa Mínima + Inflação de 4% ao ano)</h4>`;
+        anosProjecao.forEach(ano => {
+            let minimoAcumulado = 0;
+            let minimoAnoAtual = taxaMinimaMensalBase;
+            for (let i = 1; i <= ano; i++) {
+                minimoAcumulado += minimoAnoAtual * 12;
+                minimoAnoAtual = minimoAnoAtual * (1 + taxaReajusteAnual);
+            }
+            minimoAcumulado = Math.round(minimoAcumulado);
+            const percentualBarra = tetoEscala > 0 ? Math.min((minimoAcumulado / tetoEscala) * 100, 100) : 0;
+            
+            htmlGeral += `
+                <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
+                    <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                    <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                        <div style="background: #4b5563; width: ${percentualBarra}%; height: 100%;"></div>
+                    </div>
+                    <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
+                        R$ ${minimoAcumulado.toLocaleString('pt-BR')}
+                    </div>
+                </div>
+            `;
+        });
+        htmlGeral += `</div>`;
+
+        // ---------------------------------------------------------------------
+        // GRÁFICO 2: ECONOMIA REAL ACUMULADA (Soma Direta Corrigida pela Inflação)
+        // ---------------------------------------------------------------------
+        htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #1565C0; font-family: Arial;">🔵 Economia Real Acumulada (Soma Direta - Reajustada com Inflação de 4% ao ano)</h4>`;
+        anosProjecao.forEach(ano => {
+            let economyPuraAcumulada = 0;
+            let economiaAnoAtual = economyMensalBiBase;
+            
+            for (let i = 1; i <= ano; i++) {
+                economyPuraAcumulada += economiaAnoAtual * 12;
+                economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
+            }
+            
+            economyPuraAcumulada = Math.round(economyPuraAcumulada);
+            const percentualBarra = tetoEscala > 0 ? Math.min((economyPuraAcumulada / tetoEscala) * 100, 100) : 0;
+            
+            htmlGeral += `
+                <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
+                    <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                    <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                        <div style="background: #1565C0; width: ${percentualBarra}%; height: 100%;"></div>
+                    </div>
+                    <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
+                        R$ ${economyPuraAcumulada.toLocaleString('pt-BR')}
+                    </div>
+                </div>
+            `;
+        });
+        htmlGeral += `</div>`;
+
+        divWebEconomia.innerHTML = htmlGeral;
+
+        // ---------------------------------------------------------------------
+        // GRÁFICO 3: VALORIZAÇÃO DO CAPITAL (Com aportes crescentes pela inflação)
+        // ---------------------------------------------------------------------
+        let htmlRendimento = `<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #2E7D32; font-family: Arial;">🟢 Valorização Real do Capital Aplicado (Rendimento 1% a.m.)</h4>`;
+        anosProjecao.forEach(ano => {
+            let capitalAcumuladoComJuros = 0;
+            let economiaAnoAtual = economyMensalBiBase;
+            
+            for (let i = 1; i <= ano; i++) {
+                for (let m = 1; m <= 12; m++) {
+                    capitalAcumuladoComJuros = (capitalAcumuladoComJuros + economiaAnoAtual) * (1 + 0.01);
+                }
+                economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
+            }
+            
+            capitalAcumuladoComJuros = Math.round(capitalAcumuladoComJuros);
+            const percentualBarra = tetoEscala > 0 ? Math.min((capitalAcumuladoComJuros / tetoEscala) * 100, 100) : 0;
+            
+            htmlRendimento += `
+                <div style="display: flex; align-items: center; margin-bottom: 6px; font-family: Arial, sans-serif;">
+                    <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                    <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                        <div style="background: #2E7D32; width: ${percentualBarra}%; height: 100%;"></div>
+                    </div>
+                    <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">
+                        R$ ${capitalAcumuladoComJuros.toLocaleString('pt-BR')}
+                    </div>
+                </div>
+            `;
+        });
+        
+        divWebValorizacao.innerHTML = htmlRendimento;
+    }
 }
-// ==========================================================
-// 5. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
-// ==========================================================
+
+// ==========================================================================
+// 6. FUNÇÃO GERAR PDF INSTITUCIONAL E PROFISSIONAL (ZNSOLAR)
+// ==========================================================================
 async function gerarPDF() {
     if (!window.jspdf) {
         alert("Erro: Biblioteca PDF não carregada.");
@@ -919,276 +928,110 @@ async function gerarPDF() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); // Força padrão A4 vertical
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    // Captura dos dados calculados dinamicamente na tela
+    const valorTotal = typeof p !== 'undefined' ? `R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : (document.getElementById('res-investimento')?.innerText || 'R$ 0,00');
+    const paybackBifasico = typeof payback_bi !== 'undefined' ? `${payback_bi} anos` : (document.getElementById('res-payback-bi')?.innerText || '0 anos');
+    const paybackTrifasico = typeof payback_tri !== 'undefined' ? `${payback_tri} anos` : (document.getElementById('res-payback-tri')?.innerText || '0 anos');
+    const consumoMedio = typeof c !== 'undefined' ? `${c.toFixed(1)} kWh/mês` : (document.getElementById('res-consumo')?.innerText || '0 kWh/mês');
+    const geracaoEstimada = typeof c !== 'undefined' ? `${(c * 1.18).toFixed(1)} kWh/mês` : (document.getElementById('res-geracao')?.innerText || '0 kWh/mês');
+    const areaTelhado = typeof a !== 'undefined' ? `${a.toFixed(1)} m²` : (document.getElementById('res-telhado')?.innerText || '0 m²');
+    
+    // Análise financeira mensal detalhada
+    const contaSemSolar = typeof tc !== 'undefined' ? `R$ ${tc.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : (document.getElementById('res-conta-sem')?.innerText || 'R$ 0,00');
+    const contaComBifasico = typeof nc_bi !== 'undefined' ? `R$ ${nc_bi.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : (document.getElementById('res-conta-bi')?.innerText || 'R$ 0,00');
+    const economiaMensalBi = typeof e_bi !== 'undefined' ? `R$ ${e_bi.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : (document.getElementById('res-economia-bi')?.innerText || 'R$ 0,00');
 
-    let p = dadosPDF.p;
-    const payback_bi = dadosPDF.payback_bi;
-    const payback_tri = dadosPDF.payback_tri;
-    const a = dadosPDF.a;
-    const c = dadosPDF.c;
-    const tc = dadosPDF.tc;
-    const nc_bi = dadosPDF.nc_bi;
-    const nc_tri = dadosPDF.nc_tri;
+    // Elemento HTML virtual para clonar perfeitamente os layouts em formato A4
+    const elementoHTML = document.createElement('div');
+    elementoHTML.style.width = '790px'; 
+    elementoHTML.style.padding = '35px';
+    elementoHTML.style.backgroundColor = '#ffffff';
+    elementoHTML.style.fontFamily = "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+    elementoHTML.style.color = '#333333';
 
-    if (!p) {
-        alert("Por favor, clique em SIMULAR primeiro.");
-        return;
-    }
+    elementoHTML.innerHTML = `
+        <div style="border-bottom: 3px solid #ff9800; padding-bottom: 15px; margin-bottom: 25px; display: table; width: 100%;">
+            <div style="display: table-cell; vertical-align: middle;">
+                <div style="font-size: 26px; font-weight: bold; font-family: Arial, sans-serif;">
+                    <span style="color: #1565c0;">ZN</span><span style="color: #ff9800;">SOLAR</span>
+                </div>
+                <p style="margin: 4px 0 0 0; color: #7f8c8d; font-size: 10px; uppercase; font-weight: bold; letter-spacing: 0.5px;">Especialistas em Projetos Fotovoltaicos</p>
+            </div>
+            <div style="display: table-cell; text-align: right; vertical-align: middle; font-size: 11px; color: #555555; line-height: 1.5;">
+                <strong style="color: #1a365d;">Proposta Comercial Preliminar</strong><br>
+                <strong>WhatsApp:</strong> (11) 98318-5337<br>
+                <strong>Região Atendida:</strong> São Paulo Capital
+            </div>
+        </div>
 
-    // ==========================================
-    // 1. CABEÇALHO (Logo Oficial, Título e Contato)
-    // ==========================================
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(34, 34, 34);
-    doc.text("PROPOSTA COMERCIAL PRELIMINAR", 200, 25, { align: "right" });
+        <div style="display: table; width: 100%; table-layout: fixed; margin-bottom: 30px; border-collapse: separate; border-spacing: 12px 0;">
+            
+            <div style="display: table-cell; background-color: #f5f5f5; border-left: 4px solid #ff9800; border-radius: 6px; padding: 15px; vertical-align: top;">
+                <h3 style="margin: 0 0 12px 0; color: #ff9800; font-size: 13px; font-weight: bold; text-transform: uppercase;">Dados do Sistema</h3>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Consumo Médio: <span style="float: right; font-weight: bold; color: #2d3748;">${consumoMedio}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Geração Estimada: <span style="float: right; font-weight: bold; color: #2d3748;">${geracaoEstimada}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Telhado Estimado: <span style="float: right; font-weight: bold; color: #2d3748;">${areaTelhado}</span></p>
+            </div>
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(100, 100, 100);
-    doc.text("Consultor Técnico", 200, 33, { align: "right" }); // Removido o nome Rafael
-    doc.text("WhatsApp: (11) 98318-5337", 200, 40, { align: "right" });
+            <div style="display: table-cell; background-color: #f0f8f0; border-left: 4px solid #4caf50; border-radius: 6px; padding: 15px; vertical-align: top; border: 1px solid #4caf50;">
+                <h3 style="margin: 0 0 12px 0; color: #2e7d32; font-size: 13px; font-weight: bold; text-transform: uppercase;">Investimento & Retorno</h3>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Valor Total: <span style="float: right; font-weight: bold; color: #2e7d32;">${valorTotal}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Payback (Bifásico): <span style="float: right; font-weight: bold; color: #2d3748;">${paybackBifasico}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Payback (Trifásico): <span style="float: right; font-weight: bold; color: #2d3748;">${paybackTrifasico}</span></p>
+            </div>
 
-    // Desenha a linha horizontal laranja decorativa abaixo do cabeçalho
-    doc.setDrawColor(255, 152, 0);
-    doc.setLineWidth(1);
-    doc.line(10, 46, 200, 46);
+            <div style="display: table-cell; background-color: #ebf8ff; border-left: 4px solid #1565c0; border-radius: 6px; padding: 15px; vertical-align: top;">
+                <h3 style="margin: 0 0 12px 0; color: #1565c0; font-size: 13px; font-weight: bold; text-transform: uppercase;">Análise de Contas</h3>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Conta Sem Solar: <span style="float: right; font-weight: bold; color: #c0392b;">${contaSemSolar}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Conta Bifásica: <span style="float: right; font-weight: bold; color: #27ae60;">${contaComBifasico}</span></p>
+                <p style="margin: 6px 0; font-size: 11px; color: #4a5568;">Economia Mensal: <span style="float: right; font-weight: bold; color: #1565c0;">${economiaMensalBi}</span></p>
+            </div>
+        </div>
 
-    // Inserção do Logotipo Oficial ZNSOLAR do Repositório do GitHub
+        <div style="margin-top: 15px;">
+            <h2 style="font-size: 15px; color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">
+                Análise de Viabilidade Econômica e Projeções (25 Anos)
+            </h2>
+            
+            <div style="margin-bottom: 20px; text-align: left;">
+                ${document.getElementById('web-bar-economia')?.innerHTML || ''}
+            </div>
+            
+            <div style="margin-bottom: 20px; text-align: left;">
+                ${document.getElementById('web-bar-valorizacao')?.innerHTML || ''}
+            </div>
+        </div>
+
+        <div style="margin-top: 35px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; font-size: 10px; color: #64748b; line-height: 1.6; text-align: left;">
+            <strong style="color: #b71c1c; text-transform: uppercase; font-size: 10.5px; display: block; margin-bottom: 6px;">⚠️ Aviso Importante e Condições Gerais:</strong>
+            * O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica junto à concessionária. Foi utilizado o HSP de São Paulo e a tarifa ENEL SÃO PAULO vigente. Valores sujeitos a alteração sem prévio aviso.<br>
+            * Este orçamento preliminar é válido exclusivamente para São Paulo Capital. Visita técnica no valor de R$ 150,00 é necessária para efetivar e validar as condições físicas do local de instalação.<br>
+            * Cidades fora de São Paulo Capital estão sujeitas a fretes adicionais, custos extras de deslocamento, pedágios e taxas de projeto locais. Eventuais reformas e adequações necessárias no padrão de entrada do cliente não estão inclusas e serão orçadas à parte.
+        </div>
+    `;
+
+    document.body.appendChild(elementoHTML);
+
     try {
-        // Altere para o nome exato da imagem que usa no repositório
-       doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26);
-    } catch (e) {
-        // Fallback elegante caso a imagem falhe ou demore para carregar
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(24);
-        doc.setTextColor(21, 101, 192); // Azul principal
-        doc.text("ZN ", 12, 32);
-        doc.setTextColor(255, 152, 0); // Laranja principal
-        doc.text("SOLAR", 26, 32);
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "italic");
-        doc.setTextColor(100, 100, 100);
-        doc.text("ESPECIALISTAS EM PROJETOS FOTOVOLTAICOS", 12, 38);
+        await pdf.html(elementoHTML, {
+            callback: function (doc) {
+                doc.save('Proposta_ZNSolar_Bifasico.pdf');
+                document.body.removeChild(elementoHTML);
+            },
+            x: 0,
+            y: 0,
+            width: 210, 
+            windowWidth: 790
+        });
+    } catch (erro) {
+        console.error("Falha ao gerar proposta digital em PDF: ", erro);
+        if (document.body.contains(elementoHTML)) {
+            document.body.removeChild(elementoHTML);
+        }
     }
-
-    // ==========================================
-    // 2. BLOCOS LADO A LADO (Dados vs Retorno) - SEM PORCENTAGENS
-    // ==========================================
-    
-    // Bloco Esquerdo: Dados do Sistema (Cinza)
-    doc.setFillColor(245, 245, 245);
-    doc.roundedRect(10, 54, 92, 48, 3, 3, 'F');
-    
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(255, 152, 0); // Título Laranja
-    doc.text("Dados do Sistema", 15, 62);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10.5);
-    doc.setTextColor(51, 51, 51);
-    doc.text(`Consumo Médio: `, 15, 71);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${c.toFixed(1)} kWh/mês`, 46, 71);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`Geração Estimada: `, 15, 79); // Removido o (+18%) daqui
-    doc.setFont("helvetica", "bold");
-    doc.text(`${(c * 1.18).toFixed(1)} kWh/mês`, 48  , 79);
-    
-  doc.setFont("helvetica", "normal");
-doc.text(`Área de Telhado Estimada: `, 15, 87);
-doc.setFont("helvetica", "bold");
-doc.text(`${a.toFixed(1)} m²`, 63, 87); // <--- Mudamos de 59 para 63 aqui!
-
-    // Bloco Direito: Investimento e Retorno (Verde)
-    doc.setFillColor(240, 248, 240);
-    doc.setDrawColor(76, 175, 80);
-    doc.setLineWidth(0.4);
-    doc.roundedRect(106, 54, 94, 48, 3, 3, 'FD');
-    
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(46, 125, 50); // Título Verde
-    doc.text("Investimento e Retorno", 111, 62);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(51, 51, 51);
-    doc.text(`Valor Total: `, 111, 72);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 132, 72);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(46, 125, 50);
-    doc.text(`Payback (Retorno Bifásico): `, 111, 81);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${payback_bi} anos`, 161, 81);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text(`Payback (Retorno Trifásico): `, 111, 89);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${payback_tri} anos`, 162, 89);
-
-      // ==========================================
-    // 4. SEÇÃO DE GRÁFICOS (Ajustados para caber o aviso)
-    // ==========================================
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(34, 34, 34);
-    doc.text("Análise de Viabilidade Econômica", 105, 107, { align: "center" });
-
-    // Gráfico 1: Consumo vs Geração
-    const canvas1 = document.getElementById('graficoConsumoMensal'); 
-    if (canvas1) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("Comparativo de Consumo vs Geração:", 10, 115);
-        const imgData1 = canvas1.toDataURL('image/png', 1.0);
-        doc.addImage(imgData1, 'PNG', 10, 118, 190, 48); // <--- Altura reduzida para 48
-    }
-
-    // Gráfico 2: Custos Financeiros (Subiu para Y=174)
-    const canvas2 = document.getElementById('graficoCustoFinanceiro'); 
-    if (canvas2) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("Economia Financeira Estimada:", 10, 174); // <--- Ajustado Y para 174
-        const imgData2 = canvas2.toDataURL('image/png', 1.0);
-        doc.addImage(imgData2, 'PNG', 15, 177, 180, 40); // <--- Altura reduzida para 40
-    }
-
-    // ==========================================
-    // 5. AVISO IMPORTANTE E JURÍDICO (Y Ajustado com Folga)
-    // ==========================================
-    // Agora começando em Y=226, logo após o segundo gráfico terminar
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(183, 28, 28); 
-    doc.text("Aviso Importante:", 10, 226); 
-    
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(90, 90, 90);
-    doc.setFontSize(7.5); 
-    
-    const textoAviso = "* O valor acima inclui todos os equipamentos, a instalação profissional completa e a homologação técnica da rede elétrica. Foi utilizado o HSP de São Paulo, tarifa ENEL SÃO PAULO vigente mês Maio de 2026. Valores sujeitos a alteração sem prévio aviso. Este orçamento e simulação são válidos para São Paulo Capital. Visita técnica valor R$ 150,00 para efetivar o orçamento e condições do local da instalação. Cidades fora de São Paulo Capital estão sujeitas a diferenças nos valores de simulação e custo, pois exigem simulações específicas de acordo com a região, custos extras de deslocamento, pedágios, e outros tantos quantos forem necessários. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte. Esse orçamento é prévio, para confirmar os dados e valores é necessário o estudo técnico in loco. Não espere mais entre em contato agora mesmo.";
-  // =========================================================================
-// NOVA PÁGINA: PROJEÇÃO VISUAL EM FORMATO HORIZONTAL (PÁGINA 2)
-// =========================================================================
-doc.addPage();
-
-// 1. Cabeçalho da Página 2
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("ANÁLISE DE VIABILIDADE ECONÔMICA E RETORNO", 15, 20);
-
-doc.setDrawColor(210, 210, 210);
-doc.setLineWidth(0.3);
-doc.line(15, 24, 195, 24);
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(11);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, 35, { align: "center" });
-
-// 2. Gráfico 1: Barras Horizontais de Economia (Azul)
-const g1X = 45;
-let g1Y = 50;
-const maxEco = dadosPDF.economia_25_anos || 46012.23;
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192);
-doc.text("Economia Acumulada no Período (R$)", 15, 44);
-
-// =========================================================================
-// SUBSTITUA A PARTIR DA LINHA 975 (A PARTIR DE CONST PECO) POR ESTE BLOCO:
-// =========================================================================
-
-// 1. Definição inicial da posição Y (Abaixo do comparativo de contas da página 1)
-let yDinamico = 175; 
-
-doc.setFont("helvetica", "bold");
-doc.setFontSize(10);
-doc.setTextColor(34, 34, 34);
-doc.text("Projeção de Economia e Valorização sobre 25 Anos", 105, yDinamico, { align: "center" });
-
-// -------------------------------------------------------------------------
-// GRÁFICO 1: ECONOMIA ACUMULADA (AZUL)
-// -------------------------------------------------------------------------
-yDinamico += 10;
-doc.setFontSize(8.5);
-doc.setTextColor(21, 101, 192); // Azul institucional
-doc.text("Economia Acumulada no Período (R$)", 15, yDinamico);
-
-const pEco = [
-    { ano: "1 Ano", valor: dadosPDF.economia_anual || 1533.74 },
-    { ano: "5 Anos", valor: dadosPDF.economia_5_anos || 7668.71 },
-    { ano: "10 Anos", valor: dadosPDF.economia_10_anos || 15337.41 },
-    { ano: "15 Anos", valor: dadosPDF.economia_15_anos || 23006.12 },
-    { ano: "20 Anos", valor: dadosPDF.economia_20_anos || 30674.82 },
-    { ano: "25 Anos", valor: dadosPDF.economia_25_anos || 46012.23 }
-];
-
-let maxEcoPDF = Math.max(...pEco.map(p => p.valor));
-
-yDinamico += 5;
-pEco.forEach((p) => {
-    const larg = maxEcoPDF > 0 ? (p.valor / maxEcoPDF) * 110 : 0; // Escala máxima de 110mm    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
-    
-    doc.setFillColor(21, 101, 192); // Cor Azul
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
-});
-
-// -------------------------------------------------------------------------
-// GRÁFICO 2: VALORIZAÇÃO DO CAPITAL (VERDE)
-// -------------------------------------------------------------------------
-yDinamico += 5;
-doc.setFont("helvetica", "bold");
-doc.setFontSize(8.5);
-doc.setTextColor(46, 125, 50); // Verde institucional
-doc.text("Valorização do Capital Próprio Aplicado (1% a.m.)", 15, yDinamico);
-
-const pRen = [
-    { ano: "1 Ano", valor: dadosPDF.rendimento_1_ano || 1717.79 },
-    { ano: "5 Anos", valor: dadosPDF.rendimento_5_anos || 8588.95 },
-    { ano: "10 Anos", valor: dadosPDF.rendimento_10_anos || 17177.90 },
-    { ano: "15 Anos", valor: dadosPDF.rendimento_15_anos || 25766.85 },
-    { ano: "20 Anos", valor: dadosPDF.rendimento_20_anos || 171778.99 },
-    { ano: "25 Anos", valor: dadosPDF.rendimento_25_anos || 214723.74 }
-];
-
- let maxRenPDF = Math.max(...pRen.map(p => p.valor));
-
-yDinamico += 5;
-pRen.forEach((p) => {
-  const larg = maxRenPDF > 0 ? (p.valor / maxRenPDF) * 110 : 0; // Escala máxima de 110mm
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 100, 100);
-    doc.text(p.ano, 15, yDinamico + 3.5);
-    
-    doc.setFillColor(46, 125, 50); // Cor Verde
-    doc.rect(32, yDinamico, larg, 4.5, "F");
-    
-    doc.setTextColor(34, 34, 34);
-    doc.setFont("helvetica", "bold");
-    doc.text(`R$ ${Math.round(p.valor).toLocaleString('pt-BR')}`, 35 + larg, yDinamico + 3.5);
-    
-    yDinamico += 6.5; // Espaçamento entre as barras
-});
+}
 
 // -------------------------------------------------------------------------
 // SEÇÃO DE AVISOS FINAIS (Abaixo dos dois gráficos dinamicamente)
