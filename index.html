@@ -270,19 +270,27 @@
       transform: scale(1.1);
     }
 
-    /* Estilos da Linha de Configurações Tarifárias e Proteção de Bordas */
-    .linha-tarifas {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+    /* Estilos da Linha de Configurações Tarifárias (2 Linhas Conforme Pedido) */
+    .linha-tarifas-container {
       background: #fdfdfd;
       padding: 15px;
       border-radius: 8px;
       border: 1px dashed #ff9800;
+      margin-bottom: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .linha-sub {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
       text-align: left;
       width: 100%;
     }
+
     .campo-tarifa {
       display: flex;
       flex-direction: column;
@@ -299,10 +307,6 @@
       border-radius: 4px;
       font-size: 0.9rem;
     }
-    select#bandeiraCor {
-      font-weight: bold;
-      color: #2e7d32;
-    }
 
     .grid-consumo {
       display: grid;
@@ -315,7 +319,7 @@
     .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
 
     /* Contêiner de Segurança para Gráficos e Projeções Internas */
-    .wrapper-grafico, .container-proporcional-projeto {
+    .wrapper-grafico {
       position: relative; 
       height: 250px; 
       width: 100%; 
@@ -341,11 +345,11 @@
       .video-box iframe { height:200px; }
       .videos-grid { grid-template-columns: 1fr; }
       .grid-consumo { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .linha-tarifas { grid-template-columns: repeat(2, 1fr); }
+      .linha-sub { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width:380px) {
       .grid-consumo { grid-template-columns: 1fr; }
-      .linha-tarifas { grid-template-columns: 1fr; }
+      .linha-sub { grid-template-columns: 1fr; }
     }
   </style>
 
@@ -412,57 +416,66 @@
   
   <section id="simulador-solar" style="max-width:900px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800; width:100%;">
       <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
-      <p style="text-align:center; color:#666; margin-bottom:25px;">Configure as tarifas da sua conta e insira o consumo em kWh dos últimos 12 meses.</p>
+      <p style="text-align:center; color:#666; margin-bottom:25px;">Configure os dados da sua fatura e adicione o consumo em kWh dos 12 meses.</p>
       
-      <!-- LINHA DE CONFIGURAÇÕES TARIFÁRIAS E PADRÃO DE ENTRADA -->
-      <div class="linha-tarifas">
-        <div class="campo-tarifa">
-          <label>Padrão / Fase</label>
-          <select id="tipoConsumo">
-            <option value="Monofásico">Monofásico (Fixo 30 kWh)</option>
-            <option value="Bifásico">Bifásico (Fixo 50 kWh)</option>
-            <option value="Trifásico">Trifásico (Fixo 100 kWh)</option>
-          </select>
+      <!-- CONFIGURAÇÕES TARIFÁRIAS EM DUAS LINHAS -->
+      <div class="linha-tarifas-container">
+        <!-- LINHA DE CIMA: CLASSIFICAÇÃO E VALORES UNITÁRIOS -->
+        <div class="linha-sub">
+          <div class="campo-tarifa">
+            <label>Grupo / Subgrupo</label>
+            <select id="subgrupoTarifa">
+              <option value="B1">B1 - Residencial Convencional</option>
+              <option value="B1_Baixa">B1 - Residencial Baixa Renda</option>
+              <option value="B2">B2 - Rural</option>
+              <option value="B3">B3 - Demais Classes (Comércio/Ind.)</option>
+              <option value="B4">B4 - Iluminação Pública</option>
+            </select>
+          </div>
+          <div class="campo-tarifa">
+            <label>Tarifa TE (R$)</label>
+            <input type="number" id="tarifaTE" step="0.00001" value="0.43500" placeholder="0.43500">
+          </div>
+          <div class="campo-tarifa">
+            <label>Tarifa TUSD (R$)</label>
+            <input type="number" id="tarifaTUSD" step="0.00001" value="0.49454" placeholder="0.49454">
+          </div>
+          <div class="campo-tarifa">
+            <label>Ilum. Pública COSIP (R$)</label>
+            <input type="number" id="tarifaCosip" step="0.01" value="22.67" placeholder="22.67">
+          </div>
         </div>
-        <div class="campo-tarifa">
-          <label>Tarifa TE (R$)</label>
-          <input type="number" id="tarifaTE" step="0.00001" value="0.43500" placeholder="0.43500">
-        </div>
-        <div class="campo-tarifa">
-          <label>Tarifa TUSD (R$)</label>
-          <input type="number" id="tarifaTUSD" step="0.00001" value="0.49454" placeholder="0.49454">
-        </div>
-        <div class="campo-tarifa">
-          <label>Ilum. Pública (R$)</label>
-          <input type="number" id="tarifaCosip" step="0.01" value="9.39" placeholder="9.39">
-        </div>
-        <div class="campo-tarifa">
-          <label>Bandeira Cor</label>
-          <select id="bandeiraCor" onchange="atualizarCorBandeira(this)">
-            <option value="verde" style="color:green;">Verde</option>
-            <option value="amarela" style="color:orange;">Amarela</option>
-            <option value="vermelha" style="color:red;">Vermelha</option>
-          </select>
-        </div>
-        <div class="campo-tarifa">
-          <label>Valor Band. (R$)</label>
-          <input type="number" id="tarifaBandeira" step="0.00001" value="0.00000" placeholder="0.00">
+
+        <!-- LINHA DE BAIXO: INFRAESTRUTURA E VALOR TOTAL DA BANDEIRA -->
+        <div class="linha-sub">
+          <div class="campo-tarifa">
+            <label>Padrão de Entrada</label>
+            <select id="tipoConsumo">
+              <option value="Monofásico">Monofásico (Custo Mínimo 30 kWh)</option>
+              <option value="Bifásico" selected>Bifásico (Custo Mínimo 50 kWh)</option>
+              <option value="Trifásico">Trifásico (Custo Mínimo 100 kWh)</option>
+            </select>
+          </div>
+          <div class="campo-tarifa" style="grid-column: span 2;">
+            <label>Valor Total de Bandeira na Conta (R$)</label>
+            <input type="number" id="tarifaBandeiraCheia" step="0.01" value="3.47" placeholder="Insira o valor em R$ que veio na conta">
+          </div>
         </div>
       </div>
   
       <div class="grid-consumo">
-        <div class="campo-mes"><label>Mês Atual (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 2º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 3º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 4º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 5º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 6º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 7º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 8º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 9º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 10º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 11º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 12º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 1 (kWh)</label><input type="number" class="mes-consumo" value="250" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 2 (kWh)</label><input type="number" class="mes-consumo" value="270" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 3 (kWh)</label><input type="number" class="mes-consumo" value="260" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 4 (kWh)</label><input type="number" class="mes-consumo" value="240" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 5 (kWh)</label><input type="number" class="mes-consumo" value="230" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 6 (kWh)</label><input type="number" class="mes-consumo" value="220" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 7 (kWh)</label><input type="number" class="mes-consumo" value="210" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 8 (kWh)</label><input type="number" class="mes-consumo" value="245" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 9 (kWh)</label><input type="number" class="mes-consumo" value="265" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 10 (kWh)</label><input type="number" class="mes-consumo" value="280" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 11 (kWh)</label><input type="number" class="mes-consumo" value="290" placeholder="0"></div>
+        <div class="campo-mes"><label>Mês 12 (kWh)</label><input type="number" class="mes-consumo" value="300" placeholder="0"></div>
       </div>
   
       <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
@@ -553,7 +566,7 @@
       </div>
       <div class="faq-item">
         <h3>Os meus créditos de energia expiram?</h3>
-        <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futuras em até 60 meses.</p>
+        <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futures em até 60 meses.</p>
       </div>
     </section>
   
@@ -624,18 +637,12 @@
   
     let dadosPDF = {};
 
-    function atualizarCorBandeira(select) {
-      if(select.value === 'verde') { select.style.color = 'green'; document.getElementById('tarifaBandeira').value = "0.00000"; }
-      else if(select.value === 'amarela') { select.style.color = 'orange'; document.getElementById('tarifaBandeira').value = "0.02989"; }
-      else if(select.value === 'vermelha') { select.style.color = 'red'; document.getElementById('tarifaBandeira').value = "0.07877"; }
-    }
-
     function _calcZN() {
       const campos = document.querySelectorAll('.mes-consumo');
       let totalKwh = 0;
       let mesesComValor = 0;
       const listaValores = [];
-      const nomesMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const nomesMeses = ['Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 7', 'Mês 8', 'Mês 9', 'Mês 10', 'Mês 11', 'Mês 12'];
 
       campos.forEach(campo => {
           const valor = parseFloat(campo.value);
@@ -668,12 +675,8 @@
               <div style="font-size:1.2rem; font-weight:bold; color:#c62828; margin-bottom:10px;">
                   <i class="fas fa-exclamation-triangle"></i> Potência acima do limite da categoria
               </div>
-              <p style="color:#333; line-height:1.5;">
-                  O consumo informado indica que o seu sistema precisa de um dimensionamento com mais detalhes técnicos.
-              </p>
-              <p style="font-weight:bold; color:#c62828;">
-                  Por favor, entre em contato diretamente conosco para realizarmos um estudo personalizado!
-              </p>
+              <p style="color:#333; line-height:1.5;">O consumo informado indica que o seu sistema precisa de um dimensionamento com mais detalhes técnicos.</p>
+              <p style="font-weight:bold; color:#c62828;">Por favor, entre em contato diretamente conosco para realizarmos um estudo personalizado!</p>
               <a href="https://wa.me/5511983185337?text=Olá! Meu consumo mensal passou de 6.250 kWh e preciso de uma simulação detalhada para o meu sistema solar." 
                  target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center; width:100%;">
                  Falar no WhatsApp com Engenheiro
@@ -687,13 +690,17 @@
       const tTE = parseFloat(document.getElementById('tarifaTE').value) || 0;
       const tTUSD = parseFloat(document.getElementById('tarifaTUSD').value) || 0;
       const tCosip = parseFloat(document.getElementById('tarifaCosip').value) || 0;
-      const tBandeira = parseFloat(document.getElementById('tarifaBandeira').value) || 0;
+      
+      // MÁGICA DA DIVISÃO AUTOMÁTICA: Pegamos o valor monetário cheio e dividimos pelo consumo acumulado real
+      const valorBandeiraCheioInformado = parseFloat(document.getElementById('tarifaBandeiraCheia').value) || 0;
+      const tBandeiraCalculadaPorKwh = totalKwh > 0 ? (valorBandeiraCheioInformado / totalKwh) : 0;
 
-      const tarifaTotalComBandeira = tTE + tTUSD + tBandeira;
+      // Tarifa unificada por kWh
+      const tarifaTotalComBandeira = tTE + tTUSD + tBandeiraCalculadaPorKwh;
       const c = totalKwh / 12; 
       const tc = (c * tarifaTotalComBandeira) + tCosip;
 
-      // Dimensionamento técnico
+      // Dimensionamento técnico com margem
       const pr = ((c * 1.22) / 55.42) * 0.575;
       
       let pf;
@@ -710,17 +717,15 @@
       const n = Math.ceil(pf / 0.575);
       const a = (n * 2.58) * 1.15;
 
-      // CÁLCULO DINÂMICO DOS VALORES MÍNIMOS (Monofásico, Bifásico ou Trifásico)
+      // CUSTOS FIXOS DE DISPONIBILIDADE
       const nc_mono = (30 * tarifaTotalComBandeira) + tCosip;
       const nc_bi = (50 * tarifaTotalComBandeira) + tCosip;
       const nc_tri = (100 * tarifaTotalComBandeira) + tCosip;
 
-      // Seleção do custo fixo com base na escolha do usuário
       let novaContaFixo = nc_bi;
       if (tipoConsumo === 'Monofásico') novaContaFixo = nc_mono;
       if (tipoConsumo === 'Trifásico') novaContaFixo = nc_tri;
 
-      // Economia gerada específica do padrão escolhido
       const economiaSelecionada = tc - novaContaFixo;
 
       const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
@@ -736,7 +741,7 @@
       tabelaMesesWhats += `_Mês | Consumo | Geração Estimada_\n`;
       tabelaMesesWhats += `----------------------------------\n`;
       for (let i = 0; i < 12; i++) {
-          tabelaMesesWhats += `• ${nomesMeses[i]}: ${listaValores[i].toFixed(0)} kWh  ➔  ${dadosGeracao[i].toFixed(0)} kWh\n`;
+          tabelaMesesWhats += `• Mês ${i+1}: ${listaValores[i].toFixed(0)} kWh  ➔  ${dadosGeracao[i].toFixed(0)} kWh\n`;
       }
       tabelaMesesWhats += `----------------------------------`;
 
@@ -751,6 +756,7 @@
           <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px; color: #ff9800;">Resultado da Simulação ZN Solar — Conexão ${tipoConsumo}</div>
           <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
           <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
+          <span style="font-size: 0.85rem; color:#666;">Taxa de Bandeira calculada automaticamente: R$ ${tBandeiraCalculadaPorKwh.toFixed(5)} /kWh</span>
           <hr style="border:0;border-top:1px solid #ddd;margin:12px 0;">
           
           <strong>Conta Sem Sistema Solar (Cheia):</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
@@ -777,7 +783,7 @@
           <a href="https://wa.me/5511983185337?text=${msgBandeira}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center; width: 100%;">
               Falar no WhatsApp Agora  
           </a>
-          <br><span style="font-size:0.85rem; color:#666;">* O valor acima inclui equipamentos, instalação profissional completa e homologação técnica. Valores baseados nas tarifas customizadas inseridas no simulador.</span><br><br>
+          <br><span style="font-size:0.85rem; color:#666;">* O valor acima inclui equipamentos, instalação profissional completa e homologação técnica.</span><br><br>
           <strong style="font-size:0.9rem;">Aviso Importante:</strong> <span style="font-size:0.9rem; color:#444;">Este orçamento e simulação são prévios. Visita técnica valor R$ 150,00 para efetivar condições do local da instalação. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte.</span>
       `;
 
@@ -787,7 +793,7 @@
       new Chart(ctx1, {
           type: 'bar',
           data: {
-              labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez', 'MÉDIA'],
+              labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'MÉDIA'],
               datasets: [
                   { label: 'Consumo', data: [...listaValores, c], backgroundColor: '#e53935' },
                   { label: 'Geração', data: [...dadosGeracao, mediaGeracao], backgroundColor: '#2e7d32' }
