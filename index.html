@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>  
   <meta charset="UTF-8">
@@ -17,16 +17,16 @@
   <style>
     /* Estilos base e proteção máxima contra cópia */
     * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
-    body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; }
+    body { background:#f7f7f7; color:#333; line-height:1.6; text-align:center; overflow-x: hidden; }
     a { text-decoration:none; color:inherit; }
     
-    input, select { -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto; user-select:auto; }
+    input, select { -webkit-user-select:auto; -moz-user-select:auto; -ms-user-select:auto; user-select:auto; width: 100%; }
 
     /* Cabeçalho Limpo e Profissional */
     header {
       background:#ffffff;
       color:#333;
-      padding:25px 10%;
+      padding:25px 5%;
       text-align:center;
       position:sticky;
       top:0;
@@ -40,7 +40,8 @@
     }
 
     .logo-site {
-      max-width:300px;
+      max-width:100%;
+      width: 300px;
       height:auto;
       display:block;
       margin-bottom:8px;
@@ -53,7 +54,7 @@
       color:#666;
     }
 
-    main { max-width:1200px; margin:0 auto; padding:40px 10%; }
+    main { max-width:1200px; margin:0 auto; padding:40px 5%; width: 100%; }
 
     h2 { margin-bottom:25px; color:#ff9800; font-size:1.8rem; text-align:center; }
 
@@ -136,6 +137,7 @@
     .autoridade-imagem {
       flex:1;
       max-width:450px;
+      width: 100%;
       border-radius:10px;
       border:1px solid #ddd;
       box-shadow:0 4px 10px rgba(0,0,0,0.05);
@@ -180,6 +182,7 @@
       border-radius:10px;
       box-shadow:0 4px 10px rgba(0,0,0,0.05);
       border:1px solid #eee;
+      width: 100%;
     }
 
     .diagrama-container p {
@@ -214,11 +217,11 @@
     .faq-item p { color:#555; font-size:1rem; }
 
     /* Seção de Vídeos */
-    .videos-container { margin:50px 0; }
+    .videos-container { margin:50px 0; width: 100%; }
 
     .videos-grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
       gap:25px;
       max-width:900px;
       margin:0 auto;
@@ -267,10 +270,10 @@
       transform: scale(1.1);
     }
 
-    /* Estilos da Nova Linha de Configurações Tarifárias */
+    /* Estilos da Linha de Configurações Tarifárias e Proteção de Bordas */
     .linha-tarifas {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 12px;
       margin-bottom: 20px;
       background: #fdfdfd;
@@ -278,6 +281,7 @@
       border-radius: 8px;
       border: 1px dashed #ff9800;
       text-align: left;
+      width: 100%;
     }
     .campo-tarifa {
       display: flex;
@@ -300,17 +304,48 @@
       color: #2e7d32;
     }
 
+    .grid-consumo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+      width: 100%;
+    }
+    .campo-mes label { font-weight:bold; font-size:0.9rem; display:block; margin-bottom:5px; text-align: left; }
+    .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
+
+    /* Contêiner de Segurança para Gráficos e Projeções Internas */
+    .wrapper-grafico, .container-proporcional-projeto {
+      position: relative; 
+      height: 250px; 
+      width: 100%; 
+      margin: 20px 0;
+      max-width: 100%;
+    }
+    
+    .barra-linha-pdf {
+      display: flex; 
+      align-items: center; 
+      margin-bottom: 6px;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+
     @media (max-width:900px) {
-      .linha-tarifas { grid-template-columns: repeat(3, 1fr); }
+      main { padding: 20px 3%; }
+      .diagramas-grid { grid-template-columns: 1fr !important; gap: 30px; }
     }
     @media (max-width:600px) {
-      .autoridade-container { flex-direction:column; text-align:center; }
+      .autoridade-container { flex-direction:column; text-align:center; padding: 20px 15px; }
       .autoridade-texto h2 { text-align:center; }
       .video-box iframe { height:200px; }
       .videos-grid { grid-template-columns: 1fr; }
-      .diagramas-grid { grid-template-columns: 1fr !important; }
-      .grid-consumo { grid-template-columns: repeat(2, 1fr); }
+      .grid-consumo { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .linha-tarifas { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width:380px) {
+      .grid-consumo { grid-template-columns: 1fr; }
+      .linha-tarifas { grid-template-columns: 1fr; }
     }
   </style>
 
@@ -375,19 +410,18 @@
       </div>
     </section>
   
-  <section id="simulador-solar" style="max-width:900px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
+  <section id="simulador-solar" style="max-width:900px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800; width:100%;">
       <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
       <p style="text-align:center; color:#666; margin-bottom:25px;">Configure as tarifas da sua conta e insira o consumo em kWh dos últimos 12 meses.</p>
       
-      <!-- NOVA LINHA EXCLUSIVA: Configurações Tarifárias Técnicas -->
+      <!-- LINHA DE CONFIGURAÇÕES TARIFÁRIAS E PADRÃO DE ENTRADA -->
       <div class="linha-tarifas">
         <div class="campo-tarifa">
-          <label>Tipo Consumo</label>
+          <label>Padrão / Fase</label>
           <select id="tipoConsumo">
-            <option value="B1">B1 (Residencial)</option>
-            <option value="B2">B2 (Rural)</option>
-            <option value="B3">B3 (Comercial/Outros)</option>
-            <option value="A">Grupo A (Industrial)</option>
+            <option value="Monofásico">Monofásico (Fixo 30 kWh)</option>
+            <option value="Bifásico">Bifásico (Fixo 50 kWh)</option>
+            <option value="Trifásico">Trifásico (Fixo 100 kWh)</option>
           </select>
         </div>
         <div class="campo-tarifa">
@@ -415,43 +449,32 @@
           <input type="number" id="tarifaBandeira" step="0.00001" value="0.00000" placeholder="0.00">
         </div>
       </div>
-
-      <style>
-        .grid-consumo {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 15px;
-          margin-bottom: 25px;
-        }
-        .campo-mes label { font-weight:bold; font-size:0.9rem; display:block; margin-bottom:5px; }
-        .campo-mes input { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
-      </style>
   
       <div class="grid-consumo">
         <div class="campo-mes"><label>Mês Atual (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 2 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 3 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 4 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 5 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 6 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 7 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 8 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 9 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 10 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 11 mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
-        <div class="campo-mes"><label> 12 mes   (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 2º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 3º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 4º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 5º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 6º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 7º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 8º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 9º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 10º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 11º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
+        <div class="campo-mes"><label> 12º mês (kWh)</label><input type="number" class="mes-consumo" placeholder="0"></div>
       </div>
   
       <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
   
-      <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
+      <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left; word-wrap: break-word; overflow-x: hidden; width: 100%; border: 1px solid #ddd; background: #fafafa;"></div>
   </section>
   
     <section class="diagrama-container">
       <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
       <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia. Dependendo do sistema, ela pode ser usada localmente, injetada na rede ou armazenada em baterias.</p>
        
-      <div class="diagramas-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+      <div class="diagramas-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; width: 100%;">
           <div class="diagrama-item" style="text-align: center;">
               <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema On-Grid</h3>
               <img src="img/DIAGRAMA SITE.jpeg" alt="Diagrama Técnico de Sistema Solar On-Grid" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -468,7 +491,7 @@
           </div>
       </div>
   
-      <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; padding: 0 10px;">
+      <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; padding: 0;">
           <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
               <strong style="color: #333; display: block; margin-bottom: 5px;">On-Grid (Conectado à Rede)</strong>
               <p style="color: #666; font-size: 0.95rem; margin: 0;">É o modelo mais comum e econômico. Funciona em paralelo com a rede da concessionária. Toda a energia excedente vira créditos para abater na sua conta de luz.</p>
@@ -496,7 +519,7 @@
         </div>
         <div class="passo-card">
           <h3><span class="passo-numero">2</span> Projeto e Homologação</h3>
-          <p>Desenvolvimento e Dimensionamento completo do sistema e aprovação do projeto junto à concessionária deEnergia.</p>
+          <p>Desenvolvimento e Dimensionamento completo do sistema e aprovação do projeto junto à concessionária de Energia.</p>
         </div>
         <div class="passo-card">
           <h3><span class="passo-numero">3</span> Instalação e Ativação</h3>
@@ -526,7 +549,7 @@
       </div>
       <div class="faq-item">
         <h3>O que é o "custo de disponibilidade" (taxa mínima)?</h3>
-        <p>É o valor obrigatório pago à concessionária para estar conectado à rede de energia. Para ligações bifásicas padrão, corresponde ao valor de 50 kWh e 100 kWh para trifásico.</p>
+        <p>É o valor obrigatório pago à concessionária para estar conectado à rede de energia. Corresponde ao custo fixo de 30 kWh para ligações monofásicas, 50 kWh para bifásicas e 100 kWh para trifásicas.</p>
       </div>
       <div class="faq-item">
         <h3>Os meus créditos de energia expiram?</h3>
@@ -652,30 +675,25 @@
                   Por favor, entre em contato diretamente conosco para realizarmos um estudo personalizado!
               </p>
               <a href="https://wa.me/5511983185337?text=Olá! Meu consumo mensal passou de 6.250 kWh e preciso de uma simulação detalhada para o meu sistema solar." 
-                 target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center;">
+                 target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center; width:100%;">
                  Falar no WhatsApp com Engenheiro
               </a>
           `;
           return; 
       }
 
-      // CAPTURA DOS NOVOS PARÂMETROS CONFIGURADOS
+      // CAPTURA DOS PARÂMETROS CONFIGURADOS
       const tipoConsumo = document.getElementById('tipoConsumo').value;
       const tTE = parseFloat(document.getElementById('tarifaTE').value) || 0;
       const tTUSD = parseFloat(document.getElementById('tarifaTUSD').value) || 0;
       const tCosip = parseFloat(document.getElementById('tarifaCosip').value) || 0;
       const tBandeira = parseFloat(document.getElementById('tarifaBandeira').value) || 0;
 
-      // Soma da Tarifa Plena Aplicada por kWh
       const tarifaTotalComBandeira = tTE + tTUSD + tBandeira;
-
-      // Média mensal calculada
       const c = totalKwh / 12; 
-      
-      // Conta Cheia Baseada Dinamicamente nas Tarifas Inseridas + COSIP
       const tc = (c * tarifaTotalComBandeira) + tCosip;
 
-      // Dimensionamento técnico com margem de 1.22
+      // Dimensionamento técnico
       const pr = ((c * 1.22) / 55.42) * 0.575;
       
       let pf;
@@ -692,21 +710,23 @@
       const n = Math.ceil(pf / 0.575);
       const a = (n * 2.58) * 1.15;
 
-      // CÁLCULO DINÂMICO DOS VALORES MÍNIMOS (Custo Fixo de Disponibilidade)
-      // Bifásico = 50 kWh | Trifásico = 100 kWh
+      // CÁLCULO DINÂMICO DOS VALORES MÍNIMOS (Monofásico, Bifásico ou Trifásico)
+      const nc_mono = (30 * tarifaTotalComBandeira) + tCosip;
       const nc_bi = (50 * tarifaTotalComBandeira) + tCosip;
       const nc_tri = (100 * tarifaTotalComBandeira) + tCosip;
 
-      // Economias geradas baseadas nas taxas mínimas atualizadas
-      const e_bi = tc - nc_bi;
-      const e_tri = tc - nc_tri;
+      // Seleção do custo fixo com base na escolha do usuário
+      let novaContaFixo = nc_bi;
+      if (tipoConsumo === 'Monofásico') novaContaFixo = nc_mono;
+      if (tipoConsumo === 'Trifásico') novaContaFixo = nc_tri;
+
+      // Economia gerada específica do padrão escolhido
+      const economiaSelecionada = tc - novaContaFixo;
 
       const p = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
+      const payback_selecionado = (economiaSelecionada > 0) ? (p / (economiaSelecionada * 12)).toFixed(1) : 0;
 
-      const payback_bi = (e_bi > 0) ? (p / (e_bi * 12)).toFixed(1) : 0;
-      const payback_tri = (e_tri > 0) ? (p / (e_tri * 12)).toFixed(1) : 0;
-
-      dadosPDF = { p, payback_bi, payback_tri, a, c, tc, nc_bi, nc_tri, e_bi, e_tri };
+      dadosPDF = { p, payback_selecionado, a, c, tc, novaContaFixo, economiaSelecionada, tipoConsumo };
       
       const hspSP = [5.22, 5.48, 4.70, 4.14, 3.42, 3.17, 3.24, 4.20, 4.24, 4.76, 5.14, 5.69];
       const dadosGeracao = hspSP.map(hsp => n * 0.575 * hsp * 30 * 0.76);
@@ -720,48 +740,45 @@
       }
       tabelaMesesWhats += `----------------------------------`;
 
-      const textoWhatsappCliente = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar (${tipoConsumo}):\n----------------------------------\n💰 *INVESTIMENTO E RETORNO:*\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Retorno Padrão Bifásico: ${payback_bi} anos\n• Retorno Padrão Trifásico: ${payback_tri} anos\n• Economia Mensal (Bifásico): R$ ${e_bi.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n• Economia Mensal (Trifásico): R$ ${e_tri.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n📊 *MÉDIAS DO SISTEMA:*\n• Consumo Médio: ${c.toFixed(1)} kWh/mês\n• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês\n• Área Necessária: ${a.toFixed(1)} m²\n----------------------------------\n${tabelaMesesWhats}\n\nDesejo mais informações sobre esta simulação e orçamento._`;
-      const msgWhatsapp = encodeURIComponent(textoWhatsappCliente);
+      const textoSample = `Olá ZNSolar! Seguem os dados da minha Simulação de Energia Solar (${tipoConsumo}):\n----------------------------------\n💰 *INVESTIMENTO E RETORNO:*\n• Investimento Total: R$ ${p.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n• Economia Mensal Estimada: R$ ${economiaSelecionada.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n• Tempo de Retorno (${tipoConsumo}): ${payback_selecionado} anos\n\n📊 *MÉDIAS DO SISTEMA:*\n• Consumo Médio: ${c.toFixed(1)} kWh/mês\n• Geração Média: ${mediaGeracao.toFixed(1)} kWh/mês\n• Área Necessária: ${a.toFixed(1)} m²\n----------------------------------\n${tabelaMesesWhats}\n\nDesejo mais informações sobre esta simulação e orçamento._`;
+      const msgBandeira = encodeURIComponent(textoSample);
 
-      divResultado.style.background = "transparent";
-      divResultado.style.borderLeft = "none";
-      divResultado.style.padding = "0";
+      divResultado.style.background = "#fafafa";
+      divResultado.style.border = "1px solid #ddd";
+      divResultado.style.padding = "25px";
 
       divResultado.innerHTML = `
-          <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">Resultado da Simulação ZN Solar (${tipoConsumo}):</div>
+          <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px; color: #ff9800;">Resultado da Simulação ZN Solar — Conexão ${tipoConsumo}</div>
           <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
           <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
-          <hr style="border:0;border-top:1px solid #a5d6a7;margin:12px 0;">
+          <hr style="border:0;border-top:1px solid #ddd;margin:12px 0;">
           
           <strong>Conta Sem Sistema Solar (Cheia):</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-          <strong>Nova Conta Fixo (Padrão Bifásico Mínimo):</strong> R$ ${nc_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-          <strong>Nova Conta Fixo (Padrão Trifásico Mínimo):</strong> R$ ${nc_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-          <strong>Economia Mensal Estimada (Bifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_bi.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span><br>
-          <strong>Economia Mensal Estimada (Trifásico):</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${e_tri.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+          <strong>Nova Conta Estimada (Custo Fixo ${tipoConsumo}):</strong> R$ ${novaContaFixo.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+          <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${economiaSelecionada.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
           
-          <div style="position: relative; height:250px; width:100%; margin: 20px 0;"><canvas id="graficoConsumoMensal"></canvas></div>
-          <div style="position: relative; height:200px; width:100%; margin: 20px 0;"><canvas id="graficoCustoFinanceiro"></canvas></div>
+          <div class="wrapper-grafico"><canvas id="graficoConsumoMensal"></canvas></div>
+          <div class="wrapper-grafico" style="height: 180px;"><canvas id="graficoCustoFinanceiro"></canvas></div>
 
-          <div style="font-size:1.1rem;font-weight:bold;">Investimento Total Estimado:</div>
-          <span style="font-size:1.6rem;font-weight:bold;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
-          <p><strong>Tempo de Retorno (Padrão Bifásico):</strong> ${payback_bi} anos</p>
-          <p><strong>Tempo de Retorno (Padrão Trifásico):</strong> ${payback_tri} anos</p>
+          <div style="font-size:1.1rem;font-weight:bold; margin-top: 15px;">Investimento Total Estimado:</div>
+          <span style="font-size:1.6rem;font-weight:bold; color: #333;">R$ ${p.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span><br>
+          <p><strong>Tempo de Retorno (Payback ${tipoConsumo}):</strong> ${payback_selecionado} anos</p>
 
-          <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
-              <h3 style="text-align: center; color: #2c3e50; font-size: 18px; margin-top: 0; margin-bottom: 25px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia e Valorização sobre 25 Anos</h3>
-              <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px;"></div>
-              <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <div id="projecao-financeira-web" style="margin-top: 25px; margin-bottom: 25px; font-family: Arial, sans-serif; background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e1e8ed; width: 100%;">
+              <h3 style="text-align: center; color: #2c3e50; font-size: 16px; margin-top: 0; margin-bottom: 20px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">Projeção de Economia sobre 25 Anos</h3>
+              <div id="web-bar-economia" style="display: flex; flex-direction: column; gap: 8px; width: 100%;"></div>
+              <div id="web-bar-valorizacao" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 20px;"></div>
           </div>
                  
           <button onclick="gerarPDF()" style="margin-top:20px; background:#e74c3c; color:white; padding:15px; border-radius:5px; font-weight:bold; width:100%; border:none; cursor:pointer;">
               <i class="fas fa-file-pdf"></i> Baixar Proposta em PDF
           </button>
 
-          <a href="https://wa.me/5511983185337?text=${msgWhatsapp}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center;">
+          <a href="https://wa.me/5511983185337?text=${msgBandeira}" target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:12px; text-align:center; width: 100%;">
               Falar no WhatsApp Agora  
           </a>
-          <br>* O valor acima inclui equipamentos, instalação profissional completa e homologação técnica. Valores baseados nas tarifas customizadas inseridas no simulador.<br><br>
-          <strong>Aviso Importante:</strong> Este orçamento e simulação são prévios. Visita técnica valor R$ 150,00 para efetivar condições do local da instalação. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte.
+          <br><span style="font-size:0.85rem; color:#666;">* O valor acima inclui equipamentos, instalação profissional completa e homologação técnica. Valores baseados nas tarifas customizadas inseridas no simulador.</span><br><br>
+          <strong style="font-size:0.9rem;">Aviso Importante:</strong> <span style="font-size:0.9rem; color:#444;">Este orçamento e simulação são prévios. Visita técnica valor R$ 150,00 para efetivar condições do local da instalação. Ressalvas a parte elétrica do imóvel, se necessário alterações, o valor é cobrado a parte.</span>
       `;
 
       divResultado.style.display = "block";
@@ -783,11 +800,11 @@
       new Chart(ctx2, {
           type: 'bar',
           data: {
-              labels: ['Conta Cheia (Sem Solar)', 'Mínimo Bifásico (Com Solar)', 'Mínimo Trifásico (Com Solar)'],
+              labels: ['Sem Solar', 'Com Solar (' + tipoConsumo + ')'],
               datasets: [{
                   label: 'Custo Mensal (R$)',
-                  data: [tc, nc_bi, nc_tri], 
-                  backgroundColor: ['#DC3545', '#28A745', '#17A2B8'],
+                  data: [tc, novaContaFixo], 
+                  backgroundColor: ['#DC3545', '#28A745'],
                   borderWidth: 1
               }]
           },
@@ -795,7 +812,7 @@
               indexAxis: 'y',
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { legend: { display: true } }
+              plugins: { legend: { display: false } }
           }
       });
 
@@ -807,7 +824,7 @@
           const taxaReajusteAnual = 0.04;
 
           let valorMaximoRendimento = 0;
-          let economiaMensalAnoAtual = e_bi;
+          let economiaMensalAnoAtual = economiaSelecionada;
           for (let ano = 1; ano <= 25; ano++) {
               for (let mes = 1; mes <= 12; mes++) {
                   valorMaximoRendimento = (valorMaximoRendimento + economiaMensalAnoAtual) * (1 + 0.01);
@@ -817,12 +834,12 @@
           const tetoEscala = Math.round(valorMaximoRendimento);
 
           let htmlGeral = `
-              <div style="margin-bottom: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #0284c7; font-size: 13px; color: #334155; text-align: left; line-height: 1.4;">
-                  <strong>📊 Nota Técnica do Simulador:</strong> Projeções customizadas baseadas no tipo de tarifa inserida, considerando reajuste inflacionário de <strong>4% ao ano</strong>.
+              <div style="margin-bottom: 15px; padding: 10px; background: #f8fafc; border-left: 4px solid #0284c7; font-size: 12px; color: #334155; text-align: left; line-height: 1.4;">
+                  <strong>📊 Nota Técnica:</strong> Prospecção considerando reajuste tarifário inflacionário anual estimado em <strong>4% ao ano</strong>.
               </div>
           `;
 
-          htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #b91c1c;">🔴 Custo da Conta de Luz Acumulada (Sem Solar - Conta Cheia)</h4>`;
+          htmlGeral += `<div style="margin-bottom: 15px;"><h4 style="margin: 0 0 10px 0; font-size: 13px; color: #b91c1c; text-align:left;">🔴 Gasto Acumulado com a Concessionária (Sem Solar)</h4>`;
           anosProjecao.forEach(ano => {
               let custoAcumulado = 0;
               let contaAnoAtual = tc;
@@ -833,20 +850,20 @@
               custoAcumulado = Math.round(custoAcumulado);
               const percentualBarra = tetoEscala > 0 ? Math.min((custoAcumulado / tetoEscala) * 100, 100) : 0;
               htmlGeral += `
-                  <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                      <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                  <div class="barra-linha-pdf">
+                      <div style="width: 50px; font-size: 11px; color: #555; font-weight: bold; text-align:left;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 8px;">
                           <div style="background: #ef4444; width: ${percentualBarra}%; height: 100%;"></div>
                       </div>
-                      <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${custoAcumulado.toLocaleString('pt-BR')}</div>
+                      <div style="width: 85px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${custoAcumulado.toLocaleString('pt-BR')}</div>
                   </div>`;
           });
           htmlGeral += `</div>`;
 
-          htmlGeral += `<div style="margin-bottom: 25px;"><h4 style="margin: 0 0 10px 0; font-size: 14px; color: #1565C0;">🔵 Economia Real Acumulada (Soma Direta Corrigida)</h4>`;
+          htmlGeral += `<div><h4 style="margin: 0 0 10px 0; font-size: 13px; color: #1565C0; text-align:left;">🔵 Economia Real Líquida Acumulada</h4>`;
           anosProjecao.forEach(ano => {
               let economyPuraAcumulada = 0;
-              let economiaAnoAtual = e_bi;
+              let economiaAnoAtual = economiaSelecionada;
               for (let i = 1; i <= ano; i++) {
                   economyPuraAcumulada += economiaAnoAtual * 12;
                   economiaAnoAtual = economiaAnoAtual * (1 + taxaReajusteAnual);
@@ -854,22 +871,22 @@
               economyPuraAcumulada = Math.round(economyPuraAcumulada);
               const percentualBarra = tetoEscala > 0 ? Math.min((economyPuraAcumulada / tetoEscala) * 100, 100) : 0;
               htmlGeral += `
-                  <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                      <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                  <div class="barra-linha-pdf">
+                      <div style="width: 50px; font-size: 11px; color: #555; font-weight: bold; text-align:left;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 8px;">
                           <div style="background: #1565C0; width: ${percentualBarra}%; height: 100%;"></div>
                       </div>
-                      <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${economyPuraAcumulada.toLocaleString('pt-BR')}</div>
+                      <div style="width: 85px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${economyPuraAcumulada.toLocaleString('pt-BR')}</div>
                   </div>`;
           });
           htmlGeral += `</div>`;
 
           divWebEconomia.innerHTML = htmlGeral;
 
-          let htmlRendimento = `<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #2E7D32;">🟢 Valorização Real do Capital Aplicado (Rendimento Reinvestido 1% a.m.)</h4>`;
+          let htmlRendimento = `<h4 style="margin: 0 0 10px 0; font-size: 13px; color: #2E7D32; text-align:left;">🟢 Valorização do Capital Reinvestido (1% ao mês)</h4>`;
           anosProjecao.forEach(ano => {
               let capitalAcumuladoComJuros = 0;
-              let economiaAnoAtual = e_bi;
+              let economiaAnoAtual = economiaSelecionada;
               for (let i = 1; i <= ano; i++) {
                   for (let m = 1; m <= 12; m++) {
                       capitalAcumuladoComJuros = (capitalAcumuladoComJuros + economiaAnoAtual) * (1 + 0.01);
@@ -879,12 +896,12 @@
               capitalAcumuladoComJuros = Math.round(capitalAcumuladoComJuros);
               const percentualBarra = tetoEscala > 0 ? Math.min((capitalAcumuladoComJuros / tetoEscala) * 100, 100) : 0;
               htmlRendimento += `
-                  <div style="display: flex; align-items: center; margin-bottom: 6px;">
-                      <div style="width: 55px; font-size: 11px; color: #555; font-weight: bold;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
-                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 10px;">
+                  <div class="barra-linha-pdf">
+                      <div style="width: 50px; font-size: 11px; color: #555; font-weight: bold; text-align:left;">${ano} ${ano === 1 ? 'Ano' : 'Anos'}</div>
+                      <div style="flex: 1; background: #e1e8ed; height: 14px; border-radius: 3px; overflow: hidden; margin: 0 8px;">
                           <div style="background: #2E7D32; width: ${percentualBarra}%; height: 100%;"></div>
                       </div>
-                      <div style="width: 95px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${capitalAcumuladoComJuros.toLocaleString('pt-BR')}</div>
+                      <div style="width: 85px; text-align: right; font-size: 11px; font-weight: bold; color: #333;">R$ ${capitalAcumuladoComJuros.toLocaleString('pt-BR')}</div>
                   </div>`;
           });
           divWebValorizacao.innerHTML = htmlRendimento;
@@ -897,13 +914,12 @@
       const doc = new jsPDF('p', 'mm', 'a4');
 
       let p = dadosPDF.p;
-      const payback_bi = dadosPDF.payback_bi;
-      const payback_tri = dadosPDF.payback_tri;
+      const payback_selecionado = dadosPDF.payback_selecionado;
       const a = dadosPDF.a;
       const c = dadosPDF.c;
       const tc = dadosPDF.tc;
-      const nc_bi = dadosPDF.nc_bi;
-      const nc_tri = dadosPDF.nc_tri;
+      const novaContaFixo = dadosPDF.novaContaFixo;
+      const tipoConsumo = dadosPDF.tipoConsumo;
 
       if (!p) { alert("Por favor, clique em SIMULAR primeiro."); return; }
 
@@ -916,7 +932,7 @@
 
       doc.setDrawColor(255, 152, 0); doc.setLineWidth(1); doc.line(10, 46, 200, 46);
 
-      try { doc.addImage('img/marca_dagua.png', 'PNG', 10, 15, 55, 26); } catch (e) {
+      try { doc.addImage('img/marca_down.png', 'PNG', 10, 15, 55, 26); } catch (e) {
           doc.setFont("helvetica", "bold"); doc.setFontSize(24); doc.setTextColor(21, 101, 192);
           doc.text("ZN ", 12, 32); doc.setTextColor(255, 152, 0); doc.text("SOLAR", 26, 32);
       }
@@ -935,8 +951,8 @@
       doc.text("Investimento e Retorno", 111, 62);
       doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.setTextColor(51, 51, 51);
       doc.text(`Valor Total: R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 111, 72);
-      doc.text(`Payback (Retorno Bifásico): ${payback_bi} anos`, 111, 81);
-      doc.text(`Payback (Retorno Trifásico): ${payback_tri} anos`, 111, 89);
+      doc.text(`Padrão Entrada: Padrão ${tipoConsumo}`, 111, 81);
+      doc.text(`Tempo Retorno (Payback): ${payback_selecionado} anos`, 111, 89);
     
       doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(34, 34, 34);
       doc.text("Análise de Viabilidade Econômica", 105, 107, { align: "center" });
