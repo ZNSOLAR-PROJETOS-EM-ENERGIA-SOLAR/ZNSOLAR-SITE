@@ -262,16 +262,40 @@
       justify-content: center;
       transition: transform 0.3s;
     }
-    .whatsapp:hover {
-      transform: scale(1.1);
-    }
+    .whatsapp:hover { transform: scale(1.1); }
 
-    @media (max-width:768px) {
+    /* Configuração interna do Simulador Avançado */
+    .grid-consumo {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .campo-mes { display: flex; flex-direction: column; text-align: left; }
+    .campo-mes label { font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #555; }
+    .campo-mes input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
+
+    .form-tarifas {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+      text-align: left;
+      border-top: 1px dashed #ddd;
+      padding-top: 20px;
+    }
+    .campo-tarifa { display: flex; flex-direction: column; }
+    .campo-tarifa label { font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; color: #333; }
+    .campo-tarifa input, .campo-tarifa select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; }
+
+    @media (max-width: 768px) {
       .autoridade-container { flex-direction:column; text-align:center; }
       .autoridade-texto h2 { text-align:center; }
       .video-box iframe { height:200px; }
       .videos-grid { grid-template-columns: 1fr; }
       .diagramas-grid { grid-template-columns: 1fr !important; }
+      .grid-consumo { grid-template-columns: repeat(2, 1fr); }
+      .form-tarifas { grid-template-columns: 1fr; }
     }
   </style>
 
@@ -336,52 +360,48 @@
     </div>
   </section>
 
-  <section id="simulador-solar" style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
+  <!-- SEÇÃO DO SIMULADOR UNIFICADO E COMPLETO -->
+  <section id="simulador-solar" style="max-width:850px; margin:0 auto; background:white; padding:30px; border-radius:10px; margin-top:50px; box-shadow:0 4px 10px rgba(0,0,0,0.05); border:1px solid #eee; border-top:4px solid #ff9800;">
     <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
-    <p style="text-align:center; color:#666; margin-bottom:25px;">Insira os valores da sua conta de luz para um cálculo detalhado com tarifas TUSD, TE e Bandeiras.</p>
+    <p style="text-align:center; color:#666; margin-bottom:25px;">Insira o histórico de consumo em kWh dos últimos 12 meses e ajuste as tarifas para um cálculo de engenharia exato.</p>
     
-    <style>
-      .form-simulador {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        margin-bottom: 25px;
-        text-align: left;
-      }
-      .campo-simulador {
-        display: flex;
-        flex-direction: column;
-      }
-      .campo-simulador label { font-weight:bold; font-size:0.9rem; margin-bottom:5px; color:#333; }
-      .campo-simulador input, .campo-simulador select { padding:10px; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
-      
-      @media (max-width: 600px) {
-        .form-simulador { grid-template-columns: 1fr; }
-      }
-    </style>
+    <!-- 12 MESES VOLTARAM PARA CÁ -->
+    <h3 style="text-align:left; font-size:1.05rem; margin-bottom:12px; color:#ff9800;"><i class="fas fa-calendar-alt"></i> Histórico de Consumo Mensal (kWh)</h3>
+    <div class="grid-consumo">
+      <div class="campo-mes"><label>Mês 1 (Atual)</label><input type="number" class="mes-consumo" placeholder="0" value="520"></div>
+      <div class="campo-mes"><label>Mês 2</label><input type="number" class="mes-consumo" placeholder="0" value="480"></div>
+      <div class="campo-mes"><label>Mês 3</label><input type="number" class="mes-consumo" placeholder="0" value="510"></div>
+      <div class="campo-mes"><label>Mês 4</label><input type="number" class="mes-consumo" placeholder="0" value="550"></div>
+      <div class="campo-mes"><label>Mês 5</label><input type="number" class="mes-consumo" placeholder="0" value="490"></div>
+      <div class="campo-mes"><label>Mês 6</label><input type="number" class="mes-consumo" placeholder="0" value="460"></div>
+      <div class="campo-mes"><label>Mês 7</label><input type="number" class="mes-consumo" placeholder="0" value="440"></div>
+      <div class="campo-mes"><label>Mês 8</label><input type="number" class="mes-consumo" placeholder="0" value="470"></div>
+      <div class="campo-mes"><label>Mês 9</label><input type="number" class="mes-consumo" placeholder="0" value="500"></div>
+      <div class="campo-mes"><label>Mês 10</label><input type="number" class="mes-consumo" placeholder="0" value="530"></div>
+      <div class="campo-mes"><label>Mês 11</label><input type="number" class="mes-consumo" placeholder="0" value="540"></div>
+      <div class="campo-mes"><label>Mês 12</label><input type="number" class="mes-consumo" placeholder="0" value="510"></div>
+    </div>
 
-    <div class="form-simulador">
-      <div class="campo-simulador">
-        <label>Consumo Mensal Médio (kWh)</label>
-        <input type="number" id="consumoKwh" placeholder="Ex: 500" value="500">
-      </div>
-      <div class="campo-simulador">
-        <label>Tipo de Ligação (Taxa Mínima)</label>
+    <!-- COMPOSIÇÃO DE TARIFAS MANTIDA -->
+    <h3 style="text-align:left; font-size:1.05rem; margin-bottom:5px; color:#ff9800;"><i class="fas fa-receipt"></i> Composição e Configurações da Fatura</h3>
+    <div class="form-tarifas">
+      <div class="campo-tarifa">
+        <label>Tipo de Conexão (Taxa Mínima)</label>
         <select id="tipoLigacao">
           <option value="bifasico">Bifásico (50 kWh)</option>
           <option value="trifasico">Trifásico (100 kWh)</option>
         </select>
       </div>
-      <div class="campo-simulador">
-        <label>Tarifa TUSD (R$/kWh com Impostos)</label>
+      <div class="campo-tarifa">
+        <label>Tarifa TUSD (R$/kWh c/ Impostos)</label>
         <input type="number" id="tarifaTusd" step="0.0001" value="0.5120">
       </div>
-      <div class="campo-simulador">
-        <label>Tarifa TE (R$/kWh com Impostos)</label>
+      <div class="campo-tarifa">
+        <label>Tarifa TE (R$/kWh c/ Impostos)</label>
         <input type="number" id="tarifaTe" step="0.0001" value="0.4180">
       </div>
-      <div class="campo-simulador">
-        <label>Bandeira Tarifária Média (R$/kWh)</label>
+      <div class="campo-tarifa">
+        <label>Bandeira Tarifária Ativa (R$/kWh)</label>
         <select id="bandeiraTarifa">
           <option value="0.00">Verde (R$ 0,00)</option>
           <option value="0.0188">Amarela (R$ 0,0188)</option>
@@ -389,13 +409,13 @@
           <option value="0.0787">Vermelha Patamar 2 (R$ 0,0787)</option>
         </select>
       </div>
-      <div class="campo-simulador">
-        <label>Iluminação Pública + Outros (R$)</label>
+      <div class="campo-tarifa" style="grid-column: span 2;">
+        <label>Custo Adicional Fixo (COSIP / Ilum. Pública + Outros R$)</label>
         <input type="number" id="custoFixoCip" step="0.01" value="45.00">
       </div>
     </div>
 
-    <button onclick="_calcZNDetalhado()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Técnico</button>
+    <button onclick="_calcZNCompleto()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
 
     <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left;"></div>
   </section>
@@ -418,23 +438,6 @@
         <div class="diagrama-item" style="text-align: center;">
             <h3 style="font-size: 1.1em; margin-bottom: 10px;">Sistema Híbrido</h3>
             <img src="img/hibrdo fotovoltaco.jpeg" alt="Diagrama Técnico de Sistema Solar Híbrido" class="diagrama-imagem" style="width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        </div>
-    </div>
-
-    <div style="margin-top: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; padding: 0 10px;">
-        <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
-            <strong style="color: #333; display: block; margin-bottom: 5px;">On-Grid (Conectado à Rede)</strong>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">É o modelo mais comum e econômico. Funciona em paralelo com a rede da concessionária. Toda a energia excedente vira créditos para abater na sua conta de luz.</p>
-        </div>
-         
-        <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
-            <strong style="color: #333; display: block; margin-bottom: 5px;">Off-Grid (Isolado por Baterias)</strong>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">Totalmente independente da rede elétrica. A energia gerada é armazenada em baterias para ser usada à noite ou em locais isolados onde não há energia da concessionária.</p>
-        </div>
-
-        <div style="background: #fcfcfc; padding: 15px; border-left: 4px solid #ff9800; border-radius: 4px;">
-            <strong style="color: #333; display: block; margin-bottom: 5px;">Híbrido (O Melhor dos Dois Mundos)</strong>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">Trabalha conectado à rede da concessionária para gerar créditos, mas também possui baterias de emergência (backup) caso falte energia na rede da rua.</p>
         </div>
     </div>
   </section>
@@ -466,36 +469,19 @@
         <li><strong>✓ Conformidade Legal:</strong> Projetos rigorosamente alinhados com a Lei 14.300 e as normas vigentes da Enel SP.</li>
         <li><strong>✓ Simulação Precisa:</strong> Nada de estimativas vagas; usamos cálculos exatos baseados nas composições reais da sua fatura e tarifas homologadas pela ANEEL.</li>
       </ul>
-      <p>Buscamos a máxima eficiência para que seu investimento tenha durabilidade superior a 25 anos.</p>
     </div>
     <img src="img/Simulação Profissional .jpeg" alt="Profissional realizando testes e simulações solares" class="autoridade-imagem">
   </section>
 
   <section class="faq-container">
     <h2>Dúvidas Frequentes (FAQ)</h2>
-    <div class="faq-item" style="margin-top:20px;">
+    <div class="faq-item">
       <h3>O que acontece em dias nublados ou chuvosos?</h3>
       <p>O sistema continua gerando energia através da radiação solar difusa, porém em menor quantidade quando comparado a um dia ensolarado.</p>
     </div>
     <div class="faq-item">
       <h3>O que é o "custo de disponibilidade" (taxa mínima)?</h3>
       <p>É o valor obrigatório pago à concessionária para estar conectado à rede de energia. Para ligações bifásicas padrão, corresponde ao valor de 50 kWh e 100 kWh para trifásico.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Os meus créditos de energia expiram?</h3>
-      <p>Não. Os créditos de energia gerados a mais ficam acumulados e podem ser usados para abater contas futuras em até 60 meses.</p>
-    </div>
-  </section>
-
-  <section class="videos-container">
-    <h2>Conheça o Nosso Trabalho</h2>
-    <div class="videos-grid">
-      <div class="video-box">
-        <iframe src="https://www.youtube.com/embed/92p-NI8F13E" title="Vídeo ZNSOLAR 1" allowfullscreen></iframe>
-      </div>
-      <div class="video-box">
-        <iframe src="https://www.youtube.com/embed/Gjo_kqxJ1nM" title="Vídeo ZNSOLAR 2" allowfullscreen></iframe>
-      </div>
     </div>
   </section>
 
@@ -554,101 +540,120 @@
 
   let dadosRelatorioPDF = {};
 
-  function _calcZNDetalhado() {
-    // 1. Coleta dos inputs do formulário
-    const consumoKwh = parseFloat(document.getElementById('consumoKwh').value) || 0;
+  function _calcZNCompleto() {
+    // 1. Coleta e soma dos 12 meses preenchidos
+    const camposMeses = document.querySelectorAll('.mes-consumo');
+    let totalKwh12Meses = 0;
+    let mesesPreenchidos = 0;
+
+    camposMeses.forEach(campo => {
+      const valor = parseFloat(campo.value);
+      if (!isNaN(valor) && valor >= 0) {
+        totalKwh12Meses += valor;
+        mesesPreenchidos++;
+      }
+    });
+
+    const divResultado = document.getElementById('resultado-simulacao');
+
+    if (mesesPreenchidos < 12) {
+      alert("Por favor, preencha o consumo de todos os 12 meses.");
+      return;
+    }
+
+    // Média real de consumo mensal do cliente
+    const consumoMensalMedio = totalKwh12Meses / 12;
+
+    // Trava técnica para consumo industrial/de grande porte
+    if (totalKwh12Meses > 75000 || consumoMensalMedio > 6250) {
+      divResultado.style.display = "block";
+      divResultado.style.borderLeft = "4px solid #e53935";
+      divResultado.style.background = "#ffebee";
+      divResultado.innerHTML = `
+        <div style="font-size:1.2rem; font-weight:bold; color:#c62828; margin-bottom:10px;"><i class="fas fa-exclamation-triangle"></i> Potência acima da categoria padrão</div>
+        <p style="color:#333;">O consumo acumulado ultrapassa os limites padrões da ferramenta. Solicite um estudo customizado diretamente com nossa engenharia.</p>
+        <a href="https://wa.me/5511983185337?text=Olá! Meu consumo médio mensal passou de 6.250 kWh e preciso de uma simulação detalhada para o meu sistema solar." target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center;">Falar com Engenheiro no WhatsApp</a>
+      `;
+      return;
+    }
+
+    // 2. Coleta das Configurações Tarifárias
     const tipoLigacao = document.getElementById('tipoLigacao').value;
     const tarifaTusd = parseFloat(document.getElementById('tarifaTusd').value) || 0;
     const tarifaTe = parseFloat(document.getElementById('tarifaTe').value) || 0;
     const bandeiraTarifa = parseFloat(document.getElementById('bandeiraTarifa').value) || 0;
     const custoFixoCip = parseFloat(document.getElementById('custoFixoCip').value) || 0;
 
-    const divResultado = document.getElementById('resultado-simulacao');
-
-    if (consumoKwh <= 0) {
-      alert("Por favor, informe um consumo válido.");
-      return;
-    }
-
-    // Trava de limite de consumo para simulação básica
-    if (consumoKwh > 6250) {
-      divResultado.style.display = "block";
-      divResultado.style.borderLeft = "4px solid #e53935";
-      divResultado.style.background = "#ffebee";
-      divResultado.style.padding = "20px";
-      divResultado.style.borderRadius = "8px";
-      divResultado.innerHTML = `
-        <div style="font-size:1.2rem; font-weight:bold; color:#c62828; margin-bottom:10px;">
-          <i class="fas fa-exclamation-triangle"></i> Potência acima do limite padrão
-        </div>
-        <p style="color:#333;">O consumo informado (${consumoKwh} kWh) necessita de um dimensionamento de engenharia sob medida.</p>
-        <a href="https://wa.me/5511983185337?text=Olá! Meu consumo mensal é de ${consumoKwh} kWh e preciso de um estudo customizado de engenharia."
-           target="_blank" style="display:block; background:#25d366; color:white; padding:12px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:15px; text-align:center;">
-           Falar no WhatsApp com Engenheiro
-        </a>`;
-      return;
-    }
-
-    // 2. Definição da Taxa Mínima (Disponibilidade)
-    const kwhMinimo = (tipoLigacao === "bifasico") ? 50 : 100;
-
-    // 3. Cálculo do Custo Atual Completo da Conta de Luz
+    // 3. Custo da Conta de Luz Atual Baseado na Média Informada
     const precoKwhCompleto = tarifaTusd + tarifaTe + bandeiraTarifa;
-    const custoAtualTotal = (consumoKwh * precoKwhCompleto) + custoFixoCip;
+    const custoAtualTotal = (consumoMensalMedio * precoKwhCompleto) + custoFixoCip;
 
-    // 4. Dimensionamento Técnico do Sistema Solar (Mantendo fórmula de precisão)
-    const pr = ((consumoKwh * 1.22) / 55.42) * 0.575;
-    let pf = Math.round(pr * 2) / 2; // Arredonda para o degrau de 0.5 kWp mais próximo
+    // 4. Dimensionamento e Regra de Arredondamento Comercial (Degraus de 0.5 em 0.5 kW)
+    const pr = ((consumoMensalMedio * 1.22) / 55.42) * 0.575; 
+    let pf;
+    const baseInteira = Math.floor(pr);
+    const restoDecimal = pr - baseInteira;
+
+    if (restoDecimal === 0.0) {
+      pf = baseInteira;
+    } else if (restoDecimal <= 0.5) {
+      pf = baseInteira + 0.5; // Abaixo ou igual a .5 crava no degrau intermediário (.5)
+    } else {
+      pf = baseInteira + 1.0; // Acima de .5 (ex: 2.6) arredonda para o próximo inteiro
+    }
+
     if (pf < 2.0) pf = 2.0;
     if (pf > 75.0) pf = 75.0;
 
     const numeroModulos = Math.ceil(pf / 0.575);
     const areaEstimada = (numeroModulos * 2.58) * 1.15;
 
-    // 5. Custo Pós-Instalação (O cliente só paga a Taxa Mínima pelo uso do fio + taxas fixas)
+    // 5. Custo Residual Pós-Instalação (Taxa Mínima de Conexão)
+    const kwhMinimo = (tipoLigacao === "bifasico") ? 50 : 100;
     const custoPosSolar = (kwhMinimo * precoKwhCompleto) + custoFixoCip;
+
     const economiaMensal = custoAtualTotal - custoPosSolar;
     const economiaAnual = economiaMensal * 12;
 
-    // 6. Preço do Sistema pela Tabela Comercial
+    // 6. Resgate do Preço Unificado Sincronizado
     const precoSistema = _0xtp[pf.toFixed(1)] || _0xtp[pf] || 0;
-    const paybackAnos = (economiaMensal > 0) ? (precoSistema / economiaAnual).toFixed(1) : 0;
+    const paybackAnos = (economiaMensal > 0) ? (precoSistema / economy_anual = economiaAnual).toFixed(1) : 0;
 
-    // Salva variáveis para o gerador de PDF usar globalmente
+    // Grava para o gerador de PDF
     dadosRelatorioPDF = {
-      consumoKwh, tipoLigacao, kwhMinimo, tarifaTusd, tarifaTe, bandeiraTarifa, custoFixoCip,
+      consumoKwh: consumoMensalMedio.toFixed(0), tipoLigacao, kwhMinimo, tarifaTusd, tarifaTe, bandeiraTarifa, custoFixoCip,
       custoAtualTotal, pf, numeroModulos, areaEstimada, custoPosSolar, economiaMensal, economiaAnual, precoSistema, paybackAnos
     };
 
-    // 7. Renderização dos Resultados na Tela do Usuário
+    // 7. Renderização na Tela
     divResultado.style.display = "block";
     divResultado.style.borderLeft = "4px solid #ff9800";
     divResultado.style.background = "#fdfdfd";
-    divResultado.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
 
     divResultado.innerHTML = `
-      <h3 style="color:#333; margin-bottom:15px; border-bottom:2px solid #ff9800; padding-bottom:5px;">📊 Diagnóstico Técnico do Sistema Solar</h3>
+      <h3 style="color:#333; margin-bottom:15px; border-bottom:2px solid #ff9800; padding-bottom:5px;">📊 Diagnóstico de Engenharia Fotovoltaica</h3>
       
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
         <div>
-          <p><strong>Custo de Energia Atual:</strong> R$ ${custoAtualTotal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}/mês</p>
-          <p><strong>Nova Conta Estimada:</strong> R$ ${custoPosSolar.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}/mês</p>
-          <p style="color:#2e7d32; font-size:1.15rem;"><strong>Economia Mensal:</strong> R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
+          <p><strong>Média Mensal Calculada:</strong> ${consumoMensalMedio.toFixed(0)} kWh/mês</p>
+          <p><strong>Custo Mensal Atual:</strong> R$ ${custoAtualTotal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
+          <p style="color:#2e7d32; font-size:1.15rem;"><strong>Sua Nova Conta (Mínima):</strong> R$ ${custoPosSolar.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
         </div>
         <div>
-          <p><strong>Potência Recomendada:</strong> ${pf.toFixed(1)} kWp</p>
-          <p><strong>Módulos Necessários:</strong> ${numeroModulos} painéis</p>
-          <p><strong>Área Necessária:</strong> ${areaEstimada.toFixed(1)} m²</p>
+          <p><strong>Potência Comercial Aplicada:</strong> ${pf.toFixed(1)} kWp</p>
+          <p><strong>Quantidade de Painéis:</strong> ${numeroModulos} módulos</p>
+          <p><strong>Área Requerida Aprox:</strong> ${areaEstimada.toFixed(1)} m²</p>
         </div>
       </div>
 
       <div style="background:#fff3e0; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center;">
-        <span style="font-size:1.2rem; font-weight:bold; color:#e65100;">Investimento: R$ ${precoSistema.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</span><br>
-        <strong style="color:#444;">Retorno do Investimento (Payback): ${paybackAnos} anos</strong>
+        <span style="font-size:1.25rem; font-weight:bold; color:#e65100;">Investimento Total: R$ ${precoSistema.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</span><br>
+        <span style="color:#2e7d32; font-weight:bold;">Sua Economia Mensal será de: R$ ${economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</span><br>
+        <strong style="color:#444;">Retorno sobre o Investimento: ${paybackAnos} anos</strong>
       </div>
 
       <div style="display:flex; gap:10px;">
-        <button onclick="baixarPDFProposta()" style="flex:1; background:#333; color:white; border:none; padding:12px; border-radius:5px; font-weight:bold; cursor:pointer;"><i class="fas fa-file-pdf"></i> Baixar Relatório Técnico</button>
+        <button onclick="baixarPDFProposta()" style="flex:1; background:#333; color:white; border:none; padding:12px; border-radius:5px; font-weight:bold; cursor:pointer;"><i class="fas fa-file-pdf"></i> Baixar Relatório PDF</button>
         <button onclick="enviarPropostaWhats()" style="flex:1; background:#25d366; color:white; border:none; padding:12px; border-radius:5px; font-weight:bold; cursor:pointer;"><i class="fab fa-whatsapp"></i> Receber no WhatsApp</button>
       </div>
     `;
@@ -656,23 +661,20 @@
 
   function enviarPropostaWhats() {
     if (!dadosRelatorioPDF.precoSistema) return;
-    
     const d = dadosRelatorioPDF;
-    const msg = `Olá *ZNSolar*! Realizei a simulação técnica detalhada no site:\n\n` +
-                `📊 *DADOS DA UNIDADE CONSUMIDORA:*\n` +
-                `• Consumo Médio: ${d.consumoKwh} kWh/mês\n` +
-                `• Tarifa Base (TUSD+TE): R$ ${(d.tarifaTusd + d.tarifaTe).toFixed(4)}/kWh\n` +
-                `• Custo da Conta Atual: R$ ${d.custoAtualTotal.toFixed(2)}\n\n` +
-                `☀️ *DIMENSIONAMENTO SOLAR:* \n` +
-                `• Potência do Sistema: ${d.pf.toFixed(1)} kWp\n` +
-                `• Quantidade de Módulos: ${d.numeroModulos} unidades\n` +
-                `• Área Estimada: ${d.areaEstimada.toFixed(1)} m²\n\n` +
-                `💰 *PROPOSTA E RETORNO:* \n` +
+    const msg = `Olá *ZNSolar*! Montei minha simulação comercial completa com os 12 meses:\n\n` +
+                `📊 *DADOS RESUMIDOS DA FATURA:*\n` +
+                `• Média de Consumo: ${d.consumoKwh} kWh/mês\n` +
+                `• Tarifa (TUSD+TE+Bandeira): R$ ${(d.tarifaTusd + d.tarifaTe + d.bandeiraTarifa).toFixed(4)}\n` +
+                `• Valor da Fatura Atual: R$ ${d.custoAtualTotal.toFixed(2)}\n\n` +
+                `☀️ *ESTRUTURA SOLAR GERADA:* \n` +
+                `• Potência Comercial: ${d.pf.toFixed(1)} kWp\n` +
+                `• Módulos Homologados: ${d.numeroModulos} painéis\n\n` +
+                `💰 *ECONOMIA E PAYBACK:* \n` +
+                `• Custo após Ativação: R$ ${d.custoPosSolar.toFixed(2)}\n` +
                 `• Valor do Investimento: R$ ${d.precoSistema.toLocaleString('pt-BR')}\n` +
-                `• Nova conta (Taxa Mínima + CIP): R$ ${d.custoPosSolar.toFixed(2)}\n` +
-                `• Economia Anual Estimada: R$ ${d.economiaAnual.toFixed(2)}\n` +
-                `• Payback Comercial: ${d.paybackAnos} anos\n\n` +
-                `Gostaria de falar com o engenheiro para validar o projeto!`;
+                `• Retorno Estimado (Payback): ${d.paybackAnos} anos\n\n` +
+                `Quero validar este estudo e agendar a visita técnica.`;
 
     window.open(`https://wa.me/5511983185337?text=${encodeURIComponent(msg)}`, '_blank');
   }
@@ -683,56 +685,49 @@
     const doc = new jsPDF();
     const d = dadosRelatorioPDF;
 
-    // Layout limpo e profissional para Engenharia
     doc.setFillColor(33, 33, 33);
     doc.rect(0, 0, 210, 30, 'F');
-
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("ZNSOLAR — ESTUDO DE VIABILIDADE TÉCNICA", 15, 20);
+    doc.setFontSize(15);
+    doc.text("ZN SOLAR — ESTUDO DE PROPOSTA TÉCNICA", 15, 20);
 
     doc.setTextColor(33, 33, 33);
     doc.setFontSize(12);
-    doc.text("1. Composição e Diagnóstico da Fatura Atual", 15, 45);
+    doc.text("1. Diagnóstico Tarifário com Base no Histórico", 15, 45);
     doc.line(15, 47, 195, 47);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.text(`• Consumo de Referência: ${d.consumoKwh} kWh/mês`, 15, 55);
-    doc.text(`• Tarifa Aplicada TUSD: R$ ${d.tarifaTusd.toFixed(4)} / kWh`, 15, 62);
-    doc.text(`• Tarifa Aplicada TE: R$ ${d.tarifaTe.toFixed(4)} / kWh`, 15, 69);
-    doc.text(`• Adicional de Bandeira: R$ ${d.bandeiraTarifa.toFixed(4)} / kWh`, 15, 76);
-    doc.text(`• Custo Fixo de Iluminação Pública (CIP): R$ ${d.custoFixoCip.toFixed(2)}`, 15, 83);
+    doc.text(`• Média Computada de Consumo: ${d.consumoKwh} kWh/mês`, 15, 55);
+    doc.text(`• Tarifa de Distribuição TUSD: R$ ${d.tarifaTusd.toFixed(4)} / kWh`, 15, 62);
+    doc.text(`• Tarifa de Energia TE: R$ ${d.tarifaTe.toFixed(4)} / kWh`, 15, 69);
+    doc.text(`• Bandeira Aplicada: R$ ${d.bandeiraTarifa.toFixed(4)} / kWh`, 15, 76);
+    doc.text(`• Contribuição de Iluminação Pública (COSIP): R$ ${d.custoFixoCip.toFixed(2)}`, 15, 83);
     doc.setFont("helvetica", "bold");
-    doc.text(`• Valor Médio Mensal da Conta Atual: R$ ${d.custoAtualTotal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 92);
+    doc.text(`• Valor Mensal Estimado de Gasto Atual: R$ ${d.custoAtualTotal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 92);
 
-    doc.text("2. Dimensionamento Técnico Recomendado", 15, 108);
+    doc.text("2. Dimensionamento Físico Recomendado", 15, 108);
     doc.line(15, 110, 195, 110);
     doc.setFont("helvetica", "normal");
-    doc.text(`• Potência Sugerida do Sistema Solar: ${d.pf.toFixed(2)} kWp`, 15, 118);
-    doc.text(`• Quantidade Estimada de Painéis: ${d.numeroModulos} módulos fotovoltaicos`, 15, 125);
-    doc.text(`• Área de Telhado Necessária: ${d.areaEstimada.toFixed(1)} m²`, 15, 132);
+    doc.text(`• Potência Arredondada do Sistema: ${d.pf.toFixed(1)} kWp`, 15, 118);
+    doc.text(`• Módulos de Alta Eficiência Necessários: ${d.numeroModulos} painéis`, 15, 125);
+    doc.text(`• Área Requerida Estimada no Telhado: ${d.areaEstimada.toFixed(1)} m²`, 15, 132);
 
     doc.setFont("helvetica", "bold");
-    doc.text("3. Engenharia Financeira & Retorno (Payback)", 15, 148);
+    doc.text("3. Retorno do Investimento & Economia Injetada", 15, 148);
     doc.line(15, 150, 195, 150);
     doc.setFont("helvetica", "normal");
-    doc.text(`• Valor Total do Investimento (Turn-Key): R$ ${d.precoSistema.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 158);
-    doc.text(`• Custo Estimado Residual Pós-Ativação (Taxa Mínima): R$ ${d.custoPosSolar.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`, 15, 165);
+    doc.text(`• Valor Total do Investimento (Turnkey): R$ ${d.precoSistema.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 158);
+    doc.text(`• Gasto de Fatura com Energia Solar (Mínimo): R$ ${d.custoPosSolar.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`, 15, 165);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(46, 125, 50);
-    doc.text(`• Economia Mensal Estimada: R$ ${d.economiaMensaL = d.economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 174);
-    doc.text(`• Economia Anual Injetada na Unidade: R$ ${d.economiaAnual.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 181);
+    doc.text(`• Economia Mensal Realizada: R$ ${d.economiaMensal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 174);
+    doc.text(`• Economia Acumulada Anual: R$ ${d.economiaAnual.toLocaleString('pt-BR', {minimumFractionDigits:2})}`, 15, 181);
     doc.setTextColor(230, 81, 0);
-    doc.text(`• Prazo de Retorno do Capital (Payback): ${d.paybackAnos} anos`, 15, 190);
+    doc.text(`• Prazo de Retorno de Capital Estimado (Payback): ${d.paybackAnos} anos`, 15, 190);
 
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
-    doc.text("Este documento trata-se de um dimensionamento prévio baseado em tarifas informadas. Válido para análise técnica.", 15, 275);
-
-    doc.save(`Estudo_Viabilidade_Solar_ZNSOLAR_${d.consumoKwh}kWh.pdf`);
+    doc.save(`Estudo_Tecnico_ZNSolar_${d.consumoKwh}kWh.pdf`);
   }
 </script>
 
