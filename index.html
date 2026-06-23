@@ -913,7 +913,7 @@
       }
     }
 
-    async function gerarPDF() {
+async function gerarPDF() {
       if (!window.jspdf) { alert("Erro: Biblioteca PDF não carregada."); return; }
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('p', 'mm', 'a4');
@@ -937,10 +937,15 @@
 
       doc.setDrawColor(255, 152, 0); doc.setLineWidth(1); doc.line(10, 46, 200, 46);
 
-      try { doc.addImage('img/marca_down.png', 'PNG', 10, 15, 55, 26); } catch (e) {
+      // --- CORREÇÃO DO LOGOTIPO AQUI ---
+      try { 
+          // Ajustado para puxar exatamente o mesmo arquivo que funciona no seu topo da página
+          doc.addImage('img/marca dagua.png', 'PNG', 10, 15, 55, 26); 
+      } catch (e) {
           doc.setFont("helvetica", "bold"); doc.setFontSize(24); doc.setTextColor(21, 101, 192);
           doc.text("ZN ", 12, 32); doc.setTextColor(255, 152, 0); doc.text("SOLAR", 26, 32);
       }
+      // ---------------------------------
 
       doc.setFillColor(245, 245, 245); doc.roundedRect(10, 54, 92, 48, 3, 3, 'F');
       doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(255, 152, 0);
