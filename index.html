@@ -414,7 +414,6 @@
       <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
       <p style="text-align:center; color:#666; margin-bottom:25px;">Configure as tarifas da sua conta e insira o consumo em kWh dos últimos 12 meses.</p>
       
-      <!-- LINHA DE CONFIGURAÇÕES TARIFÁRIAS (Sem os campos de bandeira) -->
       <div class="linha-tarifas" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 12px;">
         <div class="campo-tarifa">
           <label>Padrão / Fase</label>
@@ -425,12 +424,12 @@
           </select>
         </div>
         <div class="campo-tarifa">
-          <label>Tarifa TE (R$)</label>
-          <input type="number" id="tarifaTE" step="0.00001" value="0.43500" placeholder="0.43500">
-        </div>
-        <div class="campo-tarifa">
           <label>Tarifa TUSD (R$)</label>
           <input type="number" id="tarifaTUSD" step="0.00001" value="0.49454" placeholder="0.49454">
+        </div>
+        <div class="campo-tarifa">
+          <label>Tarifa TE (R$)</label>
+          <input type="number" id="tarifaTE" step="0.00001" value="0.43500" placeholder="0.43500">
         </div>
         <div class="campo-tarifa">
           <label>Ilum. Pública (R$)</label>
@@ -438,7 +437,6 @@
         </div>
       </div>
 
-      <!-- NOVA LINHA EXCLUSIVA PARA A BANDEIRA (Logo abaixo da primeira) -->
       <div class="linha-tarifas" style="grid-template-columns: 1fr 1fr; margin-bottom: 25px; border-color: #ff9800;">
         <div class="campo-tarifa">
           <label>Bandeira Cor</label>
@@ -472,8 +470,7 @@
       <button onclick="_calcZN()" style="background:#ff9800; color:white; border:none; padding:16px; width:100%; border-radius:6px; font-size:1.15rem; font-weight:bold; cursor:pointer; transition:background 0.3s; box-shadow:0 4px 6px rgba(255,152,0,0.2);">Calcular Orçamento Completo</button>
   
       <div id="resultado-simulacao" style="margin-top:25px; padding:25px; border-radius:8px; display:none; line-height:1.6; font-size:1.1rem; text-align:left; word-wrap: break-word; overflow-x: hidden; width: 100%; border: 1px solid #ddd; background: #fafafa;"></div>
-  </section>
-  
+  </section>  
     <section class="diagrama-container">
       <h2>Como Funcionam os Sistemas Fotovoltaicos</h2>
       <p>Os painéis captam a luz do sol durante o dia e o inversor transforma essa energia. Dependendo do sistema, ela pode ser usada localmente, injetada na rede ou armazenada em baterias.</p>
