@@ -414,8 +414,8 @@
       <h2 style="color:#ff9800; margin-bottom:15px; text-align:center; font-size:1.8rem;">Simule seu Sistema e Economia</h2>
       <p style="text-align:center; color:#666; margin-bottom:25px;">Configure as tarifas da sua conta e insira o consumo em kWh dos últimos 12 meses.</p>
       
-      <!-- LINHA DE CONFIGURAÇÕES TARIFÁRIAS E PADRÃO DE ENTRADA -->
-      <div class="linha-tarifas">
+      <!-- LINHA DE CONFIGURAÇÕES TARIFÁRIAS (Sem os campos de bandeira) -->
+      <div class="linha-tarifas" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 12px;">
         <div class="campo-tarifa">
           <label>Padrão / Fase</label>
           <select id="tipoConsumo">
@@ -436,6 +436,10 @@
           <label>Ilum. Pública (R$)</label>
           <input type="number" id="tarifaCosip" step="0.01" value="9.39" placeholder="9.39">
         </div>
+      </div>
+
+      <!-- NOVA LINHA EXCLUSIVA PARA A BANDEIRA (Logo abaixo da primeira) -->
+      <div class="linha-tarifas" style="grid-template-columns: 1fr 1fr; margin-bottom: 25px; border-color: #ff9800;">
         <div class="campo-tarifa">
           <label>Bandeira Cor</label>
           <select id="bandeiraCor" onchange="atualizarCorBandeira(this)">
