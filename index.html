@@ -756,12 +756,12 @@
       divResultado.innerHTML = `
           <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px; color: #ff9800;">Resultado da Simulação ZN Solar — Conexão ${tipoConsumo}</div>
           <strong>Consumo Médio Apurado:</strong> ${c.toFixed(1)} kWh/mês<br>
-          <strong>Área Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
+          <strong>Área média Necessária Estimada:</strong> ${a.toFixed(1)} m²<br>
           <hr style="border:0;border-top:1px solid #ddd;margin:12px 0;">
           
-          <strong>Conta Sem Sistema Solar (Cheia):</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-          <strong>Nova Conta Estimada (Custo Fixo ${tipoConsumo}):</strong> R$ ${novaContaFixo.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
-          <strong>Economia Mensal Estimada:</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${economiaSelecionada.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
+          <strong>Conta média Sem Sistema Solar (Cheia):</strong> R$ ${tc.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+          <strong>Nova Conta média Estimada  (Custo Fixo ${tipoConsumo}):</strong> R$ ${novaContaFixo.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês<br>
+          <strong>Economia Mensal média Estimada :</strong> <span style="color:#1b5e20;font-weight:bold;">R$ ${economiaSelecionada.toLocaleString('pt-BR',{minimumFractionDigits:2})} /mês</span>
           
           <div class="wrapper-grafico"><canvas id="graficoConsumoMensal"></canvas></div>
           <div class="wrapper-grafico" style="height: 180px;"><canvas id="graficoCustoFinanceiro"></canvas></div>
@@ -806,7 +806,7 @@
       new Chart(ctx2, {
           type: 'bar',
           data: {
-              labels: ['Sem Solar', 'Com Solar (' + tipoConsumo + ')'],
+              labels: ['Conta Sem Solar', 'Conta Com Solar (' + tipoConsumo + ')'],
               datasets: [{
                   label: 'Custo Mensal (R$)',
                   data: [tc, novaContaFixo], 
@@ -866,7 +866,7 @@
           });
           htmlGeral += `</div>`;
 
-          htmlGeral += `<div><h4 style="margin: 0 0 10px 0; font-size: 13px; color: #1565C0; text-align:left;">🔵 Economia Real Líquida Acumulada</h4>`;
+          htmlGeral += `<div><h4 style="margin: 0 0 10px 0; font-size: 13px; color: #1565C0; text-align:left;">🔵 Economia Real Líquida Acumulada com solar descontado tarifa miníma</h4>`;
           anosProjecao.forEach(ano => {
               let economyPuraAcumulada = 0;
               let economiaAnoAtual = economiaSelecionada;
